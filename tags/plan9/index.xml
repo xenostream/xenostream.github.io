@@ -7,13 +7,13 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
-    <lastBuildDate>Tue, 12 Sep 2017 07:18:23 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 12 Sep 2017 16:18:23 +0900</lastBuildDate>
     <atom:link href="http://xenostream.github.io/tags/plan9/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Acme Editor for Windows</title>
       <link>http://xenostream.github.io/2017/09/acme-editor-for-windows</link>
-      <pubDate>Tue, 12 Sep 2017 07:18:23 +0000</pubDate>
+      <pubDate>Tue, 12 Sep 2017 16:18:23 +0900</pubDate>
       
       <guid>http://xenostream.github.io/2017/09/acme-editor-for-windows</guid>
       <description>
@@ -120,66 +120,66 @@ IT를 하는 사람이라면 누구라도 들어보았던 사람들이다.&lt;/p
 &lt;li&gt;Private Namespace&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;모든것은-파일다:ba6906388beb3e762e3ec6faba7ef161&#34;&gt;모든것은 파일다&lt;/h2&gt;
+&lt;h2 id=&#34;모든것은-파일이다:ba6906388beb3e762e3ec6faba7ef161&#34;&gt;모든것은 파일이다&lt;/h2&gt;
 
 &lt;p&gt;모든것이 파일이며, 계층적 구조로 접근하게 된다.&lt;/p&gt;
 
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;Purpose&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Purpose&lt;/th&gt;
 &lt;th align=&#34;left&#34;&gt;Directory&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Networking&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Networking&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/net/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Authentication&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Authentication&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/mnt/factotum/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Encryption&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Encryption&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/net/tls/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Graphics&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Graphics&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/dev/draw/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Window System&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Window System&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/dev/wsys/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Process Control and debugging&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Process Control and debugging&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/proc/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Environment&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Environment&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/env/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Email&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Email&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/mail/fs/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Etc Stuff&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Etc Stuff&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;cdfs, webfs, tarfs, ftpfs, etc&amp;hellip;.&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Web Stuff&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Web Stuff&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;wikifs, gpsfs, sshnet, iostats and others.&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -207,11 +207,113 @@ Namespace는 3가지 기능으로 사용합니다.&lt;/p&gt;
  int unmount(char *name, char *old)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;em&gt;/sys/src/libdraw/newwindow.c&lt;/em&gt; 파일에 사용예시가 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;/sys/src/libdraw/newwindow.c&lt;/em&gt; 파일에 사용예시가 있다.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;  % mount `{cat /env/wsys} /n/foo new
   % cat /proc/$pid/ns 
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;예를 들어서, 리눅스시스템의 커널의 경우는 300개의 시스템콜과 수백,수천개의 ioctl을 가진다.&lt;br /&gt;
+또한 4,827,671라인의 코드로 구성되어 있다.&lt;br /&gt;
+하지만, Plan 9의 경우에는 37개의 시스템콜과 148,787라인으로 구성된 코드에 추가적으로&lt;br /&gt;
+실시간 스케줄러기능이 탑제되어있다.&lt;/p&gt;
+
+&lt;p&gt;또한, X 터미널의 경우에는 단순접속으로도 백만번의 통신을 내부적으로 사용하게 된다.&lt;br /&gt;
+stty 명령어를 이용해서 X 터미널을 접속한 후 보드율(Baud Rate)을 살펴보기 바란다.&lt;/p&gt;
+
+&lt;p&gt;그래서, Plan 9에서는 윈도우 시스템도 완전히 새롭게 만들었다. (Rio Window System)&lt;br /&gt;
+리오윈도우 시스템은 현재에 맞는 비트맵기반 디스플레이와 입력장비에 최적화 되어 있다.&lt;br /&gt;
+비트맵 기반 화면 출력장치와 키보드 그리고&amp;hellip;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;3버튼 마우스를 적극 사용한다.&lt;/strong&gt;*&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;리오 윈도우 시스템에서는 다음과 같은 특징을 가진다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- 모든 텍스트는 편집이 가능하다 
+- 커서주소란 것은 존재하지 않는다 
+- 간단한 텍스트 편집기로만 사용한다 
+- 이전 명령의 출력은 언제든지 재사용할 수 있다. (검색 실행 ...) 
+- 모든 응용프로그램은 투명하게 서로 통신 할 수 있다 (Plumbing, chording, hold mode..) 
+- 리오윈도우 시스템에서 또다시 리오 윈도우 시스템을 호출 할 수 있다 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 쉘의 히스토리가 궁금하다면 단순히 &lt;code&gt;grep /dev/text&lt;/code&gt; 명령으로 알수 있게 된다.
+출력을 편집할수도 있고 &lt;strong&gt;Send&lt;/strong&gt; 명령으로 언제든지 실행할 수 도 있다.&lt;/p&gt;
+
+&lt;p&gt;요약하면, 기존의 키보드 기반의 환경에서 마우스를 최대한 사용하는 구조가 되었다.&lt;/p&gt;
+
+&lt;p&gt;프로그래머에게 최적화된 Acme Editor를 시스템 에디터와 쉘로 제공하며, 단순한 에디터를&lt;br /&gt;
+넘어서 위키브라우저, 메일 뉴스 클라이언트 디버거 등으로 언제든지 용도변경해서 사용할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;또한 , &lt;strong&gt;Plubing&lt;/strong&gt; 이라는 기술을 통해서 응용프로그램끼리 입출력 데이터를 언제든지 보낼 수 있으며,&lt;br /&gt;
+네트워크를 통한 원격지에도 보낼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;컴파일러 또한, 대폭 개선되어서 한개의 소스코드를 이용해서 Motorola MC680x0, Strong ARM, Alpha,&lt;br /&gt;
+i386, amd64, SPARC, SPARC64, PowerPC, MIPS등과 같은 다른 플랫폼에 별도의 수정없이 곧바로 컴파일해서&lt;br /&gt;
+사용할 수 있으며, 아키텍처에 의존적인 코드는 7,000라인밖에 존재하지 않는다. (gcc는 150,000라인)&lt;br /&gt;
+모든 텍스트는 &lt;strong&gt;UTF-8&lt;/strong&gt; 기반으로 처리된다.!!!&lt;/p&gt;
+
+&lt;p&gt;단순한 예를 들어서 Unix에서 소켓 프로그래밍의 경우는 다음과 같다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-C&#34;&gt;#include &amp;lt;sys/types.h&amp;gt;   
+#include &amp;lt;sys/socket.h&amp;gt;  
+#include &amp;lt;netinet/in.h&amp;gt;  
+#include &amp;lt;netdb.h&amp;gt;  
+...   
+struct sockaddr_in sock_in;  
+struct servent *sp;  
+struct hostent *host;  
+		...  
+		memset(&amp;amp;sock_in, 0, sizeof (sock_in));  
+		sock_in.sin_family = AF_INET;  
+		f = socket(AF_INET, SOCK_STREAM, 0);  
+		if (f &amp;lt; 0)  
+			error(&amp;quot;socket&amp;quot;);  
+		if (bind(f, (struct sockaddr*)&amp;amp;sock_in, sizeof sock_in) &amp;lt; 0){  
+			error(&amp;quot;bind&amp;quot;);  
+		host = gethostbyname(argv[1]);  
+		if(host) {  
+			sock_in.sin_family = host-&amp;gt;h_addrtype;  
+			memmove(&amp;amp;sock_in.sin_addr, host-&amp;gt;h_addr, host-&amp;gt;h_length);
+		} else {  
+			sock_in.sin_family = AF_INET;  
+			sock_in.sin_addr.s_addr = inet_addr(argv[1]);  
+			if (sock_in.sin_addr.s_addr == -1)  
+			error(&amp;quot;unknown host %s&amp;quot;, argv[1]);  
+		}  
+		sp = getservbyname(&amp;quot;discard&amp;quot;, &amp;quot;tcp&amp;quot;);   
+		if (sp)  
+			sock_in.sin_port = sp-&amp;gt;s_port;   
+		else   
+			sock_in.sin_port = htons(9);   
+		if (connect(f, (struct sockaddr*)&amp;amp;sock_in, sizeof sock_in) &amp;lt; 0)   
+			error(&amp;quot;connect:&amp;quot;);			
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;전형적인 UNIX기반에서 작성한 소켓 프로그램의 소스코드이다. 이것을 Plan 9로 구현하면 다음과 같다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-C&#34;&gt;#include &amp;lt;u.h&amp;gt;   
+#include &amp;lt;libc.h&amp;gt;   
+...    
+fd = dial(netmkaddr(argv[1], &amp;quot;tcp&amp;quot;, &amp;quot;discard&amp;quot;), 0, 0, 0);   
+if(fd &amp;lt; 0)   
+	sysfatal(&amp;quot;can’t dial %s: %r&amp;quot;, argv[1]);   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;별다른 설명이 필요없을 것이다. 네트워크 프로그래밍에 너무 많은 프로토콜에 의존적인 API와&lt;br /&gt;
+혼동된 기술이 혼재된 것을 아주 간단 명료하게 처리하고 있음을 알 수 있다.&lt;/p&gt;
+
+&lt;p&gt;에디터 하나 설명하는데 너무 많은 얘기를 한 것 같이 보인다.&lt;/p&gt;
+
+&lt;p&gt;추후에 계속될 &lt;strong&gt;Plan 9&lt;/strong&gt; 관련 강좌에 초석이 될 것이므로 억지스럽더라도 알아두면 좋을 것이다.&lt;/p&gt;
+
+&lt;p&gt;결론적으로 요약하면, UNIX개발자들이 현재에 맞도록 모든것을 다시 새롭게 만든 운영체제가  Plan 9라는&lt;br /&gt;
+운영체제이다. 2002년 4판을 마지막으로 더이상 만들지 않고 있다!!! 2005년에 GUI를 가진 전화기를&lt;br /&gt;
+만들기 위해서 Inferno 라는 운영체제를 Plan 9의 여러가지 사상을 투입해서 만들었다.&lt;br /&gt;
+Inferno또한 할얘기가 많지만, Java와 같은 구조로 구성된 멀티플랫폼 가상운영체제이다란것만 알아두기
+바란다. Acme Eidtor for Windows 파일이 바로 Inferno OS에 구현된 것을 윈도우에서 사용하게 된다.!!&lt;/p&gt;
 
 &lt;hr /&gt;
 
