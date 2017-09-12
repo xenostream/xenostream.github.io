@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [02/06] Interface &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-02/06-interface" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [02/06] Interface &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [02/06] Interface</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="interface:6fecba8e3bce6ef1e9520231bf44d186">Interface</h1>
+
+<h2 id="interface-1:6fecba8e3bce6ef1e9520231bf44d186">interface</h2>
+
+<p>Go언어에는 아주 섬세하게 설계된 <code>interface</code>라는 것이 있습니다.<br />
+이 기능은 객체지향 프로그래밍과 효율적인 프로그램 구성시에 매우 편리하게 사용 됩니다.<br />
+이 장 다읽은 후에는 Go언어의 <code>interface</code>의 획기적인 디자인 방식에 감탄하게 될 것입니다.</p>
+
+<h3 id="interface란-무엇인가:6fecba8e3bce6ef1e9520231bf44d186">interface란 무엇인가?</h3>
+
+<p>간단하게 말하면, <code>interface는 method의 조합</code> 입니다. interface를 통해 개체의 행동을 정의 할수 있습니다.<br />
+이전 장의 마지막 예제에서 Student와 Employee 객체 모두 SayHi() 메소드를 가지고 있었습니다.<br />
+그들의 내부 처리 방식은 다르지만, 그것은 중요하지 않습니다. 중요한 것은 그들 모두 <code>say hi</code>라고 말한다는 것입니다.</p>
+
+<p>여기에, 계속 더 확장 해 보겠습니다. Student와 Employee에서 또 다른 메소드 <code>Sing()</code>을 작성 합니다.<br />
+Student에는 BorrowMoney() 메소드를 추가하고,  Employee는 SpendSalary()를 추가 하겠습니다.</p>
+
+<p>Student에는 총 3가지 메소드가 존재 합니다. <code>SayHi(), Sing(), BorrowMoney()</code> 입니다.<br />
+Employee는 <code>SayHi(), Sing(), SpendSalary()</code> 3가지 메소드 입니다.</p>
+
+<p>위와 같은 조합에서 interface(개체 Student와 Employee에 추가)를 사용할 수 있습니다.<br />
+예를 들어, Student와 Employee에서 <code>모두</code> interface인 SayHi()와 Sing()을 <code>구현</code>하고 있습니다.<br />
+이 두 개체는 <code>interface 형</code>입니다.</p>
+
+<p>Employee에서 interface는  SayHi(), Sing() 입니다. BorrowMoney는 구현하지 않습니다.<br />
+Employee는 BorrowMoney() 메소드를 구현하지 않기 때문입니다.</p>
+
+<h3 id="interface-형:6fecba8e3bce6ef1e9520231bf44d186">interface 형</h3>
+
+<blockquote>
+<p><code>interface 형</code>은  메소드의 집합을 선언 합니다.</p>
+</blockquote>
+
+<p>만약 어떤 객체가 인터페이스에 선언된 모든 메소드를 구현하면, 이 객체는 이 인터페이스를 구현한 것입니다.<br />
+자세한 문법은 다음의 예제를 참고 하십시오.</p>
+
+<pre><code class="language-Go">type Human struct {
+    name string
+    age int
+    phone string
+}
+
+type Student struct {
+    Human            // 익명필드 Human
+    school string
+    loan float32
+}
+
+type Employee struct {
+    Human            // 익명 필드 Human
+    company string
+    money float32
+}
+
+// Human 객체에 SayHi 메서드를 구현합니다.
+func (h *Human) SayHi() {
+    fmt.Printf(&quot;Hi, I am %s you can call me on %s \n&quot;, h.name, h.phone)
+}
+
+// Human 객체에 Sing 메소드를 구현합니다.
+func (h *Human) Sing(lyrics string) {
+    fmt.Println(&quot;La la, la la la, la la la la la ...&quot;, lyrics)
+}
+
+// Human 객체에 Guzzle 메소드를 구현합니다.
+func (h *Human) Guzzle(beerStein string) {
+    fmt.Println(&quot;Guzzle Guzzle Guzzle ...&quot;, beerStein)
+}
+
+// Employee는 Human의 SayHi 메서드를 재정의 합니다.
+func (e *Employee) SayHi() {
+    fmt.Printf(&quot;Hi, I am %s, I work at %s. Call me on %s \n&quot;, e.name,
+        e.company, e.phone)            //여러 줄에 연속 기록해도 괜찮습니다.   
+}
+
+// Student는 BorrowMoney() 메소드를 구현 합니다.
+func (s *Student) BorrowMoney(amount float32) {
+    s.loan += amount       
+}
+
+// Employee는 SpendSalary() 메소드를 구현 합니다.
+func (e *Employee) SpendSalary(amount float32) {
+    e.money -= amount      
+}
+
+// interface를 정의 합니다.
+type Men interface {
+    SayHi()
+    Sing(lyrics string)
+    Guzzle(beerStein string)
+}
+
+type YoungChap interface {
+    SayHi()
+    Sing(song string)
+    BorrowMoney(amount float32)
+}
+
+type ElderlyGent interface {
+    SayHi()
+    Sing(song string)
+    SpendSalary(amount float32)
+}
+</code></pre>
+
+<p>위의 코드를 통해서 알수 있듯이,  interface라는 것은 모든 객체에서 구현할 기능임을 알 수 있습니다.<br />
+Men interface는 Human, Student 및 Employee에 의해 구현 됩니다.<br />
+예를 들어 Student는 Men과 YoungChap 두개의 <code>interface를 구현</code>하게 됩니다.</p>
+
+<p>마지막으로, <code>모든 종류를 처리할 수 있는 빈 interface</code>(여기에서는 interface{}라고 정의 합시다)를<br />
+구현하고 있습니다.</p>
+
+<blockquote>
+<p>빈 인터페이스는 <code>0개</code>의 메소드가 포함 된 interface 입니다.</p>
+</blockquote>
+
+<h3 id="interface-값:6fecba8e3bce6ef1e9520231bf44d186">interface 값</h3>
+
+<p>interface에는 실제 어떤 값이 존재 할까요? <code>interface 변수</code>를 선언하면,  이 변수에는 interface 유형의<br />
+모든 객체를 저장할 수 있습니다. 위의 예제로 표현하면, Men interface 변수 m을 선언 했습니다.<br />
+<code>m 변수</code>는 Human, Student 또는 Employee 값을 저장할 수 있게 된다는 의미 입니다.</p>
+
+<p><code>m</code> 은 3 가지 형태를 가질 수있는 객체이므로, <code>Men형</code>의 요소를 포함하는 <code>slice</code>를 정의 할 수 있습니다.<br />
+이 slice는 Men 인터페이스의 모든 구조의 객체를 할당 할 수 있습니다. 이 slice와 원래의 slice에는 차이가 있습니다.<br />
+다음의 예를 살펴 보겠습니다.</p>
+
+<pre><code class="language-Go">package main
+import &quot;fmt&quot;
+
+type Human struct {
+    name string
+    age int
+    phone string
+}
+
+type Student struct {
+    Human         // 익명 필드
+    school string
+    loan float32
+}
+
+type Employee struct {
+    Human         // 익명 필드
+    company string
+    money float32
+}
+
+// Human에 SayHi() 메서드를 구현 합니다.
+func (h Human) SayHi() {
+    fmt.Printf(&quot;Hi, I am %s you can call me on %s \n&quot;, h.name, h.phone)
+}
+
+// Human에 Sing() 메소드를 구현 합니다.
+func (h Human) Sing(lyrics string) {
+    fmt.Println(&quot;La la la la ...&quot;, lyrics)
+}
+
+// Employee는 Human의 SayHi() 메서드를 재작성 합니다.
+func (e Employee) SayHi() {
+    fmt.Printf(&quot;Hi, I am %s, I work at %s. Call me on %s \n&quot;, e.name,
+        e.company, e.phone)
+}
+
+// Interface Men은 Human, Student 및 Employee로 구현 됩니다.
+// 이 3 가지 형태는 다음의 두 가지 메소드를 구현했기 때문 입니다.
+type Men interface {
+    SayHi()
+    Sing(lyrics string)
+}
+
+func main() {
+    mike := Student{Human{&quot;Mike&quot;, 25 &quot;222-222-XXX&quot;}, &quot;MIT&quot;0.00}
+    paul := Student{Human{&quot;Paul&quot;, 26 &quot;111-222-XXX&quot;}, &quot;Harvard&quot;100}
+    sam := Employee{Human{&quot;Sam&quot;, 36 &quot;444-222-XXX&quot;}, &quot;Golang Inc.&quot;1000}
+    tom := Employee{Human{&quot;Tom&quot;37 &quot;222-444-XXX&quot;}, &quot;Things Ltd.&quot;5000}
+
+    // Men 유형의 i 변수를 선언 합니다.
+    var i Men
+
+    // i에는 Student를 저장할 수 있습니다.
+    i = mike
+    fmt.Println(&quot;This is Mike, a Student :&quot;)
+    i.SayHi()
+    i.Sing(&quot;November rain&quot;)
+
+    // i에는 Employee를 저장할 수도 있습니다.
+    i = tom
+    fmt.Println(&quot;This is Tom, an Employee :&quot;)
+    i.SayHi()
+    i.Sing(&quot;Born to be wild&quot;)
+
+    // Men형의 슬라이스를 정의 합니다.
+    fmt.Println(&quot;Let 's use a slice of Men and see what happens&quot;)
+    x := make([]Men 3)
+    
+    //이 3 개는 모두 다른 요소이지만, 같은 인터페이스를 구현하고 있습니다.
+    x[0], x[1], x[2] = paul, sam, mike
+
+    for _,  value := range x {
+        value.SayHi()
+    }
+}
+</code></pre>
+
+<p>위의 코드를 통해서 interface는 <code>**메서드의 집합을 추상화**</code>한 것임을 알 수 있습니다.<br />
+Go는 interface를 구현하는 <code>duck-typing</code>을 제공 합니다. 즉 &ldquo;오리처럼 달리는 모습과 오리처럼 수영하고,<br />
+오리같이 울고, 오리처럼 소리를 낸다면, 이 새는 오리다&rdquo; 라는 것입니다.</p>
+
+<h3 id="빈-interface:6fecba8e3bce6ef1e9520231bf44d186">빈 interface</h3>
+
+<p><code>빈 interface</code> (<strong>interface {}</strong>)는 아무런 메소드도 포함하지 않은 인터페이스 입니다.<br />
+이 인터페이스는 모든 형태를 처리할 수 있는 근원적인 interface를 구현하고 있습니다.<br />
+빈 interface 자체적으로는 아무 의미도 없습니다.(어떤 메소드도 포함되어 있지 않기 때문에)<br />
+이 방식은 어떠한 형태의 수치를 저장할지 모를 경우에 아주 유용하게 사용할 수 있습니다.<br />
+이것은 어떤 형태의 수치도 저장할 수 있는 구조이기 때문에 <code>C 언어의 void * 형태</code>와 비슷하게 사용합니다.</p>
+
+<pre><code class="language-go">// a를 빈 인터페이스로 정의
+var a interface {}
+var i int = 5
+s := &quot;Hello world&quot;
+// a는 모든 유형의 값을 저장할 수 있습니다.
+a = i
+a = s
+</code></pre>
+
+<p>함수가 <code>interface {}</code>를 인수로 취하면 <code>모든 형식의 값</code>을 인수로 취할 수 있습니다.<br />
+만약 함수가 interface {}를 반환하면 모든 형식의 값을 반환 할 수 있습니다. 매우 편리 합니다!</p>
+
+<h3 id="interface-함수의-인수:6fecba8e3bce6ef1e9520231bf44d186">interface 함수의 인수</h3>
+
+<p><code>interface 변수</code>는 이 interface 형식의 개체를 가질 수 있습니다.<br />
+<code>interface 인수</code>를 선언하면 <code>함수에 모든 형태의 인수</code>를 받게 처리 할 수 있습니다.</p>
+
+<p>예를 들어 보겠습니다. <code>fmt.Println()</code>은 지금까지 가장 자주 사용했던 함수입니다.<br />
+하지만 이 함수는 어떤 형태의 데이터를 받아도 처리했던것을 유심히 보셨나요?<br />
+<code>fmt</code> 패키지의  소스 파일을 살펴보면 이런 방식으로 정의되어 있습니다.</p>
+
+<pre><code class="language-go">type Stringer interface {
+    String () string
+}
+</code></pre>
+
+<p>즉, String 메소드를 가지는 모든 형태가 fmt.Println() 의해 호출 될 수있는 것입니다. 시험해 보겠습니다.</p>
+
+<pre><code class="language-go">package main
+import (
+    &quot;fmt&quot;
+    &quot;strconv&quot;
+)
+
+type Human struct {
+    name string
+    age int
+    phone string
+}
+
+//이 메소드를 사용해 Human에 fmt.Stringer을 구현 합니다.
+func (h Human) String () string {
+    return &quot;이름:&quot;+ h.name + &quot;-&quot;+ strconv.Itoa(h.age) + &quot;years - ✆&quot;+ h.phone + &quot;❱&quot;
+}
+
+func main () {
+    Bob := Human{&quot;Bob&quot;, 39 &quot;000-7777-XXX&quot;}
+    fmt.Println(&quot;This Human is :&quot;Bob)
+}
+</code></pre>
+
+<p>이전 Box의 예제를 생각해 보겠습니다. Color 구조체도 메소드를 하나 정의하고 있습니다. String 입니다.<br />
+사실 이것도 <code>fmt.Stringer()</code>라는 interface를 구현하고 있는 것입니다. 즉, 어떤 형태로도 fmt 패키지를 이용해서<br />
+출력 시키려고 한다면, <code>Stringer 인터페이스를 구현</code>해야 합니다. 만약 이 인터페이스를 구현하지 않으면<br />
+fmt는 기본 방식으로 출력 하게 됩니다.</p>
+
+<pre><code class="language-go">// 같은 기능을 구현 합니다.
+fmt.Println(&quot;The biggest one is&quot;, boxes.BiggestsColor() String ())
+fmt.Println(&quot;The biggest one is&quot;, boxes.BiggestsColor())
+</code></pre>
+
+<p>주: error 인터페이스 객체(Error () string 객체를 구현)를 구현 합니다. fmt를 사용하여 출력을 할 경우 Error() 메소드가<br />
+호출 됩니다. 따라서 String() 메소드를 재정의 할 필요가 없습니다.</p>
+
+<h3 id="interface-변수를-저장하는-형식:6fecba8e3bce6ef1e9520231bf44d186">interface 변수를 저장하는 형식</h3>
+
+<p><code>interface 변수</code>에는 모든 형태의 데이터를 저장할 수있는 것을 배웠습니다. (interface를 구현해서 처리 하고 있습니다).<br />
+하지만, 변수에 실제로 저장되어있는 것이 어떤 형태의 객체인지 알 수 있는 방법은 없을까요? 현재 두 가지 방법이 있습니다.</p>
+
+<ul>
+<li>Comma-ok 방법</li>
+</ul>
+
+<p>Go 언어의 문법에는 변수가 어떤 형태인지를 직접 판단하는 방법이 있습니다.<br />
+<code>value, ok = element(T)</code> 에서 value는 변수의 값을 가지게 됩니다. ok는 bool 형식 입니다.<br />
+element는 <code>interface 변수</code>입니다.</p>
+
+<p>만약 element에 T형의 데이터가 존재하면 ok는 true가 반환 됩니다. 그렇지 않으면 false가 반환 됩니다.</p>
+
+<p>예제를 통해서 상세하게 이해하고 가겠습니다.</p>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;strconv&quot;
+)
+
+type Element interface {}
+type List [] Element
+
+type Person struct {
+    name string
+    age int
+}
+
+// String 메소드를 정의 합니다. fmt.Stringer을 구현 합니다.
+func (p Person) String () string {
+    return &quot;(name :&quot;+ p.name + &quot;- age :&quot;+ strconv.Itoa(p.age) + &quot;years)&quot;
+}
+
+func main () {
+    list := make(List 3)
+    list [0] = 1               // int
+    list [1] = &quot;Hello&quot;         // string
+    list [2] = Person{&quot;Dennis&quot;, 70}
+
+    for index, element := range list {
+        if value, ok := element(int); ok {
+            fmt.Printf(&quot;list [%d] is an int and its value is %d \n&quot;, index, value)
+        } else if value, ok := element(string); ok {
+            fmt.Printf(&quot;list [%d] is a string and its value is %s \n&quot;, index, value)
+        } else if value, ok := element(Person); ok {
+            fmt.Printf(&quot;list [%d] is a Person and its value is %s \n&quot;, index, value)
+        } else {
+            fmt.Println(&quot;list [%d] is of a different type&quot;, index)
+        }
+    }
+}
+</code></pre>
+
+<p>매우 간단 합니다. 이전 제어문에서 설명한대로 여러개의 if에서 변수를 초기화할 수 있습니다.<br />
+또한 분기 처리가 증가하면 증가할수록, if-else의 수도 증가하는 것을 기억할 것입니다.</p>
+
+<p>다음은 <code>switch</code>를 설명 합니다.</p>
+
+<ul>
+<li>switch 테스트</li>
+</ul>
+
+<p>코드 예제를 보는 것이 빠르겠습니다. 위의 코드를 다시 처리 하겠습니다.</p>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;strconv&quot;
+)
+
+type Element interface {}
+type List [] Element
+
+type Person struct {
+    name string
+    age int
+}
+
+// 프린트
+func (p Person) String () string {
+    return &quot;(name :&quot;+ p.name + &quot;- age :&quot;+ strconv.Itoa(p.age) + &quot;years)&quot;
+}
+
+func main () {
+    list := make (List 3)
+    list [0] = 1                     // int
+    list [1] = &quot;Hello&quot;               // string
+    list [2] = Person{&quot;Dennis&quot;, 70}
+
+    for index, element := range list {
+        switch value := element(type) {
+        case int:
+            fmt.Printf(&quot;list [%d] is an int and its value is %d \n&quot;, index, value)
+        case string:
+            fmt.Printf(&quot;list [%d] is a string and its value is %s \n&quot;, index, value)
+        case Person:
+            fmt.Printf(&quot;list [%d] is a Person and its value is %s \n&quot;, index, value)
+        default:
+            fmt.Println(&quot;list [%d] is of a different type&quot;, index)
+        }
+    }
+}
+</code></pre>
+
+<p>여기서 강조하고 싶은 것은 <code>element (type)</code>문법은 switch의 외부에서는 사용할 수 없다는 것입니다.<br />
+만약 switch 외부에서 이런 형태를 판단하려면 <code>comma-ok</code> 방식을 사용 하십시오.</p>
+
+<h3 id="내장-interface:6fecba8e3bce6ef1e9520231bf44d186">내장 interface</h3>
+
+<p>Go 언어의 가장 매력적인 것은 바로 기본적인 논리처리 문법 입니다. Struct을 배울때 <code>익명 필드</code>가 우아한 처리 중 하나입니다.<br />
+이와 유사한 논리로 interface에 도입하면 더 완벽하게 됩니다.<br />
+만약 interface1이 interface2 내장 필드이면 interface2는 암묵적으로 interface1의 메소드를 포함 할 수 있습니다.</p>
+
+<p><code>container/heap</code> 패키지에서 이런 정의가있는 것을 확인할 수 있습니다.</p>
+
+<pre><code class="language-go">type Interface interface {
+    sort.Interface         // 기본 제공 필드 sort.Interface
+    Push(x interface {})   // Push method to push elements into the heap
+    Pop() interface {}     // Pop elements that pops elements from the heap
+}
+</code></pre>
+
+<p>sort.Interface는 사실 기본 제공 필드 입니다. sort.Interface의 모든 메소드를 암시 적으로 포함 합니다.</p>
+
+<p>즉 다음의 세 가지 방법입니다.</p>
+
+<pre><code class="language-go">type Interface interface {
+    // Len is the number of elements in the collection.
+    Len() int
+    // Less returns whether the element with index i should sort
+    // before the element with index j.
+    Less(i, j int) bool
+    // Swap swaps the elements with indexes i and j.
+    Swap(i, j int)
+}
+</code></pre>
+
+<p>또 다른 예는 io 패키지 안에있는 <code>io.ReadWriter</code>입니다.<br />
+이 패키지에는 io 패키지의 Reader와 Writer, 두개의 interface를 포함하고 있습니다.</p>
+
+<pre><code class="language-go">// io.ReadWriter
+type ReadWriter interface {
+    Reader
+    Writer
+}
+</code></pre>
+
+<h3 id="리플렉션:6fecba8e3bce6ef1e9520231bf44d186">리플렉션</h3>
+
+<p>Go는 리플렉션을 구현하고 있습니다. 리플렉션은 프로그램의 런타임 상태를 검사 할 수 있습니다.<br />
+우리가 일반적으로 사용하고있는 패키지는 <code>reflect 패키지</code><code>입니다. reflect 패키지를 어떻게 사용하는지는</code>공식 문서`에 자세한 원리가<br />
+설명되어 있습니다. <a href="http://golang.org/doc/articles/laws_of_reflection.html">laws of reflection</a></p>
+
+<p>reflect를 사용하려면 3단계로 처리를 나눌 수 있습니다. 간단하게 설명 합니다.</p>
+
+<p>reflect 형태의 값(이 값은 빈 인터페이스를 통해서 구현하고 있습니다.) 먼저 reflect 객체로 변환해야 합니다.<br />
+(reflect.Type 또는 reflect.Value입니다.상황에 따라 각가의 함수를 호출 합니다.)<br />
+이 두 가지를 얻을 수있는 방법은 다음과 같습니다.</p>
+
+<pre><code class="language-go">t := reflect.TypeOf(i)   // 원래 데이터를 가져옵니다. t를 통해 형식 정의된 모든 요소를​​ 검색 할 수 있습니다.
+v := reflect.ValueOf(i)  // 실제 값을 가져옵니다. v를 통해 저장되고있는 값을 얻을 수 있습니다. 값을 변경할 수 있습니다.
+</code></pre>
+
+<p>reflect 객체로 변환 한 후 어떠한 작업을 할 수 있습니다. 즉, reflect 객체를 이에 대응하는 값으로 변환하는 것입니다.</p>
+
+<pre><code class="language-go">tag := t.Elem().Field(0).Tag       // struct에서 정의 된 태그를 취득 합니다.
+name := v.Elem().Field(0).String() // 첫 번째 필드에 저장되어있는 값을 얻을 수 있습니다.
+</code></pre>
+
+<p>reflect 값을 검색하여 해당 형식과 값을 반환 할 수 있습니다.</p>
+
+<pre><code class="language-go">var x float64 = 3.4
+v := reflect.ValueOf(x)
+fmt.Println(&quot;type :&quot;, v.Type())
+fmt.Println(&quot;kind is float64 :&quot;, v.Kind () == reflect.Float64)
+fmt.Println(&quot;value :&quot;, v.Float())
+</code></pre>
+
+<p>마지막으로 Reflect 필드는 값을 수정할 수 있어야 합니다. 이것은 앞에서 배운 <code>값 전달</code>과 <code>참조</code>와 같은 방법 입니다.<br />
+리플렉션 필드를 읽고/쓰는 것은 다음과 같이 사용하면 오류가 발생하는 것입니다.</p>
+
+<pre><code class="language-go">var x float64 = 3.4
+v := reflect.ValueOf(x)
+v.SetFloat(7.1)
+</code></pre>
+
+<p>만약 해당하는 값을 변경하려면 이런 방식으로 사용해야 합니다 .</p>
+
+<pre><code class="language-go">var x float64 = 3.4
+p := reflect.ValueOf(&amp;x)
+v := p.Elem()
+v.SetFloat(7.1)
+</code></pre>
+
+<p>리플렉션에 대해서 간단히 설명했다고 하지만, 실제적인 이해는 프로그래밍에서 직접 이해해 나가는 수 밖에 없습니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/07-concurrency"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/05-object-oriented">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go by Example: [21] Errors &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-by-example-21-errors" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-16T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="gobyexample" />
+  
+  
+
+  <title>
+     Go by Example: [21] Errors &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go by Example: [21] Errors</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-16T00:00:00Z">
+          Feb 16, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/gobyexample">#gobyexample</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="errors:d343f96b1e0681f95f6d24ce31685a04">Errors</h1>
+
+<p><code>Go</code>언어에서는 에러또한 명시적으로 사용하는 하나의 형태입니다. 암시적으로 함수의<br />
+반환값으로 포함되기도 합니다. Java / Ruby와 같은 언어의 예외와 <code>C</code>언어의 단일 결과값으로<br />
+에러유무를 처리하는 것과는 대조적입니다. 함수호출의 결과를 에러형식으로 전달하는 것은<br />
+상당히 유연하게 프로그램을 작성할 수 있는 기능 중 하나입니다.</p>
+
+<pre><code class="language-go">package main
+
+import &quot;errors&quot;
+import &quot;fmt&quot;
+
+func f1(arg int) (int, error) {                          // [1]
+    if arg == 42 {
+        return -1, errors.New(&quot;can't work with 42&quot;)      // [2]
+    }
+    return arg + 3, nil                                  // [3]
+}
+
+type argError struct {                                   // [4]
+    arg int
+    prob string
+}
+
+func (e *argError) Error() string {                        
+    return fmt.Sprintf(&quot;%d - %s&quot;, e.arg, e.prob)           
+}
+
+func f2(arg int) (int, error) {
+    if arg == 42 {
+        return -1, &amp;argError{arg, &quot;can't work with it&quot;}   // [5]
+    }
+    return arg + 3, nil
+}
+
+func main() {
+
+    for _, i := range []int{7, 42} {                      // [6]
+        if r, e := f1(i); e != nil {
+            fmt.Println(&quot;f1 failed:&quot;, e)
+        } else {
+            fmt.Println(&quot;f1 worked:&quot;, r)
+        }
+    }
+    
+    for _, i := range []int{7, 42} {
+        if r, e := f2(i); e != nil {
+            fmt.Println(&quot;f2 failed:&quot;, e)
+        } else {
+            fmt.Println(&quot;f2 worked:&quot;, r)
+        }
+    }
+    
+    _, e := f2(42)                                       // [7]
+    if ae, ok := e.(*argError); ok {
+        fmt.Println(ae.arg)
+        fmt.Println(ae.prob)
+    }
+}
+</code></pre>
+
+<ol>
+<li>기본적으로 <code>error</code>형식은 인터페이스로 구현되어 있으며, 마지막으로 반환한 값을 가지고 있습니다.<br /></li>
+<li><code>errors.New()</code>함수는 주어진 에러메세지를 기반으로 <code>error</code>객체를 생성합니다.<br /></li>
+<li><code>nil</code>값을 기준으로해서, <strong>에러 유무</strong>를 판단합니다.<br /></li>
+<li>사용자 정의(구조체) 에러타입을 생성한 후 <code>Error()</code>메소드를 구현할 수 있습니다.<br />
+인자에러가 발생할 경우 사용하는 에러형식 사용자 정의 구조체를 선언하고 있습니다.<br /></li>
+<li><code>&amp;argError</code>구조체 포인터를 생성해서 전달하고 있습니다. <code>arg</code>, <code>prob</code> 필드를 제공합니다.<br /></li>
+<li>함수에서 에러값을 반환하는지를 두개의 반복문을 통해서 사용하고 있습니다.<br />
+여기서는 <code>if</code>문 내부에서 인라인 함수를 호출해서 에러여부를 검사하고 있으며,<br />
+이러한 방식은 <code>Go</code>에서 표준적인 방식에 속합니다.<br /></li>
+<li>프로그래머가 임의로 에러를 정의하고 사용자 정의 에러객체로 다룰 수 있습니다.</li>
+</ol>
+
+<p>실행하면 다음과 같습니다.</p>
+
+<pre><code>$ go run errors.go
+f1 worked: 10
+f1 failed: can't work with 42
+f2 worked: 10
+f2 failed: 42 - can't work with it
+42
+can't work with it
+</code></pre>
+
+<p><a href="http://blog.golang.org/error-handling-and-go">Go Team Blog</a>에서 에러처리에 대한 자세한 설명이 있습니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-by-example-22-goroutines"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-by-example-20-interfaces">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

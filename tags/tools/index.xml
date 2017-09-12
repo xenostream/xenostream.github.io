@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tools on XenoStream&#39;s Private Site</title>
+    <link>http://xenostream.github.io/tags/tools/</link>
+    <description>Recent content in Tools on XenoStream&#39;s Private Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
+    <lastBuildDate>Wed, 04 Jan 2017 23:23:41 +0930</lastBuildDate>
+    <atom:link href="http://xenostream.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Setup Blog with Hugo with Github Pages</title>
+      <link>http://xenostream.github.io/2017/01/setup-blog-with-hugo-with-github-pages</link>
+      <pubDate>Wed, 04 Jan 2017 23:23:41 +0930</pubDate>
+      
+      <guid>http://xenostream.github.io/2017/01/setup-blog-with-hugo-with-github-pages</guid>
+      <description>
+
+&lt;p&gt;Github에서 제공하는 Pages기능을 이용해서, 블로그를 무료(??)로 이용하는 방법에 대해서 설명합니다.&lt;/p&gt;
+
+&lt;h1 id=&#34;최초-설치:7a8e697e5b301bc82024e089c23ea074&#34;&gt;최초 설치&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;github.com&lt;/code&gt; 에서 컨텐츠를 생성할 계정을 생성합니다.&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;public Repository&lt;/code&gt;를 생성합니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;반드시 &lt;code&gt;계정명.github.io&lt;/code&gt;의 Repository 이름으로 생성해야 합니다.&lt;/p&gt;
+&lt;/blockquote&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;HUGO Server를 설치한 후, config.toml파일을 설정합니다.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;   baseurl = &amp;quot;http://xenostream.github.io/&amp;quot;
+   languageCode = &amp;quot;en-us&amp;quot;
+   title = &amp;quot;XenoStream&#39;s Private Site&amp;quot;
+   
+   theme = &amp;quot;vienna&amp;quot;
+   copyright = &amp;quot;&amp;amp;copy;Xenostream.com. &amp;amp;reg;2016 All Rights Reserved.&amp;quot;
+   
+   contentdir = &amp;quot;content&amp;quot;
+   layoutdir = &amp;quot;layouts&amp;quot;
+   publishdir = &amp;quot;public&amp;quot;
+   builddrafts = &amp;quot;false&amp;quot;
+   canonifyurls = &amp;quot;true&amp;quot;   
+   datadir = &amp;quot;data&amp;quot;
+   
+   hasCJKLanguage = &amp;quot;true&amp;quot;
+   paginate = &amp;quot;5&amp;quot;
+   
+   
+   
+   [permalinks]
+     post = &amp;quot;/:year/:month/:title&amp;quot;
+   
+   [taxonomies]
+     category = &amp;quot;categories&amp;quot;
+     tag = &amp;quot;tags&amp;quot;
+   
+   
+   [params]
+   # github = &amp;quot;xenostream&amp;quot;
+   # googleplus = &amp;quot;xenostream&amp;quot;
+    disqus = &amp;quot;xenostream&amp;quot;
+    subtitle = &amp;quot;Software &amp;amp; System Engineer!!&amp;quot;
+   
+    tags = &amp;quot;/tags&amp;quot;
+    about = &amp;quot;/2016/02/about&amp;quot;
+    archive = &amp;quot;/post&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;post-생성:7a8e697e5b301bc82024e089c23ea074&#34;&gt;Post 생성&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;/root/Hugo/xenostream&lt;/code&gt; 디렉토리의 &lt;code&gt;contents/post&lt;/code&gt; 디렉토리에서 새로운 포스트를 생성합니다.&lt;/p&gt;
+
+&lt;p&gt;또는 &lt;code&gt;hugo new /post/test.md&lt;/code&gt; 명령으로 자동생성해도 됩니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;hugo&lt;/code&gt; 명령어를 실행해서 새로운 포스트의 정적 파일을 자동생성 합니다. (public 디렉토리 생성됨)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;새롭게 생성된 &lt;code&gt;public&lt;/code&gt;디렉토리에서 다음의 명령으로 동기화 합니다.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;   cd public 
+   git init
+   git remote add origin https://github.com/xenostream/xenostream.github.io.git
+   git add .
+   git commit -m &amp;quot;Init: 2017/01/04&amp;quot;
+
+   git push -u origin master      
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;10분정도의 Delay후에 해당 페이지가 갱신됩니다.(곧바로 되는 경우도 있습니다)&lt;/p&gt;
+
+&lt;h1 id=&#34;포스트-추가:7a8e697e5b301bc82024e089c23ea074&#34;&gt;포스트 추가&lt;/h1&gt;
+
+&lt;p&gt;추가적인 포스트를 작성한 후에 추가분만 동기화 할 경우에는 다음과 같이 진행합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd /root/Hugo/xenostream
+vi contents/post/test.md
+hugo
+cd public
+git add .
+git commit -m &amp;quot;변경사유&amp;quot;
+git push origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;자동배포-스크립트:7a8e697e5b301bc82024e089c23ea074&#34;&gt;자동배포 스크립트&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;/root/Hugo/xenostream&lt;/code&gt; 디렉토리에서 사용&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+
+echo -e &amp;quot;\033[0;32mDeploying updates to GitHub...\033[0m&amp;quot;
+
+# Build the project.
+hugo # if using a theme, replace by `hugo -t &amp;lt;yourtheme&amp;gt;`
+
+# Go To Public folder
+cd public
+# Add changes to git.
+git add -A
+
+# Commit changes.
+msg=&amp;quot;rebuilding site `date`&amp;quot;
+if [ $# -eq 1 ]
+  then msg=&amp;quot;$1&amp;quot;
+fi
+git commit -m &amp;quot;$msg&amp;quot;
+
+# Push source and build repos.
+git push origin master
+
+# Come Back
+cd ..
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Running HUGO Server with GitHub</title>
+      <link>http://xenostream.github.io/2017/01/running-hugo-server-with-github</link>
+      <pubDate>Wed, 04 Jan 2017 15:08:37 +0930</pubDate>
+      
+      <guid>http://xenostream.github.io/2017/01/running-hugo-server-with-github</guid>
+      <description>
+
+&lt;h1 id=&#34;hugo-server-mode-start-option:ae352c56656707e5a63f12b8a271e9e5&#34;&gt;HUGO Server Mode Start &amp;amp; Option&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;cd /root/Hugo/xenostream
+nohup hugo server --baseURL=http://192.168.0.10/ --port=8088 --bind=192.168.0.10 &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(192.168.0.10서버에서 실행중이며, 포트는 8088로 실행하며 기본 URL은 &lt;a href=&#34;http://192.168.0.10/&#34;&gt;http://192.168.0.10/&lt;/a&gt; 작동)&lt;/p&gt;
+
+&lt;h1 id=&#34;hugo-post-add:ae352c56656707e5a63f12b8a271e9e5&#34;&gt;HUGO Post Add&lt;/h1&gt;
+
+&lt;p&gt;/xenostream/contents/post 디렉토리에서 기존 &lt;code&gt;md파일&lt;/code&gt;을 복사해서 편집 후 추가 또는&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hugo new /post/new-post.md&lt;/code&gt; 명령어로 추가(기본 헤더를 제공)&lt;/p&gt;
+
+&lt;h1 id=&#34;hugo-post-rebuild:ae352c56656707e5a63f12b8a271e9e5&#34;&gt;HUGO Post Rebuild&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;hugo&lt;/code&gt; 명령어만 실행하면 자동으로 재빌드함&lt;/p&gt;
+
+&lt;h1 id=&#34;md-syntax:ae352c56656707e5a63f12b8a271e9e5&#34;&gt;md syntax&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;#  헤딩
+
+1.  숫자리스팅
+
+&amp;gt;  강조처리(진하게 폰트증가)
+
+&#39;&#39; 단순강조(Back Quote)
+```  인용박스시작
+
+![툴팁](/images/이미지)  그림삽입
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;http://gohugo.io&#34;&gt;http://gohugo.io&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://fontawesome.io/icons/&#34;&gt;http://fontawesome.io/icons/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Make Bootable USB with diskpart</title>
+      <link>http://xenostream.github.io/2016/02/make-bootable-usb-with-diskpart</link>
+      <pubDate>Sat, 20 Feb 2016 20:46:37 +0930</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/make-bootable-usb-with-diskpart</guid>
+      <description>
+
+&lt;h1 id=&#34;diskpart로-부팅-usb만드는-순서:4201b76129eacf20a5320012091a78de&#34;&gt;diskpart로 부팅 USB만드는 순서&lt;/h1&gt;
+
+&lt;p&gt;윈도우에서는 모든 디스크 관련 작업을 내장된 &lt;code&gt;diskpart&lt;/code&gt; 툴로 처리할 수 있습니다.&lt;br /&gt;
+과거 &lt;code&gt;fdisk + format&lt;/code&gt;툴의 합체본이라고 생각하시면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;디스크 관련툴의 작업순서는 대채로 다음과 같습니다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;시스템에 설치된 디스크 리스팅&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;작업하기 원하는 디스크 선택&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;파티션 작업&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;포맷 작업&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;대부분의 경우 상기와 같은 작업으로 진행됩니다.&lt;/p&gt;
+
+&lt;p&gt;예제로는, 윈도우 설치 &lt;code&gt;iso&lt;/code&gt;파일을 &lt;code&gt;부팅가능&lt;/code&gt;한 &lt;code&gt;설치용 USB&lt;/code&gt;로 만드는 과정입니다.&lt;br /&gt;
+&lt;code&gt;UltraISO, UNetbootin...&lt;/code&gt; 등의 여러 &lt;code&gt;GUI&lt;/code&gt;도 있지만, 본 방식은 아무런 준비물이 필요없습니다.&lt;/p&gt;
+
+&lt;p&gt;단지, 운영되는 윈도우와 만들려는 ISO파일만 있으면 됩니다. 또한, &lt;code&gt;GUI&lt;/code&gt;중에는 프로그램에서&lt;br /&gt;
+해당 USB장비를 인식하지 못하는 경우도 있지만, 이 방법은 윈도우에서 인식하면 곧바로 작업할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;예제에서는 16G의 USB와 Windows10.iso 파일을 이용해서 설치 USB로 만드는 과정입니다.&lt;br /&gt;
+필요한 경우만 화면 캡쳐를 사용합니다.  간단한 내용에 화면캡쳐를 자주 사용하니 더 혼란스럽습니다.&lt;/p&gt;
+
+&lt;p&gt;먼저 한번만 수행해보면, 실제 사용하는 명령어만 알면 곧바로 이해할 수 있기 때문에 설치명령어부터 시작 합니다.&lt;br /&gt;
+USB장비를 컴퓨터에 삽입하고, 시작합니다.  USB를 파티션을 제거 및 포맷하기 때문에,&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;당연히 자료는 다 삭제됩니다.!!!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Win + R                      // 윈도우 + R키 입력후 실행 
+diskpart                     // diskpart 수행 
+list disk                    // 시스템에서 인식한 디스크 내역(사이즈로 구별가능)
+select disk                  // 작업할 디스크 선택 (!!!!주의 반드시 작업할 디스크 선택)
+clean                        // 디스크 정리 (파티션 및 관련 설정 초기화)
+create partition primary     // Primary 파티션 생성 
+list par                     // 파티션 내역 
+select partition = 1         // 작업 파티션 선택 
+active                       // 부팅가능 파티션 표시 
+format quick fs=ntfs         // ntfs로 빠른(quick) 포맷 
+exit                         // diskpart 종료 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;다음 그림은 과정에 대한 화면캡쳐입니다. 붉은박스가 입력 명령어 입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://xenostream.github.io/images/diskpart01.jpg&#34; alt=&#34;작업내역 1&#34; /&gt;&lt;br /&gt;
+&lt;img src=&#34;http://xenostream.github.io/images/diskpart02.jpg&#34; alt=&#34;작업내역 2&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;작업은 완료되었습니다.  이제는 &lt;code&gt;windows10.iso&lt;/code&gt; 파일을 복사할 차례입니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;iso파일 자체를 복사하는것이 아닙니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;가상디스크나 압축프로그램으로 해제한 후 iso파일내의 파일을 상기에서 작업한 USB에 &lt;code&gt;모두&lt;/code&gt;&lt;br /&gt;
+복사해주면 끝 입니다.&lt;/p&gt;
+
+&lt;p&gt;이렇게 생성한 설치용USB는 그냥 외장하드와 동일합니다. 일반 USB사용하듯이 사용해도 됩니다.&lt;br /&gt;
+단, 루트의 여러 기본디렉토리 구조는 그대로 유지하기 바랍니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Block Country with iptables</title>
+      <link>http://xenostream.github.io/2016/02/block-country-with-iptables</link>
+      <pubDate>Thu, 11 Feb 2016 00:15:37 +0930</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/block-country-with-iptables</guid>
+      <description>
+
+&lt;h2 id=&#34;iptables로-국가별로-차단:bd2e91ad1d91a11974d5cbe86b12d69f&#34;&gt;iptables로 국가별로 차단&lt;/h2&gt;
+
+&lt;p&gt;Linux &lt;code&gt;iptables&lt;/code&gt; 환경에서 다음의 스크립트를 생성후 실행&lt;br /&gt;
+아프카니스탄과 중퀴벌레를 차단하고 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/root&lt;/code&gt; 디렉토리에서 하기의 내용을 &lt;code&gt;Block.sh&lt;/code&gt;로 생성 후, &lt;code&gt;chmod 755 ./Block.sh&lt;/code&gt;로&lt;br /&gt;
+실행권한을 부여한 후 실행 합니다. (현재 디렉토리에 iptables 디렉토리를 생성하게 됩니다.)&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;참고로, 중국 대역이 많으므로 시간이 좀 걸릴 수 있습니다.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Block.sh&lt;/code&gt; 쉘파일을 실행할때마다 새롭게 대역파일을 받아와서 갱신하게 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;#!/bin/bash -x
+# Purpose: Block all traffic from AFGHANISTAN (af) and CHINA (CN). Use ISO code.
+## See url for more info - http://www.cyberciti.biz/faq/?p=3402
+# -------------------------------------------------------------------------------
+
+ISO=&amp;quot;af cn&amp;quot;
+
+
+### Set PATH ###
+IPT=/sbin/iptables
+WGET=/usr/bin/wget
+EGREP=/bin/egrep
+
+### No editing below ###
+SPAMLIST=&amp;quot;countrydrop&amp;quot;
+ZONEROOT=&amp;quot;/root/iptables&amp;quot;
+DLROOT=&amp;quot;http://www.ipdeny.com/ipblocks/data/countries&amp;quot;
+
+cleanOldRules()
+{
+  $IPT -F
+  $IPT -X
+  $IPT -t nat -F
+  $IPT -t nat -X
+  $IPT -t mangle -F
+  $IPT -t mangle -X
+  $IPT -P INPUT ACCEPT
+  $IPT -P OUTPUT ACCEPT
+  $IPT -P FORWARD ACCEPT
+}
+
+# create a dir
+[ ! -d $ZONEROOT ] &amp;amp;&amp;amp; /bin/mkdir -p $ZONEROOT
+
+# clean old rules
+cleanOldRules
+
+# create a new iptables list
+$IPT -N $SPAMLIST
+
+for c  in $ISO
+do
+    # local zone file
+    tDB=$ZONEROOT/$c.zone
+
+    # get fresh zone file
+    $WGET -O $tDB $DLROOT/$c.zone
+
+    # country specific log message
+    SPAMDROPMSG=&amp;quot;$c Country Drop&amp;quot;
+
+    # get
+    BADIPS=$(egrep -v &amp;quot;^#|^$&amp;quot; $tDB)
+    for ipblock in $BADIPS
+    do
+       $IPT -A $SPAMLIST -s $ipblock -j LOG --log-prefix &amp;quot;$SPAMDROPMSG&amp;quot;
+       $IPT -A $SPAMLIST -s $ipblock -j DROP
+    done
+done
+
+# Drop everything
+$IPT -I INPUT -j $SPAMLIST
+$IPT -I OUTPUT -j $SPAMLIST
+$IPT -I FORWARD -j $SPAMLIST
+
+# call your other iptable script
+# /path/to/other/iptables.sh
+
+exit 0
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

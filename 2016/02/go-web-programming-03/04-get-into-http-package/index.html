@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [03/04] Get into http Package &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-03/04-get-into-http-package" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [03/04] Get into http Package &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [03/04] Get into http Package</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="get-into-http-package:d9797a47a3107f48b35b98e37373341c">Get Into http Package</h1>
+
+<p>앞 절에서 Go 언어에서 Web 작업환경을 제공하는 것과 개발 흐름에 대해서 설명했습니다.<br />
+이 절에서는 <code>http</code> 패키지에 대해서 좀더 알아보도록 하겠습니다.<br />
+<code>net/http</code> 패키지의 핵심 프로세스는 어떻게 구현되어있는지 알아 보겠습니다.</p>
+
+<p>Go의 <code>net/http</code>에는 2개의 핵심적인 기능이 있습니다. 바로 <code>Conn 과 ServeMux</code> 입니다.</p>
+
+<h2 id="conn의-goroutine:d9797a47a3107f48b35b98e37373341c">Conn의 goroutine</h2>
+
+<p>현재 일반적으로 쓰이는 http 기반의 웹서버와는 다르게, Go 언어는 멀티스레드와 고성능을 실현하기 위해<br />
+goroutines을 사용하여 <code>Conn 이벤트</code>를 읽고 처리 합니다.<br />
+이 기능을 통해서 각각의 요청은 독립성을 유지 할 수 있습니다. 서로 차단하지 않고 효율적으로 네트워크 이벤트에 응답<br />
+할 수 있습니다. 이것은 Go 언어의 높은 효율을 보장 합니다.</p>
+
+<p>Go가 클라이언트의 요청을 대기할 때는 다음과 같이 사용합니다.</p>
+
+<pre><code class="language-go">c, err := srv.newConn(rw)
+if err != nil {
+    continue
+}
+go c.serve()
+</code></pre>
+
+<p>클라이언트의 각 요청은 <code>Conn</code> 객체 하나를 생성하고 사용하는 것을 알 수 있습니다.<br />
+이 Conn 객체에는 해당 요청 정보가 저장되어 있습니다. 이것은 주요 목적의 handler로 전달하는 것이고,<br />
+해당 handler에서 원하는 정보를 읽을 수 있습니다. 이처럼 각 요청별 독립성을 보장 합니다.</p>
+
+<h2 id="servemux의-정의:d9797a47a3107f48b35b98e37373341c">ServeMux의 정의</h2>
+
+<p>앞 절에서 <code>conn.server</code>대해 설명했을 때 내부적으로 <code>http</code> 패키지의 기본 루트를 호출하고 있었습니다.<br />
+이번에는 <code>라우터</code>를 통해서 각 요청에대한 데이터를 백엔드 처리함수에 전달 합니다.</p>
+
+<p><code>라우터</code>는 어떻게 구현되어 있을까요? 구조는 다음과 같습니다.</p>
+
+<pre><code class="language-go">type ServeMux struct {
+    mu sync.RWMutex       // 뮤텍스 요청이 멀티스레드로 처리 됩니다.     
+    m map[string]muxEntry // 라우팅 규칙 하나의 string이 하나의 mux 엔티티에 대응 합니다. 
+    hosts bool            // 어떤 규칙에 host 정보가 포함되어 있는지
+}
+</code></pre>
+
+<p>다음으로 muxEntry를 살펴보겠습니다.</p>
+
+<pre><code class="language-go">type muxEntry struct {
+    explicit bool      // 일치 여부 검증  
+    h Handler          // 라우팅 식과 연결된 handler
+    pattern string     // 매칭 문자열
+}
+</code></pre>
+
+<p>다음으로 Handler의 정의에 대해서 알아 보겠습니다.</p>
+
+<pre><code class="language-go">type Handler interface {
+    ServeHTTP(ResponseWriter *Request) // 라우팅 기능 구현 
+}
+</code></pre>
+
+<p>Handler는 <code>인터페이스</code>지만, 앞부분 중에서 <code>sayhelloName()</code>함수는 ServeHTTP라는 인터페이스를<br />
+구현하지는 않았습니다. 그런데 어떻게 추가 할 수 있을까요?<br />
+원래 http 패키지에는 <code>HandlerFunc</code>라는 형식이 정의되어 있습니다. 우리가 정의한 <code>sayhelloName</code>함수는<br />
+바로이 <code>HandlerFunc</code>가 호출 된 결과이며,이 형태는 기본적으로 ServeHTTP 인터페이스를 구현하고있는 것입니다.<br />
+즉, HandlerFunc(f)를 호출해서 강제로 <code>f</code>를 HandlerFunc 타입으로 <code>형변환</code>하고있는 것입니다.<br />
+이런 과정을 거쳐서 <code>f</code>는 ServeHTTP 메소드를 갖게됩니다.</p>
+
+<pre><code class="language-go">type HandlerFunc func (ResponseWriter *Request)
+
+// ServeHTTP calls f(w, r).
+func (f Ha​​ndlerFunc) ServeHTTP(w ResponseWriter, r * Request) {
+    f(w, r)
+}
+</code></pre>
+
+<p>라우터는 해당 라우팅 규칙을 저장 한 후에는 실제적으로는 어떻게 요청을 분류할까요?<br />
+다음 코드를 참고 하시기 바랍니다. 기본 라우터는 <code>ServeHTTP</code>를 구현 합니다.</p>
+
+<pre><code class="language-go">func (mux *ServeMux) ServeHTTP(w ResponseWriter, r * Request) {
+    if r.RequestURI == &quot;*&quot; {
+        w.Header()Set(&quot;Connection&quot;, &quot;close&quot;)
+        w.WriteHeader(StatusBadRequest)
+        return
+    }
+    h , _ := mux.Handler(r)
+    h.ServeHTTP(w, r)
+}
+</code></pre>
+
+<p>위에서 보았듯이 라우터는 요청을받은 후 이값이 <code>*</code>면 연결을 해제하고, 그렇지 않으면<br />
+<code>mux.handler(r).ServeHTTP(w, r)</code>를 호출하여 해​​당 설정처리 Handler를 반환해서,<br />
+<code>h.ServeHTTP(w, r)</code>를 실행 합니다.</p>
+
+<p>즉, 원하는 라우팅 handler의 ServerHTTP 인터페이스에 대한 호출입니다.<br />
+<code>mux.Handler(r)</code>는 어떻게 처리 하는것 일까요?</p>
+
+<pre><code class="language-go">func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string) {
+    if r.Method != &quot;CONNECT&quot; {
+        if p := cleanPath(r.URL.Path); p != r.URL.Path {
+            _, pattern = mux.handler(r.Host, p)
+            return RedirectHandler(p, StatusMovedPermanently), pattern
+        }
+    }
+    return mux.handler (r.Host, r.URL.Path)
+}
+
+func (mux *ServeMux) handler (host, path string) (h Handler, pattern string) {
+    mux.mu.RLock()
+    defer mux.mu.RUnlock()
+
+    if mux.hosts {
+        h, pattern = mux.match(host + path)
+    }
+    if h == nil {
+        h, pattern = mux.match(path)
+    }
+    if h == nil {
+        h, pattern = NotFoundHandler(), &quot;&quot;
+    }
+    return
+}
+</code></pre>
+
+<p>원래 이것은 사용자의 요청 된 URL과 라우터에 저장되는 map 따라 일치하고 있습니다. 매칭에 의해 저장되는<br />
+handler가 반환 될 즈음이 handler의 ServeHTTP 인터페이스가 호출되어 원하는 기능을 수행 할 수 있습니다.</p>
+
+<p>위의 소개를 통해 우리는 라우팅의 전체 프로세스를 이해했습니다. Go는 사실 외부에서 구현 된 라우터를 지원합니다.<br />
+<code>ListenAndServe</code>의 두번째 인자가 외부의 라우터를 설정하기 위해 사용됩니다.<br />
+이것은 Handler 인터페이스의 하나로 외부 라우터 Handler 인터페이스를 구현하고 ServeHTTP에<br />
+사용자 정의 라우팅 기능을 구현할 수 있습니다.</p>
+
+<p>아래 코드를 통해 자신 간단한 라우터를 구현하려고합니다.</p>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;net / http&quot;
+)
+
+type MyMux struct {
+}
+
+func (p *MyMux) ServeHTTP(w http.ResponseWriter, r * http.Request) {
+    if r.URL.Path == &quot;/&quot; {
+        sayhelloName(w, r)
+        return
+    }
+    http.NotFound(w, r)
+    return
+}
+
+func sayhelloName(w http.ResponseWriter, r * http.Request) {
+    fmt.Fprintf(w, &quot;Hello myroute!&quot;)
+}
+
+func main () {
+    mux := &amp;MyMux{}
+    http.ListenAndServe(&quot;: 9090&quot;, mux)
+}
+</code></pre>
+
+<h2 id="go-코드의-실행-과정:d9797a47a3107f48b35b98e37373341c">Go 코드의 실행 과정</h2>
+
+<p>http 패키지에 대한 분석을 통해서 전체 코드의 실행 과정을 정리해 보겠습니다.</p>
+
+<ul>
+<li><p>먼저 <code>Http.HandleFunc()</code>함수를 호출 합니다.<br />
+순서에 따라서 몇 가지 작업을 실행 합니다.</p>
+
+<ol>
+<li>DefaultServeMux의 HandlerFunc를 호출 합니다.<br /></li>
+<li>DefaultServeMux의 Handle을 호출 합니다.<br /></li>
+<li>DefaultServeMux의 map[string]muxEntry에서 원하는 handler 및 라우팅 규칙을 추가 합니다.<br /></li>
+</ol></li>
+
+<li><p>다음으로 <code>http.ListenAndServe(&quot;: 9090&quot;, nil)</code> 함수를 호출 합니다.<br />
+이 과정도 몇가지 순서에 따라 처리합니다.</p>
+
+<ol>
+<li>Server의 엔티티화<br /></li>
+<li>Server의 ListenAndServe() 함수를 호출<br /></li>
+<li>net.Listen(&ldquo;tcp&rdquo;, addr)함수를 호출한 후 포트를 감시<br /></li>
+<li>for 루프를 시작하고 요청을 Accept<br /></li>
+<li>각 요청에 대해서 Conn을 하나 생성해 엔티티화하고, 각 요청에 대해서 goroutine 하나를 실행한 후
+go c.serve() 서비스를 실행</li>
+<li>각 요청의 내용을 로드한 후  w, err := c.readRequest()<br /></li>
+<li>처리 handler가 존재하는지 판단. 만약 handler가 설정되어 있지 않으면<br />
+(예제에서는 handler는 설정하지 않습니다) handler는 DefaultServeMux로 설정.</li>
+<li>handler의 ServeHttp를 호출<br /></li>
+<li>이후 DefaultServeMux.ServeHttp 모드에 돌입<br /></li>
+<li>request에따라 해당 handler를 선택하고, handler의 ServeHTTP에 돌입
+mux.handler&reg;.ServeHTTP(w, r)<br /></li>
+<li>handler를 선택<br />
+A. 라우터가 request를 처리했는지 판단(루프에 의해 ServerMux의 muxEntry를 검사)<br />
+B. 만약 라우팅되면 해당 라우팅 handler의 ServeHttp를 호출<br />
+C. 라우팅되지 않으면 NotFoundHandler의 ServeHttp를 호출</li>
+</ol></li>
+</ul>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-03/05-summary"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-03/03-how-go-works-with-web">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

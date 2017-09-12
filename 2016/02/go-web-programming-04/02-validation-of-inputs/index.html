@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [04/02] Validation of Inputs &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-04/02-validation-of-inputs" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [04/02] Validation of Inputs &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [04/02] Validation of Inputs</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="validation-of-inputs:aa6dd3fa9bca059f31fb3cf3bdd9efcb">Validation of inputs</h1>
+
+<blockquote>
+<p>사용자가 입력한 어떤 정보도 믿지말라!!</p>
+</blockquote>
+
+<p>Web 개발시에는 상기와 같은 원칙이 있습니다. 따라서 사용자가 입력한 정보를 <code>검증</code>하고 필터링하는 것은<br />
+아주 중요한 작업이 되었습니다.<br />
+블로그나 뉴스에서 홈페이지가 해킹되거나 보안홀이 발생한 것을 들었던 기억이 있을것 입니다.<br />
+이들 대부분은 사용자가 입력한 정보를 홈페이지에서 엄격하게 검증하고 적절히 처리하지 않았기 때문입니다.<br />
+따라서 <code>안전한 Web 프로그램</code>을 작성하는 기법에서 입력양식의 데이터를 <strong>검증</strong>하는 것은 매우 중요 합니다.</p>
+
+<p>Web 응용프로그램을 개발할때,주로 두군데에서 <code>데이터 검증을 실시</code>합니다.<br />
+첫번째는 <code>JavaScript</code>에 의한 검증(현재 이 방법은 많은 플러그인이 존재 합니다. ValidationJS)이고,<br />
+다른 하나는 서버측에서 <code>유효성 검사</code>루틴 입니다. 이 절에서는 서버측 검증에 대해서 설명 합니다.</p>
+
+<h2 id="필수-필드:aa6dd3fa9bca059f31fb3cf3bdd9efcb">필수 필드</h2>
+
+<p>양식 요소에서 값하나를 추출하고자 합니다. 예를들어 이전 예제의 사용자 아이디를 어떻게 처리할지에 대한<br />
+문제입니다. Go 언어는 내장함수인 <code>len()</code>함수를 통해서 문자열의 길이를 얻을 수 있습니다.<br />
+예를 들면 다음과 같습니다.</p>
+
+<pre><code class="language-go">if len(r.Form[&quot;username&quot;][0]) == 0 {
+    // 입력값이 없을 경우의 처리
+}
+</code></pre>
+
+<p><code>r.Form</code>은 형태마다 폼 요소의 공백에 대해서 각기 다른 작업을 수행 합니다. 빈 텍스트 필드, 텍스트 영역 및 파일 업로드에는<br />
+요소의 값을 비웁니다. 또한 선택되지 않은 콤보 상자 나 셀렉트 박스는 <code>r.Form</code>에서는 해당 항목을 생성하지 않습니다.<br />
+따라서 <code>r.Form.Get()</code>을 사용해서 해당 값을 구해야 합니다. 왜냐하면 만약 필드가 존재하지 않을 경우에는, 이 방법은 빈 값을<br />
+얻어서 알 수 있습니다. 하지만,<code>r.Form.Get()</code>의 경우는 하나의 값만 얻을 수 있습니다. 만약 map값과 같이 여러개라면 이방법은<br />
+통하지 않습니다.</p>
+
+<h2 id="숫자-검증:aa6dd3fa9bca059f31fb3cf3bdd9efcb">숫자 검증</h2>
+
+<p>예를 들어 양식에서 나이가 50세와 10세 등의 구체적인 숫자값만 필요하고, &ldquo;아저씨&rdquo;, &ldquo;젊은이&rdquo; 등의 글자는 필요하지 않다고,<br />
+가정할 경우 입력양식의 필드에 <code>숫자만 허용</code>하도록 시키고, 숫자일 경우에는 정수인지를 판단하기 위해 먼저 int로 변환 한 후<br />
+처리 합니다.</p>
+
+<p>양의 정수를 판단하고자 하는 경우 먼저 int로 변환한 후 처리 합니다.</p>
+
+<pre><code class="language-go">getint, err := strconv.Atoi(r.Form.Get(&quot;age&quot;))
+if err != nil {
+    // 숫자 변환 오류가 발생했습니다. 즉, 숫자가 아닙니다.
+}
+
+// 다음으로는 숫자의 범위를 결정합니다.
+if getint &gt; 100 {
+    // 너무 나이가 많습니다. 
+}
+</code></pre>
+
+<p>또 다른 방법으로는  정규표현식으로 처리하는 방법입니다.</p>
+
+<pre><code class="language-go">if m , _ := regexp.MatchString(&quot;^[0-9] + $&quot;, r.Form.Get(&quot;age&quot;)); !m {
+    return false
+}
+</code></pre>
+
+<p>어떤 처리방식이 더좋은 성능과 안정성이 좋은지는 항상 토론되는 주제 중 하나입니다. 어떤이는 가능​​한 한 정규표현식을<br />
+피해야한다고 생각하고 있습니다. 왜냐면 <code>정규표현식의 처리 속도는 일반적으로 느리기 때문입니다.</code> 그러나 현재처럼 컴퓨터<br />
+성능이 발달한 환경이라면 간단한 정규표현식의 효율성과 형식변환 함수 사이의 성능차이는 크지 않습니다.<br />
+만약 개발자가 정규표현식에 익숙하다면, G​​o 언어에서 제공하는 정규표현식을 사용하는 것도 편리한 방법 중 하나 입니다.</p>
+
+<blockquote>
+<p>Go 정규표현식 구현은 <a href="http://code.google.com/p/re2/wiki/Syntax">RE2</a>입니다.<br />
+모든 문자는 UTF-8 인코딩으로 처리됩니다.</p>
+</blockquote>
+
+<h2 id="한국어:aa6dd3fa9bca059f31fb3cf3bdd9efcb">한국어</h2>
+
+<p>폼 요소에서 한글이름만 얻고 싶은 경우에는, 올바른 한국어임을 보증하기 위해 확인을 해야 합니다.<br />
+사용자로 하여금 아무 문자열이나 입력시키도록 허용하지 않습니다. 한국어에 대한 올바른 검증법에는 <code>unicode</code> 패키지가 제공하는<br />
+<code>func Is(rangeTab *RangeTable, r rune) bool</code> 함수와  정규 표현식을 사용하는 방법이 있습니다.<br />
+다음의 코드를 참고하시기 바랍니다.</p>
+
+<pre><code class="language-go">if m,  _ := regexp.MatchString(&quot;^\\p{Han}+$&quot;, r.Form.Get(&quot;realname&quot;)); !m {
+    return false
+}
+</code></pre>
+
+<h2 id="영어:aa6dd3fa9bca059f31fb3cf3bdd9efcb">영어</h2>
+
+<p>사용자의 영어이름만 사용하고 싶을 때, 폼 입력 요소에서 영어값만 허용하고(예  <code>Xenostream</code>는 허용 <code>Xeno스트림</code> 불허)<br />
+싶을경우에는 다음과 같이 간단한 정규식을 사용하여 데이터를 검증 할 수 있습니다.</p>
+
+<pre><code class="language-go">if m,  _ := regexp.MatchString(&quot;^[a-zA-Z] + $&quot;, r.Form.Get(&quot;engname&quot;)); !m {
+    return false
+}
+</code></pre>
+
+<h2 id="이메일-주소:aa6dd3fa9bca059f31fb3cf3bdd9efcb">이메일 주소</h2>
+
+<p>사용자가 입력 한 Email 주소가 올바른 것인지를 확인하려면, 다음과 같은 방법으로 확인할 수 있습니다.</p>
+
+<pre><code class="language-go">if m,  _ := regexp.MatchString(`^(\w\\_] {2,10})@(\w{1}).([az] {2,4})$` r.Form.Get(&quot;email&quot;)); !m {
+    fmt.Println(&quot;no&quot;)
+} else {
+    fmt.Println(&quot;yes&quot;)
+}
+</code></pre>
+
+<h2 id="전화-번호:aa6dd3fa9bca059f31fb3cf3bdd9efcb">전화 번호</h2>
+
+<p>사용자가 입력 한 전화번호가 올바른지를 확인하려면 다음의 정규 표현식처럼 확인할 수 있습니다.</p>
+
+<pre><code class="language-go">if m,  _ : = regexp.MatchString(`^(01[0-9]\d{4,8})$`, r.Form.Get(&quot;mobile&quot;)); !m {
+    return false
+}
+</code></pre>
+
+<h2 id="풀다운-메뉴:aa6dd3fa9bca059f31fb3cf3bdd9efcb">풀다운 메뉴</h2>
+
+<p>양식 중에서 <code>&lt;select&gt;</code> 요소가 생성하는 풀다운 메뉴에서 해커는 때때로 풀다운 메뉴에 없는 항목을 위조한 후,<br />
+허위 데이터를 보낼 수 도 있습니다. 이런 경우에 원래 설정된 값임을 확인하려면 어떻게 해야할까요?</p>
+
+<p>select에 다음과 같이 설정되어 있다고 가정 합니다.</p>
+
+<pre><code class="language-html">&lt;select name = &quot;fruit&quot;&gt;
+&lt;option value = &quot;apple&quot;&gt; apple &lt;/option&gt;
+&lt;option value = &quot;pear&quot;&gt; pear &lt;/option&gt;
+&lt;option value = &quot;banane&quot;&gt; banane &lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+
+<p>이 경우 다음과 같은 방법으로 확인 할 수 있습니다.</p>
+
+<pre><code class="language-go">slice := []string{&quot;apple&quot;, &quot;pear&quot;, &quot;banane&quot;}
+
+for _ , v := range slice {
+    if v == r.Form.Get(&quot;fruit&quot;) {
+        return true
+    }
+}
+return false
+</code></pre>
+
+<h2 id="라디오-버튼:aa6dd3fa9bca059f31fb3cf3bdd9efcb">라디오 버튼</h2>
+
+<p>남자/여자와 같은 성별을 구별하는 일은 라디오버튼을 이용해서 처리 합니다.<br />
+15세의 소년이 http프로토콜을 이용해서, telnet 클라이언트를 이용해서 프로그램에 해당 데이터를 전달했다고 가정하면,<br />
+예를 들어 남자=1, 여자=2로 설정했을 경우, 3이라는 허위값을 전송하게 되면  프로그램에서는 예외를 처리할까요?<br />
+풀다운 메뉴에서는 항상 원래 정상적으로 얻고자하는 값인지를 판단해야 합니다.</p>
+
+<pre><code class="language-html">&lt;input type = &quot;radio&quot; name = &quot;gender&quot; value = &quot;1&quot;&gt; 남자
+&lt;input type = &quot;radio&quot; name = &quot;gender&quot; value = &quot;2&quot;&gt; 여자
+</code></pre>
+
+<p>풀다운 메뉴의 처리 방법과 같이 사용할 수 있습니다.</p>
+
+<pre><code class="language-go">slice := []int{1,2}
+
+for _, v := range slice {
+    if v == r.Form.Get(&quot;gender&quot;) {
+        return true
+    }
+}
+return false
+</code></pre>
+
+<h2 id="체크박스:aa6dd3fa9bca059f31fb3cf3bdd9efcb">체크박스</h2>
+
+<p>취미와 같은 정보를 선택하는 체크박스의 경우를 알아보도록 하겠습니다.</p>
+
+<pre><code class="language-html">&lt;input type = &quot;checkbox&quot; name = &quot;interest&quot; value = &quot;football&quot;&gt; 축구
+&lt;input type = &quot;checkbox&quot; name = &quot;interest&quot; value = &quot;basketball&quot;&gt; 농구
+&lt;input type = &quot;checkbox&quot; name = &quot;interest&quot; value = &quot;tennis&quot;&gt; 테니스
+</code></pre>
+
+<p>체크박스는  라디오버튼 방식과는 검증방법이 <code>조금 다릅니다.</code> 왜냐하면 수신된 데이터가 <code>slice형태</code>이기 때문 입니다.</p>
+
+<pre><code class="language-go">slice := []string{&quot;football&quot;, &quot;basketball&quot;, &quot;tennis&quot;}
+a := Slice_diff(r.Form[&quot;interest&quot;, slice)
+if a == nil {
+    return true
+}
+
+return false
+</code></pre>
+
+<p><code>Slice_diff</code>라는 함수는 오픈소스 <code>외부 라이브러리</code>입니다.(slice와 map을 처리하는 전용 라이브러리)<br />
+<a href="https://github.com/astaxie/beeku">https://github.com/astaxie/beeku</a> 에서 다운로드 받을 수 있습니다.</p>
+
+<h2 id="날짜와-시간:aa6dd3fa9bca059f31fb3cf3bdd9efcb">날짜와 시간</h2>
+
+<p>사용자가 입력 한 날짜가 유효한지를 확인하고 싶을 경우가 있습니다. 예를들어 사용자가 8월 15일에 파티를 예정하거나,<br />
+미래의 자기생일이 무슨 요일인지를 알아보는 경우 등 여러가지 경우가 발생할 수 있습니다.<br />
+Go는 <code>time</code> 패키지를 기본적으로 제공하고 있습니다. 사용자가 입력한 날짜를 원하는 시간으로 변환한 후 처리 합니다.</p>
+
+<pre><code class="language-go">t := time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
+fmt.Printf(&quot;Go launched at %s \n&quot;, t.Local())
+</code></pre>
+
+<p>먼저 <code>time 객체</code>를 취득한 후 시간 함수를 사용해서 해당 작업을 처리할 수 있습니다.<br />
+구체적인 판단법은 요구사항에 맞게 조정해서 사용하시면 됩니다.</p>
+
+<h2 id="각종-서식화-번호-카드번호-주민번호-등:aa6dd3fa9bca059f31fb3cf3bdd9efcb">각종 서식화  번호(카드번호, 주민번호 등&hellip;)</h2>
+
+<p>양식입력에서 주민등록번호를 입력하는 경우에 정규식을 사용하면 쉽게 확인할 수 있습니다. 그러나 주민등록 번호는<br />
+6자리와 7자리가 <code>특정한 용도</code>가 있기 때문에 2가지 부분 모두를 별도로 검증해야 합니다.<br />
+(주 : 주민등록번호의 마지막 자리는 앞의 12자리를 연산한 후 생성되는 <code>체크디지트</code> 숫자 입니다.)</p>
+
+<pre><code class="language-go">// 13자리 주민등록번호 확인. 13자리 모두 숫자 입니다.
+if m, _ := regexp.MatchString(`^(\d{13})$`, r.Form.Get(&quot;usercard&quot;)); !m {
+    return false
+}
+</code></pre>
+
+<p>13번째 숫자는 정식 주민등록번호임을 확인하는 체크 디지트입니다. 앞의 12자리를 연산한 후 13번째를 계산 합니다.<br />
+예제에서는 13번째 자리를 계산하지 않고, 숫자인지만 검사하는 방식으로 대신 설명 합니다.</p>
+
+<pre><code class="language-o">if m, _ := regexp.MatchString(`^(\d{13})([0-8]|9)$`, r.Form.Get(&quot;usercard&quot;)); !m {
+    return false
+}
+</code></pre>
+
+<p>이상으로, 웹개발에 주로 사용되는 서버측 입력 요소값을 검증하는 몇가지 방법에 대해서 설명 했습니다.<br />
+이 설명을 기초로해서 Go언어를 이용한 데이터 검증, 특히 정규식의 처리에 대한 지식이 늘어났다면 좋겠습니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-04/03-cross-site-scripting"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-04/01-process-form-inputs">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

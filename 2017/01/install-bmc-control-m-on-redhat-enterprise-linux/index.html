@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Install BMC Control-M on Redhat Enterprise Linux &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2017/01/install-bmc-control-m-on-redhat-enterprise-linux" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2017-01-04T15:20:10&#43;09:30" />
+  
+  <meta property="og:article:tag" content="Control-M" />
+  
+  
+
+  <title>
+     Install BMC Control-M on Redhat Enterprise Linux &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Install BMC Control-M on Redhat Enterprise Linux</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2017-01-04T15:20:10&#43;09:30">
+          Jan 4, 2017
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/control-m">#Control-M</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="install-bmc-control-m:6c81db782dd271de9c619becf0181899">Install BMC Control-M</h1>
+
+<pre><code>  Minimal 설치(개발툴 모두 설치: 추가적으로 Java Developement는 설치)
+  /etc/hosts 파일 생성(반드시!!)
+  groupadd dba
+  useradd -g dba -s /bin/csh ctmuser
+  useradd -g dba -s /bin/csh emuser
+  chmod 755 /home/ctmuser
+  chmod 755 /home/emuser
+  /BMC/setup.sh (chmod -R 777 /BMC 선행)
+</code></pre>
+
+<p>CTM/EM설치시에 미리 ctmuser로 <code>/home/ctmuser/pgsql/app_data/em700</code> 폴터를 생성하고
+  <code>chmod 770 em700</code> 명령으로 퍼미션 생성후 CTM/EM을 설치!!</p>
+
+<h1 id="control-m-7-x-gui-실행시-먹통-현상:6c81db782dd271de9c619becf0181899">Control-M 7.x GUI 실행시 먹통 현상</h1>
+
+<ol>
+<li>GUI 설치 및 실행시 &ldquo;관리자권한&rdquo; 으로 실행</li>
+<li>Enterprise Manager Fixpack을 최신 상태로 설치후 실행</li>
+</ol>
+
+<h1 id="control-m-버전별-권장-os:6c81db782dd271de9c619becf0181899">Control-M 버전별 권장 OS</h1>
+
+<pre><code>Control-M v7.x == RHEL 5.x
+Control-M v8.x == RHEL 6.x
+Control-M v9.x == RHEL 7.x
+</code></pre>
+
+<p>상기의 매핑은 별다른 설정 변경이 필요하지 않음.
+Mix형태로 설치할 경우는 하기의 추가적인 패키지를 설정해야함.</p>
+
+<h1 id="설치-dvd를-yum-repository로-사용:6c81db782dd271de9c619becf0181899">설치 DVD를 yum Repository로 사용</h1>
+
+<pre><code>mkdir /media/dvd                             : 마운트포인트 생성
+mount -t iso9660 /dev/cdrom /media/dvd       : 마운트 
+
+
+vi /etc/yum.repos.d/rhel-dvd.repo            : 설치 DVD 리포지토리 
+
+[rhel-dvd]
+name=Red Hat Enterprise Linux $releasever - $basearch - DVD
+baseurl=file:///media/dvd/
+gpgcheck=0
+
+yum clean all
+yum grouplist
+</code></pre>
+
+<h1 id="mixed환경에서-사용시-설치-패키지:6c81db782dd271de9c619becf0181899">Mixed환경에서 사용시 설치 패키지</h1>
+
+<pre><code>Cann't Starting Configuration Agent Problem....
+ yum install libcurl.i686 libstdc++.i686 libgcc.i686 pam-devel.i686
+
+필요시.....  
+ln -s /usr/lib/libcurl.so.4.1.1 /usr/lib/libcurl.so.3
+</code></pre>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2017/01/running-hugo-server-with-github"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2017/01/snorkel-embedded-webserver-with-c-language">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

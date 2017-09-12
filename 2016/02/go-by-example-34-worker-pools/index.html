@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go by Example: [34] Worker Pools &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-by-example-34-worker-pools" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-16T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="gobyexample" />
+  
+  
+
+  <title>
+     Go by Example: [34] Worker Pools &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go by Example: [34] Worker Pools</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-16T00:00:00Z">
+          Feb 16, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/gobyexample">#gobyexample</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="worker-pools:921a3b5d2e714c9124ac369e129099d4">Worker Pools</h1>
+
+<p>다음의 예제는, <code>channel</code>과 <code>goroutine</code>을 이용해서 <code>Worker Pool</code>을 구현하는 예제 입니다.</p>
+
+<pre><code class="language-go">package main
+
+import &quot;time&quot;
+import &quot;fmt&quot;
+
+func worker(id int, jobs &lt;-chan int, results chan&lt;- int) {     // [1]
+    for j := range jobs {
+        fmt.Println(&quot;worker&quot;, id, &quot;processing job&quot;, j)
+        time.Sleep(time.Second)
+        results &lt;-j * 2
+    }
+}
+
+func main() {
+    
+    jobs := make(chan int, 100)                                // [2]
+    results := make(chan int, 100)
+    
+    for w := 1; w &lt;= 3; w++ {                                  // [3]
+        go worker(w, jobs, results)
+    }
+    
+    for j := 1; j &lt;= 9; j++ {                                  // [4]
+        jobs &lt;-j
+    }
+    close(jobs)
+    
+    for a := 1; a &lt;= 9; a++ {                                  // [5]
+        &lt;-results
+    }
+}
+</code></pre>
+
+<ol>
+<li>작업함수를 선언합니다. 동시에 여러개의 함수를 실행할 것입니다.  이 작업함수는 <code>jobs</code>채널에서<br />
+작업하며, <code>results</code>채널에 작업결과를 전송하게 됩니다.  두번째 작업을 위해서 일정시간 대기합니다.<br /></li>
+<li>현재의 작업풀(<code>worker pool</code>)에서는 작업의 수행하고 해당 수행 결과를 수집하는 것이 목적입니다.<br />
+이렇듯, 특정작업을 수행하는 것과 결과를 수집하는 2개의 채널을 생성하고 사용합니다.<br /></li>
+<li>총 3개의 작업자함수를 시작하고, 현재 수행된 작업이 없으므로, 블럭상태에 둡니다.<br /></li>
+<li>9개의 작업을 처리한후 해당 채널을 종료하고 있습니다.</li>
+<li>마지막으로 수집된 결과를 결과채널에(<code>results</code>) 전송합니다.<br /></li>
+</ol>
+
+<p>실행하면 다음과 같습니다.</p>
+
+<pre><code>$ time go run worker-pools.go 
+worker 1 processing job 1
+worker 2 processing job 2
+worker 3 processing job 3
+worker 1 processing job 4
+worker 2 processing job 5
+worker 3 processing job 6
+worker 1 processing job 7
+worker 2 processing job 8
+worker 3 processing job 9
+
+real	0m3.149s
+</code></pre>
+
+<p>총 9개의 작업을 수행한 후 처리를 완료하는데 총 3초 가량 소요되었습니다. 이론적으로는 9초가<br />
+소요되어야 하나, 동시병렬 실행으로 작동했기때문에 3개 작업을 3번 걸쳐서 해서 3초가 소요되었습니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/block-country-with-iptables"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-by-example-33-tickers">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

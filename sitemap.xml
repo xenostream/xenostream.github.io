@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://xenostream.github.io/</loc>
+    <lastmod>2017-09-12T16:18:23+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2017/09/acme-sac</loc>
+    <lastmod>2017-09-12T16:18:23+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2017/01/setup-blog-with-hugo-with-github-pages</loc>
+    <lastmod>2017-01-04T23:23:41+09:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2017/01/snorkel-embedded-webserver-with-c-language</loc>
+    <lastmod>2017-01-04T16:05:37+09:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2017/01/install-bmc-control-m-on-redhat-enterprise-linux</loc>
+    <lastmod>2017-01-04T15:20:10+09:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2017/01/running-hugo-server-with-github</loc>
+    <lastmod>2017-01-04T15:08:37+09:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/make-bootable-usb-with-diskpart</loc>
+    <lastmod>2016-02-20T20:46:37+09:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-oracle-driver-setting---linux</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-perface</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-01/00-intro</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-01/01-installation</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-01/02-gopath--working-directory</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-01/03-go-command</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-01/04-go-developement-tools</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-01/05-summary</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/00-basic-knowledge</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/01-hello-go</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/02-go-foundation</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/03-control-statements-and-functions</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/04-struct</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/05-object-oriented</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/06-interface</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/07-concurrency</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-02/08-summary</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-03/00-web-foundation</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-03/01-web-working-principles</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-03/02-build-a-simple-web-server</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-03/03-how-go-works-with-web</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-03/04-get-into-http-package</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-03/05-summary</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-04/00-http-form</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-04/01-process-form-inputs</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-04/02-validation-of-inputs</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-web-programming-04/03-cross-site-scripting</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/sublime-text3--gosublime-installation</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/vim-go----linux</loc>
+    <lastmod>2016-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/about</loc>
+    <lastmod>2016-02-17T00:15:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-perface</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-01-hello-world</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-02-values</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-03-variables</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-04-constant</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-05-for</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-06-if-/-else</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-07-switch</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-08-arrays</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-09-slices</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-10-maps</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-11-range</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-12-functions</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-13-multiple-return-values</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-14-variadic-functions</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-15-closures</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-16-recursion</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-17-pointers</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-18-structs</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-19-methods</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-20-interfaces</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-21-errors</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-22-goroutines</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-23-channels</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-24-channel-buffering</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-25-channel-synchronization</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-26-channel-directions</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-27-select</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-28-timeouts</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-29-non-blocking-channel-operations</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-30-closing-channels</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-31-range-over-channels</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-32-timers</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-33-tickers</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/go-by-example-34-worker-pools</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://xenostream.github.io/2016/02/block-country-with-iptables</loc>
+    <lastmod>2016-02-11T00:15:37+09:30</lastmod>
+  </url>
+  
+</urlset>

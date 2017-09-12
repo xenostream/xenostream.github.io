@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go by Example: [10] Maps &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-by-example-10-maps" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-16T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="gobyexample" />
+  
+  
+
+  <title>
+     Go by Example: [10] Maps &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go by Example: [10] Maps</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-16T00:00:00Z">
+          Feb 16, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/gobyexample">#gobyexample</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="maps:056a53517e884b56b128a471f2aed929">Maps</h1>
+
+<p>맵(Map)은 <code>Go</code>언어에서 기본적으로 제공하는 연관된 데이터를 다룰 수 있는 자료구조입니다.<br />
+이 자료형은 다른언어에서는 해쉬(hash)값이나 사전(Dicts)형으로 불리는 데이터 구조입니다.</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+    
+    m := make(map[string]int)                // [1]
+    
+    m[&quot;k1&quot;] = 7                              // [2]
+    m[&quot;k2&quot;] = 13
+    
+    fmt.Println(&quot;map:&quot;, m)                   // [3]
+    
+    v1 := m[&quot;k1&quot;]                            // [4]
+    fmt.Println(&quot;v1:&quot;, v1)
+    
+    fmt.Println(&quot;len:&quot;, len(m))              // [5]
+    
+    delete(m, &quot;k2&quot;)                          // [6]
+    fmt.Println(&quot;map:&quot;, m)
+    
+    _, prs := m[&quot;k2&quot;]                        // [7]
+    fmt.Println(&quot;prs:&quot;, prs)
+    
+    n := map[string]int{&quot;foo&quot;: 1, &quot;bar&quot;: 2}  // [8]
+    fmt.Println(&quot;map:&quot;, n)
+}
+</code></pre>
+
+<ol>
+<li><code>make(map[key-type]value-type)</code>형식을 사용해서 빈 맵을 생성하고 있습니다.</li>
+<li><code>name[key] = value</code>형태로 맵에 데이터를 키값을 기준으로 설정하고 있습니다.</li>
+<li><code>fmt.Println()</code>함수로 맵을 출력하면 모든 <code>key/vaue</code>를 출력합니다.<br /></li>
+<li><code>name[key]</code>형식으로 맵의 해당키의 값을 추출해 낼 수 있습니다.<br /></li>
+<li><code>len()</code> 내장함수를 통해서, 현재 맵의 <code>키/값</code> 쌍의 개수를 알아낼 수 있습니다.<br /></li>
+<li><code>delete()</code> 내장함수를 통해서, 현재 맵의 특정 값(키/값)을 제거할 수 있습니다.<br /></li>
+<li>맵은 내부적으로 데이터를 구별하는 맵식별자를 추가적으로 리턴합니다.<br />
+이값은 <code>0</code>이거나 빈문자열(<code>&quot;&quot;</code>)값을 가진 키를 찾을때 사용합니다.  예제에서는 이값이<br />
+특별히 필요하지 않기 때문에 <strong><code>_</code></strong> 변수로 해당 값을 무시했습니다.</li>
+<li>맵은 선언과 동시에 초기화해서 맵을 생성할 수 있습니다. (<code>make()</code>함수를 통하지 않았습니다.)</li>
+</ol>
+
+<p>실행하면 다음과 같습니다.</p>
+
+<pre><code>$ go run maps.go 
+map: map[k1:7 k2:13]
+v1:  7
+len: 2
+map: map[k1:7]
+prs: false
+map: map[foo:1 bar:2]
+</code></pre>
+
+<p><code>fmt.Println()</code>함수를 이용해서 맵을 출력하면 <code>map[k:v k:v]</code>와 같이 키/값을 모두 출력합니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-by-example-11-range"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-by-example-09-slices">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

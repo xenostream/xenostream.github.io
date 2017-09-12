@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Vim Go  - Linux &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/vim-go----linux" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="devtools" />
+  
+  
+
+  <title>
+     Vim Go  - Linux &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Vim Go  - Linux</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/devtools">#devtools</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h2 id="vim-go-plugin-installation-guide:d6ac5b2eecfc12afd25350cc0802f0f4">Vim Go Plugin Installation Guide</h2>
+
+<h3 id="vim-go-기능:d6ac5b2eecfc12afd25350cc0802f0f4">vim-go 기능</h3>
+
+<ul>
+<li>syntax highlighting<br /></li>
+<li>gocode를 이용한 자동완성<br /></li>
+<li>gofmt를 이용한 자동 포멧팅<br /></li>
+<li>godoc를 이용한 go 언어 도움말<br /></li>
+
+<li><p>GoRUN, GoBuild등의 명령을 이용해서 에디팅 환경에서 코드 실행 및 컴파일</p></li>
+
+<li><p>Vim Manager 설치</p>
+
+<pre><code># mkdir -p ~/.vim/autoload ~/.vim/bundle
+# cd ~/.vim/autoload
+# curl -LSso pathogen.vim https://tpo.pe/pathogen.vim
+</code></pre></li>
+
+<li><p>.vimrc 편집</p>
+
+<pre><code># cat ~/.vimrc
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
+</code></pre></li>
+
+<li><p>vim-go 설치</p>
+
+<pre><code># cd ~/.vim/bundle
+# git clone https://github.com/fatih/vim-go.git
+</code></pre></li>
+
+<li><p>환경변수 추가 (<code>vi ~/.bash_profile</code>)</p>
+
+<pre><code># export GOPATH=$HOME/golang 
+# export PATH=$PATH:$GOPATH/bin
+# mkdir $HOME/golang
+</code></pre></li>
+
+<li><p>vim 실행 후 다음 실행</p>
+
+<pre><code>### vim
+~
+~
+:GoInstallBinaries
+vim-go: gocode not found. Installing github.com/nsf/gocode to folder /home/pjkwon/.vim-go/
+vim-go: goimports not found. Installing code.google.com/p/go.tools/cmd/goimports to folder /home/pjkwon/.vim-go/
+vim-go: godef not found. Installing code.google.com/p/rog-go/exp/cmd/godef to folder /home/pjkwon/.vim-go/
+vim-go: oracle not found. Installing code.google.com/p/go.tools/cmd/oracle to folder /home/pjkwon/.vim-go/
+vim-go: golint not found. Installing github.com/golang/lint/golint to folder /home/pjkwon/.vim-go/
+vim-go: errcheck not found. Installing github.com/kisielk/errcheck to folder /home/pjkwon/.vim-go/
+vim-go: gotags not found. Installing github.com/jstemmer/gotags to folder /home/pjkwon/.vim-go/
+계속하려면 엔터 혹은 명령을 입력하십시오
+</code></pre></li>
+</ul>
+
+<h3 id="vim-go-명령어:d6ac5b2eecfc12afd25350cc0802f0f4">vim-go 명령어</h3>
+
+<pre><code>:GoRun           // 실행 
+
+:make
+:GoBuild         // 빌드 실행 
+
+:GoErrCheck      // 에러체크 
+
+:GoDoc           // GoDoc 호출 
+
+:GoDef           // 변수 정의 이동 
+</code></pre>
+
+<h3 id="vimrc-파일-추가:d6ac5b2eecfc12afd25350cc0802f0f4">.vimrc 파일 추가</h3>
+
+<pre><code>set ic
+set nobackup
+set nu
+set ts=4
+set softtabstop=4
+set shiftwidth=4
+set formatoptions=croql
+set ruler
+set showmode
+set smartindent
+set statusline=\ %&lt;%l:%v\ [%P]%=%a\ %h%m%r\ %F\
+syntax on
+
+set encoding=utf-8
+set termencoding=utf-8
+
+
+execute pathogen#infect()
+filetype plugin indent on
+</code></pre>
+
+<p><code>root</code>계정에서는 <em>.vimrc</em> 파일이 적용되지 않는데, <code>alias vi='vim</code> 명령을 <code>.bash_profile</code>에<br />
+추가 해주면 적용 됩니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/about"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/sublime-text3--gosublime-installation">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [02/04] Struct &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-02/04-struct" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [02/04] Struct &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [02/04] Struct</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="struct:dc81ca879119090b9c3afddc5e2ac033">Struct</h1>
+
+<p>Go 언어는 C나 다른 언어와 마찬가지로 서로 다른 형태의 속성이나 필드의 컨테이너로 새로운 형태를<br />
+선언 할 수 있습니다. 예를 들어, 개인의 엔티티를 나타내는 <code>person</code> 형을 새롭게 만들 수 있습니다.<br />
+이 엔티티는 속성을 가지고 있습니다. 성별과 나이 입니다. 이러한 형식은 <code>struct</code> 이라고 합니다.<br />
+다음은 예제 코드입니다.</p>
+
+<pre><code class="language-go">type person struct {
+    name string
+    age int
+}
+</code></pre>
+
+<p><code>struct 선언</code>은 이렇게 간단하게 처리합니다.<br />
+위의 struct형은 2개의 필드를 가지고 있습니다.</p>
+
+<ul>
+<li>string형의 name 필드는 사용자의 <code>이름</code>을 저장하는 속성 입니다.</li>
+<li>int형 age 필드는 사용자의 <code>나이</code>를 저장하는 속성 입니다.<br /></li>
+</ul>
+
+<p>이제 <code>struct</code>이 어떻게 사용되는지를 코드를 통해서 알아보도록 하겠습니다.</p>
+
+<pre><code class="language-go">type person struct {
+    name string
+    age int
+}
+
+var P person                // P는 person형 변수입니다.
+
+P.name = &quot;Xenostream&quot;      // &quot;Xenostream&quot;을 변수 P의 name 속성에 할당 합니다.
+P.age = 25                 // &quot;25&quot;를 변수 P의 age 속성에 할당 합니다.
+fmt.Printf(&quot;The person 's name is %s&quot;, P.name)   // P의 name 속성에 액세스 합니다.
+</code></pre>
+
+<p>위와 같은 방법외에도, 다른 여러 가지 선언 방법이 있습니다.</p>
+
+<ul>
+<li><p>선언된 순서에 따라 초기화 합니다.<br />
+<code>P := person{&quot;Tom&quot;, 25}</code></p></li>
+
+<li><p><code>field : value</code> 방법으로 초기화 합니다. 이 경우 순서는 임의로 설정 됩니다.<br />
+<code>P := person{age: 24, name: &quot;Tom&quot;}</code></p></li>
+
+<li><p><code>new()</code> 함수를 통해서 포인터로 만들 수 있습니다. 이 P의 형태는 <code>*person</code> 입니다.<br />
+<code>P := new(person)</code>`</p></li>
+</ul>
+
+<p>다음의 예제를 통해서 일반적인 struct의 사용법에 대해서 설명 합니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+// 새로운 형태(타입)를 선언 합니다.
+type person struct {
+    name string
+    age int
+}
+
+// 두 사람의 나이를 비교 합니다. 나이가 큰 사람을 돌려주고, 나이 차이도 반환 합니다.
+// struct도 값전달 방식으로 인수를 전달 합니다.
+func Older(p1, p2 person) (person, int) {
+    if p1.age &gt; p2.age {              // p1과 p2의 두 사람의 나이를 비교합니다.
+        return p1, p1.age - p2.age
+    }
+    return p2, p2.age - p1.age
+}
+
+func main() {
+    var tom person
+
+    // 초기 값을 할당 합니다.
+    tom.name, tom.age = &quot;Tom&quot;, 18
+
+    // 2 개의 필드를 명확히 초기화 합니다.
+    bob := person{age: 25, name: &quot;Bob&quot;}
+
+    // struct 정의의 순서대로 초기화 합니다.
+    paul := person{&quot;Paul&quot;, 43}
+
+    tb_Older, tb_diff := Older(tom, bob)
+    tp_Older, tp_diff := Older(tom, paul)
+    bp_Older, bp_diff := Older(bob, paul)
+
+    fmt.Printf(&quot;Of %s and %s %s is older by %d years \n&quot;,
+        tom.name, bob.name, tb_Older.name, tb_diff)
+
+    fmt.Printf(&quot;Of %s and %s %s is older by %d years \n&quot;,
+        tom.name, paul.name, tp_Older.name, tp_diff)
+
+    fmt.Printf(&quot;Of %s and %s %s is older by %d years \n&quot;,
+        bob.name, paul.name, bp_Older.name, bp_diff)
+}
+</code></pre>
+
+<h3 id="struct-익명-필드:dc81ca879119090b9c3afddc5e2ac033">struct 익명 필드</h3>
+
+<p>위에서 struct를 선언하는 방법에 대해서 설명 했습니다. 선언 할 때 필드이름과 형태가 각각 대응하고 있습니다.<br />
+사실 Go는 형태만 정의하는 것도 지원하고 있습니다. 이것은 <code>필드 이름을 쓰지 않는 방법</code>으로, <strong>익명 필드</strong>라고 합니다.<br />
+또는 <code>기본 제공 필드</code>라고도 합니다.</p>
+
+<p><code>익명 필드</code>가 struct인 경우,이 struct가 가진 모든 필드는 숨겨지고, 현재 정의하고 있는 struct에 포함 됩니다.<br />
+예를 들어서 설명 하겠습니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+type Human struct {
+    name string
+    age int
+    weight int
+}
+
+type Student struct {
+    Human          // 익명필드, 기본적으로 Student는 Human 모든 필드를 포함 할 수 있습니다.
+    speciality string
+}
+
+func main() {
+    // 학생 한 명을 초기화 합니다.
+    mark := Student{Human{&quot;Mark&quot;, 25, 120}, &quot;Computer Science&quot;}
+
+    // 해당 필드에 액세스합니다.
+    fmt.Println(&quot;His name is&quot;, mark.name)
+    fmt.Println(&quot;His age is&quot;, mark.age)
+    fmt.Println(&quot;His weight is&quot;, mark.weight)
+    fmt.Println(&quot;His speciality is&quot;, mark.speciality)
+    
+    // 전공 정보를 수정 합니다.
+    mark.speciality = &quot;AI&quot;
+    fmt.Println(&quot;Mark changed his speciality&quot;)
+    fmt.Println(&quot;His speciality is&quot;, mark.speciality)
+    
+    // 나이 정보를 수정 합니다.
+    fmt.Println(&quot;Mark become old&quot;)
+    mark.age = 46
+    fmt.Println(&quot;His age is&quot;, mark.age)
+    
+    // 체중 정보를 수정합니다.
+    fmt.Println( &quot;Mark is not an athlet anymore&quot;)
+    mark.weight += 60
+    fmt.Println(&quot;His weight is&quot;, mark.weight)
+}
+</code></pre>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/2.4.student_struct.png" alt="" /></p>
+
+<p>그림 2.7 Student와 Human 상속</p>
+
+<p>Student가 age와 name 속성에 액세스 할 때, 마치 <code>자신의 필드인 것처럼 접근</code>한 것을 볼 수 있습니다.<br />
+이것이 바로 <code>익명 필드</code> 입니다. 이것으로 필드 상속을 구현 할 수 있습니다.</p>
+
+<p>OOP언어에서 보다 간단하게 구현할 수 있지 않습니까? 여기에 더 멋진 방법도 있습니다.<br />
+student는 Human 필드 이름에서 액세스 할 수 있습니다.  아래의 코드를 참조 하십시오.</p>
+
+<pre><code class="language-go">mark.Human = Human{&quot;Marcus&quot;, 55, 220}
+mark.Human.age -= 1
+</code></pre>
+
+<p>익명필드의 액세스 및 수정은 간단 합니다. struct 필드에는 Go언어의 모든 내장형과 자신이 정의한 모든형을<br />
+<code>익명 필드</code>로 사내장해서 사용할 수 있습니다.  아래의 예를 참조하시기 바랍니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+type Skills[] string
+
+type Human struct {
+    name string
+    age int
+    weight int
+}
+
+type Student struct {
+    Human            // 익명 필드 struct
+    Skills           // 익명 필드 내에서 정의 된 형. string slice
+    int              // 기본 int형 필드
+    speciality string
+}
+
+func main() {
+    // 학생 Jane을 초기화 합니다.
+    jane := Student{Human: Human{&quot;Jane&quot;, 35, 100}, speciality: &quot;Biology&quot;}
+    
+    // 해당 필드에 액세스 
+    fmt.Println(&quot;Her name is&quot;, jane.name)
+    fmt.Println(&quot;Her age is&quot;, jane.age)
+    fmt.Println(&quot;Her weight is&quot;, jane.weight)
+    fmt.Println(&quot;Her speciality is&quot;, jane.speciality)
+    
+    // skill 기능 필드를 수정 합니다.
+    jane.Skills = []string{ &quot;anatomy&quot;}
+    fmt.Println(&quot;Her skills are&quot;,jane.Skills)
+    fmt.Println(&quot;She acquired two new ones&quot;)
+    jane.Skills = append(jane.Skills, &quot;physics&quot;, &quot;golang&quot;)
+    fmt.Println(&quot;Her skills now are&quot;jane.Skills)
+    
+    // 기본 int형 필드를 수정 합니다.
+    jane.int = 3
+    fmt.Println(&quot;Her preferred number is&quot;, jane.int)
+}
+</code></pre>
+
+<p>위의 같이, struct는 struct 익명필드뿐 만 아니라, 직접 정의한 형(Type)또는,  내장형도 익명필드로 처리<br />
+할 수 있습니다. 또한 해당 필드에 직접 함수를 실행 할 수 있습니다 (예를 들어 상기의 append() 입니다).</p>
+
+<p>만약 human에 phone이라는 필드가 있고, student에도 phone 이라는 필드가 있습니다.<br />
+이럴경우 어떤것이 사용되게 되는 것일 까요?</p>
+
+<p>Go는 이 문제를 쉽게 해결할 수 있습니다. 우선 외부가 먼저 액세스되기 때문에 <code>student.phone</code>에 액세스 한 경우<br />
+st​​udent 내의 phone 필드에 액세스하고, human의 phone 필드에 액세스하지 않습니다.</p>
+
+<p>이처럼 익명 필드를 통해 <code>필드상속</code>을 쉽게 처리 할 수 있습니다. 익명필드에 접근하고 싶다면 익명필드의 이름으로<br />
+액세스 할 수 있습니다. 아래의 예를 참조 하시기 바랍니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+type Human struct {
+    name string
+    age int
+    phone string         // Human 형이 가지는 필드
+}
+
+type Employee struct {
+    Human               // 익명 필드 Human
+    speciality string
+    phone string        // 직원 phone 필드
+}
+
+func main() {
+    Bob := Employee{Human{&quot;Bob&quot;, 34 &quot;777-444-XXXX&quot;}, &quot;Designer&quot;, &quot;333-222&quot;}
+    fmt.Println(&quot;Bob 's work phone is :&quot;, Bob.phone)
+    
+    // 만약 Human의 phone 필드에 액세스하는 경우
+    fmt.Println(&quot;Bob 's personal phone is :&quot;, Bob.Human.phone)
+}
+</code></pre>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/05-object-oriented"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/03-control-statements-and-functions">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

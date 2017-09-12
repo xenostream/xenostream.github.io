@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Oracle Driver Setting - Linux &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-oracle-driver-setting---linux" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="golang" />
+  
+  
+
+  <title>
+     Go Oracle Driver Setting - Linux &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Oracle Driver Setting - Linux</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/golang">#golang</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="go-oracle-driver-setting-how-to:cfc80950fe14b5b9c47178d48dcca6a3">Go Oracle Driver Setting How To</h1>
+
+<p><a href="http://qiita.com/qt-luigi/items/fbbe6792a77b493a58f9"> Go  - Lang : Oracle Access used by go-oci8 on Linux </a><br />
+<a href="https://github.com/mattn/go-oci8">Official URL</a></p>
+
+<p>#1. Instant Client 설치
+ instantclient-basic-linux.x64-11.2.0.4.0.zip
+ instantclient-sdk-linux.x64-11.2.0.4.0.zip</p>
+
+<p>unzip 으로 모두 압축해제 ( tar xvpf )</p>
+
+<p>#2. root권한으로 심볼릭 링크 생성
+ cd /home/pjkwon/Go/instantclient_11_2
+ ln -s libclntsh.so.11.1 libclntsh.so</p>
+
+<p>#3. root권한으로 oci8.pc 생성
+ <code>vi /usr/lib/pkgconfig/oci8.pc</code></p>
+
+<pre><code>prefix=/home/pjkwon/Go/instantclient_11_2
+libdir=${prefix}
+includedir=${prefix}/sdk/include/
+
+Name: OCI
+Description: Oracle database engine
+Version: 11.2
+Libs: -L${libdir} -lclntsh
+Libs.private:
+Cflags: -I${includedir}
+
+#4. home디렉토리 .bash_profile 생성 
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+export PKG_CONFIG_PATH=/usr/lib/pkgconfig
+export GOPATH=/home/pjkwon/Go
+export PATH=$PATH:/usr/local/go/bin
+export ORACLE_HOME=/home/pjkwon/Go/instantclient_11_2
+export PATH=$PATH:$ORACLE_HOME
+export LD_LIBRARY_PATH=$ORACLE_HOME
+export NLS_LANG=American_America.KO16MSWIN949
+export TNS_ADMIN=$ORACLE_HOME/network/admin
+export ORACLE_SID=ORCL
+</code></pre>
+
+<p>#5. go-oci8 설치</p>
+
+<pre><code>cd $GOPATH/src
+go get github.com/mattn/go-oci8
+</code></pre>
+
+<p>#6. Example 실행</p>
+
+<pre><code>cd $GOPATH/src/github.com/mattn/go-oci8/_example 
+go run oracle.go scott/tiger@localhost:1521/orcl
+</code></pre>
+
+<p><a href="http://apextips.blogspot.kr/2015/09/making-connections-to-oracle-database.html">Example</a></p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-perface"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/make-bootable-usb-with-diskpart">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

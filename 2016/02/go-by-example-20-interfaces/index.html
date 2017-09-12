@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go by Example: [20] Interfaces &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-by-example-20-interfaces" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-16T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="gobyexample" />
+  
+  
+
+  <title>
+     Go by Example: [20] Interfaces &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go by Example: [20] Interfaces</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-16T00:00:00Z">
+          Feb 16, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/gobyexample">#gobyexample</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="interfaces:b21eff47d42ad7c161c95ec66d94922d">Interfaces</h1>
+
+<p><code>인터페이스(Interfaces)</code>는 <code>메소드 집합</code>에 붙여진 이름이라고 생각하시면 됩니다.</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+import &quot;math&quot;
+
+type geometry interface {                    // [1]
+    area() float64
+    perim() float64
+}
+
+type rect struct {                           // [2]
+    width, height float64
+}
+
+type circle struct {
+    radius float64
+}
+
+func (r rect) area() float64 {               // [3]
+    return r.width * r.height
+}
+
+func (r rect) perim() float64 {
+    return 2*r.width + 2*r.height
+}
+
+func (c circle) area() float64 {             // [4]
+    return math.Pi * c.radius * c.radius
+}
+
+func (c circle) perim() float64 {
+    return 2*math.Pi * c.radius
+}
+
+func measure(g geometry) {                   // [5]
+    fmt.Println(g)
+    fmt.Println(g.area())
+    fmt.Println(g.perim())
+}
+
+func main() {
+    r := rect{width: 3, height: 4}
+    c := circle{radius: 5}
+    
+    measure(r)                               // [6]
+    measure(c)
+}
+</code></pre>
+
+<ol>
+<li>형태를 처리하는 인터페이스를 선언 합니다.<br /></li>
+<li>인터페이스는 메소드의 집합이라고 했습니다. rect, circle 구조체 인터페이스의<br />
+내부 함수는 <strong>반드시 구현</strong>되어야만 합니다.<br /></li>
+<li><code>Go</code>언어에서 인터페이스내의 함수 구현은 인터페이스에 선언된 함수를 모두 구현하면됩니다.<br /></li>
+<li><code>circle</code>구조체에 대한 인터페이스를 구현합니다.</li>
+<li>만약 인터페이스 타입 변수일 경우 인터페이스이름을 통해서 메소드를 호출하면 됩니다.<br />
+<code>measure</code>함수는 인터페이스를 인자로 받아서 처리합니다.</li>
+<li><code>circle / rect</code>구조체 타입은 모두 <code>geometry</code>인터페이스를 구현했으므로, <code>measure</code>함수의<br />
+인자로 전달 할 수 있습니다.<br /></li>
+</ol>
+
+<p>실행하면 다음과 같습니다.</p>
+
+<pre><code>$ go run interfaces.go
+{3 4}
+12
+14
+{5}
+78.53981633974483
+31.41592653589793
+</code></pre>
+
+<p>인터페이스에 대한 자세한 내용은 <a href="http://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go">Jordan Orelli</a>블로그에<br />
+자세히 설명되어 있으니 참고하시기 바랍니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-by-example-21-errors"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-by-example-19-methods">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

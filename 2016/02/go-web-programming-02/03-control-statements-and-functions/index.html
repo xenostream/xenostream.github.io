@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [02/03] Control Statements and Functions &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-02/03-control-statements-and-functions" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [02/03] Control Statements and Functions &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [02/03] Control Statements and Functions</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="control-statements-and-functions:ecec97cf5f294358cffce75fc18e7e73">Control Statements and Functions</h1>
+
+<p>이 절에서는 Go 언어의 <code>흐름 제어</code><code>및</code>함수`에 대해서 설명 합니다.</p>
+
+<h2 id="흐름-제어:ecec97cf5f294358cffce75fc18e7e73">흐름 제어</h2>
+
+<p>흐름 제어는 프로그래밍 기능중에서 가장 중요한 기능입니다. 왜냐하면 흐름제어를 통해서 매우 간단한 로직에서 부터<br />
+복잡한 로직까지 표현 할 수 있기 때문 입니다. Go언어의 흐름 제어는 크게 세 부분으로 구성되어 있습니다.<br />
+바로 <code>조건문, 판단문, 루프 제어 및 무조건 점프</code> 입니다.</p>
+
+<h3 id="if:ecec97cf5f294358cffce75fc18e7e73">if</h3>
+
+<p><code>if</code>는 모든 프로그래밍 언어에서 가장 자주 사용하는 구문중 하나일 것입니다.<br />
+이 문법을 대략적으로 설명하면, 만약 조건을 만족하면 무엇을하고 만족하지 않으면 어떤 행동을 할지를 결정하는 것입니다.</p>
+
+<p>Go 언어에서는 <code>if</code> 분기문의 특징은 <strong>비교조건에 괄호를 사용할 필요가 없습니다.</strong> 다음 코드를 참고 하시기 바랍니다.</p>
+
+<pre><code class="language-go">if x&gt; 10 {
+    fmt.Println(&quot;x is greater than 10&quot;)
+} else {
+    fmt.Println(&quot;x is less than 10&quot;)
+}
+</code></pre>
+
+<p>Go의 <code>if</code>문의 장점중 하나는 <code>조건 분기에서 변수를 선언</code>할 수 있습니다.<br />
+이렇게 선언한 변수의 범위는 선언된 블록내에만 존재하며 다른 곳에서는 사용할 수 없습니다.</p>
+
+<pre><code class="language-go">// x 값을 계산한 후 x의 크기를 반환 합니다. 예제에서는 10 이상 여부를 판단 합니다.
+if x := computedValue(); x &gt; 10 {
+    fmt.Println(&quot;x is greater than 10&quot;)
+} else {
+    fmt.Println(&quot;x is less than 10&quot;)
+}
+
+// 만약 이렇게 호출하면 컴파일 오류 입니다. x는 조건문 내에서만 사용하는 변수이기 때문 입니다.    
+fmt.Println(x)
+</code></pre>
+
+<p>또한, 여러가지 조건별로 검사를 할 수도 있습니다. 예제는 다음과 같습니다.</p>
+
+<pre><code class="language-go">if integer == 3 {
+    fmt.Println(&quot;The integer is equal to 3&quot;)
+} else if integer &lt; 3 {
+    fmt.Println(&quot;The integer is less than 3&quot;)
+} else {
+    fmt.Println(&quot;The integer is greater than 3&quot;)
+}
+</code></pre>
+
+<h3 id="goto:ecec97cf5f294358cffce75fc18e7e73">goto</h3>
+
+<p>Go언어에도 <code>goto</code> 키워드가 있습니다.</p>
+
+<blockquote>
+<p>반드시 사용할 곳에만 현명하게 사용하시기 바랍니다.</p>
+</blockquote>
+
+<p><code>goto</code> 문은 반드시 함수내에서 미리 정의 된 태그(레이블)로 이동 합니다.<br />
+예를 들어 이러한 루프가 있다고 가정 합니다.</p>
+
+<pre><code class="language-go">func myFunc() {
+    i := 0
+Here :           //행의 첫컬럼에서 시작하고 콜론을 마지막에 사용하여 태그로 표시 합니다.     
+    println(i)
+    i++
+    goto Here   // Here로 이동 합니다.
+}
+</code></pre>
+
+<blockquote>
+<p>태그 이름은 대소문자를 구별 합니다.</p>
+</blockquote>
+
+<h3 id="for:ecec97cf5f294358cffce75fc18e7e73">for</h3>
+
+<p>Go언어에서 가장 <strong>강력한 컨트롤 문장</strong>이라면 단연, <code>for</code> 문장 입니다.</p>
+
+<blockquote>
+<p>Go언어의 반복문은 <code>for</code>문 <strong>하나 뿐</strong>입니다.</p>
+</blockquote>
+
+<p>반복문을 이용해서, 데이터를 모두 읽어 내는 용도 등에 사용할 수 있습니다.<br />
+일반적인 언어에서 <code>while, do while, for</code>문장을 한개로 사용한다고 생각하시면 됩니다.  문법은 다음과 같습니다.</p>
+
+<pre><code class="language-go">for expression1; expression2; expression3 {
+   ...
+}
+</code></pre>
+
+<p><code>expression1</code>, <code>expression2</code>, <code>expression3</code>은 식 입니다.<br />
+<code>expression1</code>과 <code>expression3</code>은 변수 선언이나 함수 호출의 반환 값을 사용할 수 있습니다.<br />
+<code>expression2</code>는 반복문 의사 결정에 사용 됩니다. 이 문장의 흐름은 다음과 같습니다.<br />
+<code>expression1</code>문장은 루프가 시작되기 전에 호출 됩니다. <code>expression3</code> 반복 할 때 마지막으로 호출 됩니다.</p>
+
+<p>이렇게 설명하는 것보다는 예제를 보는 편이 빠르겠습니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+func main() {
+    sum := 0;
+    for index := 0; index &lt; 10; index++ {
+        sum += index
+    }
+    
+    fmt.Println(&quot;sum is equal to&quot;, sum)
+}
+</code></pre>
+
+<p>다음과 같이 출력됩니다.</p>
+
+<p><code>sum is equal to 45</code></p>
+
+<p>때로는 여러개의 변수할당을 할 경우가 있습니다. Go언어에는 콤마연산자(,)가 없기 때문에 병행할당을 이용할 수 있습니다.</p>
+
+<p><code>i, j = i + 1, j-1</code></p>
+
+<p>또한, <code>expression1</code>과 <code>expression3</code>를 생략 할 수 도 있습니다.</p>
+
+<pre><code class="language-go">sum := 1
+for ; sum &lt;1000 ; {
+    sum += sum
+}
+</code></pre>
+
+<p>이 예제에서는 <code>;</code>을 생략 할 수 있습니다. 다음과 같은 코드는 동일한 기능을 수행 합니다.<br />
+어디선가 낯이 익지 않습니까? 바로 다른언어의 <code>while</code> 문의 기능 입니다.</p>
+
+<pre><code class="language-go">sum := 1
+for sum &lt; 1000 {
+    sum += sum
+}
+</code></pre>
+
+<p>반복문에서는 <code>break</code>와<code>continue</code> 두 가지 명령을 사용할 수 있습니다.<br />
+<code>break</code>는 현재 루프에서 탈출하며, <code>continue</code>는 조건 검사로 점프 합니다.<br />
+중첩 된 반복문의 경우<code>break</code> 명령으로, 한번에 중첩 반복문을 탈출 할 수 있습니다.<br />
+다음은 그 사용 예제입니다.</p>
+
+<pre><code class="language-go">for index := 10; index &gt; 0; index-- {
+    if index == 5 {
+        break      // 또는 continue
+    }
+    fmt.Println(index)
+}
+// break문이라면  10,9,8,7,6이 출력 됩니다.
+// continue문의 경우 10,9,8,7,6,4,3,2,1이  출력 됩니다.
+</code></pre>
+
+<p><code>break</code>와<code>continue</code> 는 이름(태그)을 지정해서 사용할 수 있습니다.<br />
+여러번 중첩된 루프에서 바깥쪽 루프로 한번에 점프하는 데 사용 됩니다. (break goto_label)</p>
+
+<p><code>for</code>문장의 주요 용도는 <code>range</code> 키워드와 함께 사용해서 <code>slice</code>와<code>map</code>의 데이터를 액세스 할 경우 입니다.</p>
+
+<pre><code class="language-go">for k, v := range map {
+    fmt.Println(&quot;map 's key :&quot;, k)
+    fmt.Println(&quot;map 's val :&quot;, v)
+}
+</code></pre>
+
+<blockquote>
+<p>Go는 &ldquo;여러개의 반환 값&rdquo;을 반환하는 기능을 제공 합니다.</p>
+</blockquote>
+
+<p>하지만, 선언만하고 사용하지 않는 변수는 컴파일러 오류를 출력 합니다.<br />
+이런 상황에서 <code>_</code>를 사용하여 필요없는 반환 값을 무시할 수 있습니다.</p>
+
+<pre><code class="language-go">for _ , v := range map {
+    fmt.Println(&quot;map 's val :&quot;, v)
+}
+</code></pre>
+
+<p>상기의 코드에서는 <code>_</code>문자로 변수 값을 무시했으므로, 컴파일 오류가 발생하지 않습니다.</p>
+
+<h3 id="switch:ecec97cf5f294358cffce75fc18e7e73">switch</h3>
+
+<p>수 많은 <code>if-else</code>를 사용해서 로직 처리해야하는 경우가 종종 있습니다.<br />
+이런 많은류의 분기 코드는 보기에도 좋지 않고, 읽기도 좋지 않습니다. 또한 유지 보수도 쉽지 않게 되므로,<br />
+이런 문제는 <code>switch</code>문을 사용하면 간단히 해결 할 수 있습니다. 이 문법은 다음과 같습니다.</p>
+
+<pre><code class="language-go">switch sExpr {
+    case expr1:
+        some instructions
+    case expr2:
+        some other instructions
+    case expr3:
+        some other instructions
+    default:
+        other code
+}
+</code></pre>
+
+<p><code>sExpr</code>과 <code>expr1</code><code>expr2</code><code>expr3</code>의 유형은 *정확히 일치**해야 합니다.<br />
+Go의<code>switch</code>문은 사용하기 편리하며, 식(expression)에 반드시 정수만 사용할 수 있는것이 아닙니다.<br />
+실행 과정은 위에서 아래까지 case문장 중 <strong>일치하는 항목</strong>을 찾을 때까지 수행 됩니다.<br />
+만약 <code>switch</code>에 일치하는 식이 없으면, <code>default</code> 문장을 수행 합니다.</p>
+
+<pre><code class="language-go">i := 10
+switch i {
+    case 1:
+        fmt.Println(&quot;i is equal to 1&quot;)
+    case 2, 3, 4:
+        fmt.Println(&quot;i is equal to 2, 3 or 4&quot;)
+    case 10:
+        fmt.Println(&quot;i is equal to 10&quot;)
+    default:
+        fmt.Println( &quot;All I know is that i is an integer&quot;)
+}
+</code></pre>
+
+<p>상기 예제에서는 7번째 줄의 case문이 수행 됩니다.</p>
+
+<p>Go의 <code>switch</code>은 기본적으로 <code>case</code>의 마지막에 <code>break</code>문이 있는 것으로 간주하기 때문에,<br />
+case를 실행한 후에 곧바로 switch문을 벗어나게 됩니다. 만약, <code>fallthrough</code> 키워드를 사용한다면,<br />
+해당 case 코드를 수행한 후 다음 case문을 수행할 수도 있습니다. 다음은 그 사용 예제입니다.</p>
+
+<pre><code class="language-go">integer := 6
+switch integer {
+    case 4:
+        fmt.Println(&quot;The integer was &lt;= 4&quot;)
+        fallthrough
+    case 5:
+        fmt.Println(&quot;The integer was &lt;= 5&quot;)
+        fallthrough
+    case 6:
+        fmt.Println(&quot;The integer was &lt;= 6&quot;)
+        fallthrough
+    case 7:
+        fmt.Println(&quot;The integer was &lt;= 7&quot;)
+        fallthrough
+    case 8:
+        fmt.Println(&quot;The integer was &lt;= 8&quot;)
+        fallthrough
+    default:
+        fmt.Println( &quot;default case&quot;)
+}
+</code></pre>
+
+<p>상기의 코드는 다음과 같이 출력 됩니다.</p>
+
+<pre><code>The integer was &lt;= 6
+The integer was &lt;= 7
+The integer was &lt;= 8
+default case
+</code></pre>
+
+<h2 id="함수:ecec97cf5f294358cffce75fc18e7e73">함수</h2>
+
+<blockquote>
+<p>함수는 Go언어의 가장 핵심 중의 핵심입니다.</p>
+</blockquote>
+
+<p>키워드 <code>func</code> 으로 함수를 선언 합니다. 함수 선언 형식은 다음과 같습니다.</p>
+
+<pre><code class="language-go">func funcName(input1 type1, input2 type2) (output1 type1, output2 type2) {
+    // 로직 처리 코드입니다.
+    // 여러 값을 반환 합니다.
+    return value1, value2
+}
+</code></pre>
+
+<p>위의 코드를 통해서 다음과 같은 것을 알 수 있습니다.</p>
+
+<ul>
+<li>키워드<code>func</code>을 이용해서 <code>funcName</code>라는 함수를 선언 합니다.<br /></li>
+<li>함수는 하나 이상의 인수를 취할 수 있고, 인수의 이름 뒤에 인수의 형식을 지정합니다. 콤마(,)를 구분자로 사용 합니다.<br /></li>
+<li>함수는 한번에 여러개의 반환 값을 반환 할 수 있습니다.<br />
+예제에서는 두 변수 <code>output1</code>과 <code>output2</code>에 반환 됩니다. 반환 변수의 이름은 생략해도 무관 합니다.<br /></li>
+<li>만약 하나의 반환 값만 존재한다면, 반환 값의 괄호를 생략 할 수 있습니다.<br /></li>
+<li>만약 반환 값이 없다면, 반환 값의 정보도 생략 할 수 있습니다.<br /></li>
+<li>만약 반환 값이 있으면 함수에서 return 문을 추가해야 합니다.<br /></li>
+</ul>
+
+<p>다음은 실제로, 함수를 사용하는 예제 입니다. (Max 값을 계산 합니다)</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+// a, b 중 최대 값을 반환 합니다.
+func max(a, b int) int {
+    if a &gt; b {
+        return a
+    }
+    return b
+}
+
+func main() {
+    x := 3
+    y := 4
+    z := 5
+
+    max_xy := max(x, y) // 함수 max(x, y)를 호출
+    max_xz := max(x, z) // 함수 max(x, z)를 호출
+
+    fmt.Printf(&quot;max(% d % d) = % d \n&quot;, x, y max_xy)
+    fmt.Printf(&quot;max(% d % d) = % d \n&quot;, x, z, max_xz)
+    fmt.Printf(&quot;max(% d % d) = % d \n&quot;, y, z, max(y, z))  // 직접 호출해도 괜찮습니다.
+}
+</code></pre>
+
+<p>위의 <code>max()</code> 함수에는 2개의 인수가 있습니다. 인수의 형식은 모두 <code>int</code>형 입니다.<br />
+첫 번째 인수 형식은 생략 할 수 있습니다.(즉 a, b int,나 a int, b int는 동일 합니다.)<br />
+선택은 개발자의 취향 입니다. 2개 이상의 동일한 형식의 반환값도 마찬가지 입니다.</p>
+
+<h3 id="여러개의-반환-값:ecec97cf5f294358cffce75fc18e7e73">여러개의 반환 값</h3>
+
+<p>Go 언어는 C에 비해 향상적인 특징을 가지고 있습니다.</p>
+
+<blockquote>
+<p>함수가 한번에 여러개의 반환 값을 가질 수 있습니다.</p>
+</blockquote>
+
+<p>코드를 통해서 알아보도록 하겠습니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+// A + B와 A * B를 반환 합니다
+func SumAndProduct(A, B int) (int, int) {
+    return A + B, A * B
+}
+
+func main() {
+    x := 3
+    y := 4
+
+    xPLUSy, xTIMESy := SumAndProduct(x, y)
+
+    fmt.Printf(&quot;%d + %d = %d \n&quot;, x, y xPLUSy)
+    fmt.Printf(&quot;%d * %d = %d \n&quot;, x, y xTIMESy)
+}
+</code></pre>
+
+<p>예제에서는 직접 2 개의 값을 반환 했습니다. 당연히 인수명으로 반환해도 상관 없습니다.<br />
+만약 함수가 export되는 함수라면(대문자로 시작) 가능한 한 반환 값에 이름을 붙이는 것을 권장 합니다.<br />
+왜냐면 이름없는 반환 코드보다 반환 변수명으로 반환하는 것이 코드의 가독성이 좋기 때문 입니다.</p>
+
+<pre><code class="language-go">func SumAndProduct(A, B int) (add int, Multiplied int) {
+    add = A + B
+    Multiplied = A * B
+    return
+}
+</code></pre>
+
+<h3 id="가변-인자:ecec97cf5f294358cffce75fc18e7e73">가변 인자</h3>
+
+<p>Go 함수는 가변 인자 기능을 지원하고 있습니다. 가변 인자를 받아들이는 함수는 불특정개의 인수를 처리 합니다.<br />
+이를 위해서 함수가 가변 인자를 처리할 수 있도록 특별한 선언을 해야 합니다.</p>
+
+<pre><code class="language-go">func myfunc(arg ...int) {}
+</code></pre>
+
+<p><code>arg ...int</code>는 Go에게 이 함수가 다수개의 인수를 받아들이는 함수라는 것을 알려 줍니다.</p>
+
+<blockquote>
+<p>주의할점은, 이렇게 선언한 다수개의 인수형식은 모두 <code>int</code> 이여야 합니다.</p>
+</blockquote>
+
+<p>실제 가변인수는(<code>args</code>) 함수 블록 내에서는 <code>int</code>의 <code>slice</code> 입니다.</p>
+
+<pre><code class="language-go">for _,  n := range arg {
+    fmt.Printf(&quot;And the number is : %d \n&quot;, n)
+}
+</code></pre>
+
+<h3 id="값-전달과-참조:ecec97cf5f294358cffce75fc18e7e73">값 전달과 참조</h3>
+
+<p>인수는 호출되는 함수에 전달될 때 <strong>실제값의 복사본</strong>이 전달 됩니다.<br />
+호출되는 함수에서 인수에 어떠한 수정을 가해도 함수 호출시의 실제 인수는 아무런 변화가 없습니다.<br />
+값의 변화 상황은 단지 복사된 값 내에서 변할 뿐입니다. (값에 의한 전달)</p>
+
+<p>이것을 확인하는 예제를 하나 보겠습니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+// 인수 + 1 을 하는 간단한 함수
+func add1(a int) int {
+    a = a + 1               // a의 값을 변경합니다.
+    return a                // 새로운 값을 반환합니다.
+}
+
+func main() {
+    x := 3
+
+    fmt.Println(&quot;x =&quot;, x)      // &quot;x = 3&quot;으로 출력
+
+    x1 := add1(x)              // add1(x)를 호출
+
+    fmt.Println(&quot;x + 1 =&quot;, x1) // &quot;x + 1 = 4&quot;로 출력   
+    fmt.Println(&quot;x =&quot;, x)      // &quot;x = 3&quot;으로 출력   
+}
+</code></pre>
+
+<p>실행해 보면, <code>add1()</code> 함수를 호출한 후, <code>add1()</code>에서 <code>a = a + 1</code>을 수행하더라도, <code>x</code>변수는<br />
+아무런 변화가 발생하지 않습니다. 이유는 매우 간단 합니다.<br />
+<code>add1()</code>함수가 호출될 때, <code>add1()</code> 함수가 받는 인수는 <code>x</code> 자체가 아니라 <code>x의 복사본</code>이기 때문 입니다.</p>
+
+<p>만약 실제 <code>x</code> 자체를 전달하고 싶다면 어떻게 처리할까요? 이런 경우는 자주 발생 합니다.</p>
+
+<p>이 경우, 이른바 <code>**포인터**</code>가 등장하게 됩니다. 변수는 메모리의 특정 위치에 존재하고 있다는 것을 이미 알고 있습니다.<br />
+실제로 변수를 수정한다는 것은 변수가 위치한 주소의 메모리의 내용을 수정하는 것입니다.<br />
+<code>add1()</code> 함수가 <code>x</code> 변수의 주소를 알고 있다면 <code>x</code> 변수의 값을 직접 변경할 수 있습니다. 따라서 <code>x</code>변수가 실제로<br />
+존재하는 주소값을, <code>&amp;x</code>형식으로 사용해서 함수에 전달하고, 함수의 매개변수 형식을 <code>int</code>에서 포인터 변수인 <code>*int</code>로 변경<br />
+합니다. 이제는 함수에서 <code>x</code>의 값을 직접 변경할 수 있게 되었습니다.</p>
+
+<blockquote>
+<p>이때에도 함수​​는 여전히 복사에 의한 인수를 전달합니다!!!
+하지만 복사하는 대상이 포인터인 것입니다.</p>
+</blockquote>
+
+<p>다음의 예제를 참조해서 보시기 바랍니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+// 인수 + 1 처리 함수
+func add1(a *int) int {           // 주의하시기 바랍니다.
+    *a = *a + 1                   // a의 값을 수정하고 있습니다.
+    return *a                     // 새로운 값을 반환합니다.
+}
+
+func main() {
+    x := 3
+
+    fmt.Println(&quot;x =&quot;, x)         // &quot;x = 3&quot;으로 출력  
+
+    x1 := add1(&amp;x)                // add1(&amp;x)를 호출하여 x의 주소를 전달
+
+    fmt.Println(&quot;x + 1 =&quot;, x1)    // &quot;x + 1 = 4&quot;를 출력   
+    fmt.Println(&quot;x =&quot;, x)         // &quot;x = 4&quot;를 출력
+}
+</code></pre>
+
+<p>이처럼 <code>x</code>변수를 직접 수정할 수 있게 되었습니다. 이처럼 포인터를 전달해서 얻는 장점은 무엇일까요?</p>
+
+<ul>
+<li>포인터를 전달해서 여러 함수에서  같은 객체에 대해 작업을 수행 할 수 있습니다.<br /></li>
+<li>포인터 전달은 비교적 가볍 습니다. (8 바이트만 전달)메모리 주소만 전달하면 그만 입니다.<br />
+포인터를 사용해서 큰 구조체를 빠르게 전달할 수 있습니다. 만약 값으로 전달했다면, 상대적으로 더 많은 시스템 리소스<br />
+(메모리와 시간)를 매번 함수 호출할 때마다 소비하게 됩니다. 따라서 구조체와 같은 큰 자료형을 전달할 때 포인터를<br />
+사용하는 것이 현명한 선택입니다.<br /></li>
+<li>Go 언어의 <code>string</code>, <code>slice</code>, <code>map</code> 3가지 형식은 포인터를 사용하는 방식입니다.(포인터 참조형 입니다)<br />
+변수를 직접 전달할 수 있기 때문에 주소를 구해서 포인터를 전달할 필요가 없습니다.<br />
+하지만, 함수가 <code>slice</code>의 길이를 변경하려면 주소를 구한 후 포인터를 전달해야 합니다.<br /></li>
+</ul>
+
+<h3 id="defer:ecec97cf5f294358cffce75fc18e7e73">defer</h3>
+
+<p>Go 언어의 훌륭한 디자인 중 하나에는  <code>**지연(defer)**</code> 문법이 있습니다.<br />
+함수에서 defer문을 여러 개 추가해서 사용할 수 있습니다.  함수가 끝까지 실행되었을 때 , defer문이 역순으로 실행된 후,<br />
+함수가 반환 됩니다. 이것은 특히 리소스를 오픈하는 작업을 하거나, 오류 발생에 대비한  롤백기능을 지원할때 요긴하게<br />
+사용될 수 있습니다. 이렇게 처리하지 않는다면, 리소스 및 메모리  누수 등의 문제를 일으킬 수 있습니다.</p>
+
+<p>즉, 리소스를 다루는 프로그램의 경우는 다음의 코드와 같이 작성하고 있습니다.</p>
+
+<pre><code class="language-go">func ReadWrite() bool {
+    file.Open(&quot;file&quot;)
+    
+    if failureX {
+        file.Close ()
+    return false
+    }
+
+    if failureY {
+        file.Close ()
+        return false
+    }
+
+    file.Close ()
+    return true
+}
+</code></pre>
+
+<p>위의 코드에는 중복 부분이 많이 보입니다. Go의 <code>defer</code>는 바로 이러한 문제를 해결 합니다.<br />
+이 기능으로, 코드는 중복부분을 줄이는 기능뿐만 아니라 프로그램을 더 읽기 좋게 만들어 줍니다.<br />
+<code>defer</code>키워드는 지정된 함수가 함수를 종료하기 직전에 호출되는 것을 보장해 주게 됩니다.</p>
+
+<pre><code class="language-go">func ReadWrite() bool {
+    file.Open(&quot;file&quot;)
+    defer file.Close()       // 지연문 호출 
+    if failureX {
+        return false
+    }
+    if failureY {
+        return false
+    }
+    return true
+}
+</code></pre>
+
+<p>만약 여러개의 <code>defer</code>을 사용하는 경우는 <code>defer</code>는 LIFO 형식으로 수행 됩니다.(역순 수행)<br />
+따라서 다음의 코드는 <code>4 3 2 1 0</code>을 출력 합니다.</p>
+
+<pre><code class="language-go">for i := 0; i &lt; 5; i++ {
+    defer fmt.Printf(&quot;% d&quot;, i)
+}
+</code></pre>
+
+<h3 id="값-형태로-함수사용:ecec97cf5f294358cffce75fc18e7e73">값 형태로 함수사용</h3>
+
+<p>Go언에서 함수또한 변수처럼 타입으로 처리할 수 있습니다. <code>type</code> 키워드를 통해서 <code>함수 변수</code>로 선언 합니다.<br />
+이것은 모두 동일한 인수와 동일한 값을 반환하는 하나의 함수 형식 변수 형태입니다.</p>
+
+<pre><code class="language-go">type typeName func(input1 inputType1, input2 inputType2[...]) (result1 resultType1[...])
+</code></pre>
+
+<p>함수를 변수로 다룸으로써 어떠한 장점이 있을까요? 다음의 예를 참조하시기 바랍니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+type testInt func(int) bool     // 함수변수를 선언 합니다.
+
+func isOdd(integer int) bool {
+    if integer % 2 == 0 {
+        return false
+    }
+    return true
+}
+
+func isEven(integer int) bool {
+    if integer % 2 == 0 {
+        return true
+    }
+    return false
+}
+
+
+func filter(slice []int, f testInt) []int {
+    var result []int
+    for _, value := range slice {
+        if f (value) {
+            result = append (result, value)
+        }
+    }
+    return result
+}
+
+func main() {
+    slice := []int{1, 2, 3, 4, 5, 7}
+    fmt.Println(&quot;slice =&quot;, slice)
+    odd := filter(slice, isOdd)          // 함수 값 전달
+    fmt.Println(&quot;Odd elements of slice are :&quot;, odd)
+    even := filter(slice, isEven)        // 함수 값 전달
+    fmt.Println(&quot;Even elements of slice are :&quot;, even)
+}
+</code></pre>
+
+<p>공유 인터페이스를 처리할 때 함수변수로 처리하면 매우 편리 합니다.<br />
+위의 예에서 <code>testInt</code>라는 형식의 함수변수를 선언했습니다. 두 <code>filter()</code> 함수의 인수와 반환 값은<br />
+<code>testInt</code>의 형태와 동일하지만, 더 많은 로직을 제공 할 수 있습니다. 따라서 프로그램을 더 좋게 개선할 수 있습니다.</p>
+
+<h3 id="panic와-recover:ecec97cf5f294358cffce75fc18e7e73">Panic와 Recover</h3>
+
+<p>Go언어는 Java와 같은 예외처리를 하지 않습니다. 즉, 예외를 던지지 않습니다.<br />
+대신 <code>panic</code>과 <code>recover</code> 기능을 사용 합니다. 반드시 기억 하시기 바랍니다.<br />
+&gt; 이것은 최후의 수단으로 사용해야 한다는 것을.</p>
+
+<p><code>panic</code>의 사용을 최대한 줄이시기 바랍니다. 이것은 매우 강력한 도구이나, 현명하게 사용하시기 바랍니다.</p>
+
+<p><code>Panic</code><br />
+내장 함수 입니다. 원래의 처리 흐름을 중단시킬 수 있습니다. 패닉이 발생한 로직으로 들어간 후  함수 <code>F</code>가 <code>panic</code>을<br />
+호출 합니다. 이 프로세스는 계속적으로 실행 됩니다. 일단 <code>panic</code>이 <code>goroutine</code>에서 발생하면 호출 된 함수가 모두 반환한<br />
+후 프로그램을 종료 합니다. 또는 직접<code>panic</code>을 호출 합니다. 실행시 오류가 발생해도 처리할 수 있습니다.<br />
+예를 들어 배열의 경계를 넘어 액세스를 할 경우 등 입니다.</p>
+
+<p><code>Recover</code><br />
+내장 함수 입니다. 에러 상황을 발생시키는 <code>goroutine</code>을  복원 할 수 있습니다. <code>recover</code>는 함수지연 내에서만 유효 합니다.<br />
+일반적으로 실행중에 <code>recover</code>를 호출하면 <code>nil</code>이  반환 됩니다. 즉, 아무런 효과도 없습니다.<br />
+만약 <code>goroutine</code>에서 패닉이 발생하면, <code>recover</code>를 호출하여 <code>panic</code>의 입력 값을 보존한 후 정상적인 실행상태로<br />
+복원 할 수 있습니다.</p>
+
+<p>다음 예제를 통해서 어떻게 <code>panic</code>이 작동하는지 알아보도록 하겠습니다.</p>
+
+<pre><code class="language-go">var user = os.Getenv(&quot;USER&quot;)
+
+func init() {
+    if user == &quot;&quot; {
+        panic(&quot;no value for $USER&quot;)
+    }
+}
+</code></pre>
+
+<p>이 함수는 인수가 함수 실행시 <code>panic</code>을 발생하는지를 검사 합니다.</p>
+
+<pre><code class="language-go">func throwsPanic(f func()) (b bool) {
+    defer func() {
+        if x := recover(); x! = nil {
+            b = true
+        }
+    }()
+    f()           // 함수 f를 실행 합니다. 만약 f에서 panic이 발생되면 복원을 할 수 있습니다.
+    return
+}
+</code></pre>
+
+<h3 id="main-함수와-init-함수:ecec97cf5f294358cffce75fc18e7e73"><code>main</code>함수와   <code>init</code>함수</h3>
+
+<p>Go에는 2개의 함수가 예약되어 있습니다.<br />
+<code>init()</code>함수(모든 <code>package</code>에서 사용할 수 있습니다)와<br />
+<code>main()</code>함수(<code>package main</code>에서만 사용할 수 없습니다)입니다. 이 두 함수는 선언할때, 인수나 반환 값을 가지지 않습니다.<br />
+<code>package</code>에서 여러개의 <code>init()</code> 함수를 사용해도, 아무런 문제가 없습니다. 물론 가독성은 나빠지게 됩니다.</p>
+
+<blockquote>
+<p><code>package</code>에 한개의 <code>init()</code>함수를 사용하길 강력히 추천합니다.</p>
+</blockquote>
+
+<p>Go 프로그램은 자동으로 <code>init()</code>함수와 <code>main()</code>함수를 호출하기 때문에, 별도로 이 함수를 직접 호출 할 필요는 없습니다.<br />
+<code>package</code>의 <code>init()</code> 함수 사용은 선택적 입니다만,</p>
+
+<blockquote>
+<p><code>package main</code>은 반드시 <code>main()</code> 함수를 포함해야 합니다.</p>
+</blockquote>
+
+<p>프로그램 초기화 및 실행은 모두 <code>main</code> 패키지에서 시작 됩니다. 만약 <code>main</code> 패키지에서 다른 패키지의 기능을 사용할 경우,<br />
+컴파일시에 종속된 패키지를 가져 옵니다. 패키지에서 다른 여러 패키지를 동시에 가져오게될 경우에는 먼저 다른 패키지를 가져온 후,<br />
+이 패키지 안에있는 패키지 상수와 변수가 초기화 됩니다.<br />
+다음으로, <code>init()</code>함수(있을 경우)가 실행되고, 마지막에 <code>main</code> 함수가 실행되는 구조 입니다.<br />
+다음 그림에서 이런 실행 과정에 대해서 자세히 설명하고 있습니다.</p>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/2.3.init.png" alt="" /></p>
+
+<p>그림 2.6 main 함수를 사용하여 패키지 가져 오기 및 초기화 과정</p>
+
+<h3 id="import:ecec97cf5f294358cffce75fc18e7e73">import</h3>
+
+<p>Go 프로그램에서는 <code>import</code> 명령으로 다른 패키지 파일을 가져 오는 경우가 종종 있습니다.<br />
+사용하는 방법은 다음과 같습니다.</p>
+
+<pre><code class="language-go">import (
+    &quot;fmt&quot;
+)
+</code></pre>
+
+<p>상기처럼 <code>fmt</code> 패키지를 가져오면, 코드에서 다음과 같은 방법으로 해당 패키지내의 함수를 호출 할 수 있습니다.</p>
+
+<pre><code class="language-go">fmt.Println(&quot;hello world&quot;)
+</code></pre>
+
+<p><code>fmt</code> 패키지는 Go 언어의 표준 라이브러리 입니다. 사실 <code>$GOROOT</code> 환경 변수에 지정된 디렉토리에 이 모듈이<br />
+실제로 존재 합니다. Go <code>import</code>는 다음과 같은 두 가지 방법으로 자신이 쓴 패키지를 직접 추가 할 수 있습니다.</p>
+
+<ol>
+<li><p>상대 경로<br />
+<code>import &quot;./model&quot;</code><br />
+현재 파일과 같은 디렉토리에 있는 model 디렉토리. 그러나 이 방법으로 import는 추천하지 않습니다.</p></li>
+
+<li><p>절대 경로<br />
+<code>import &quot;shorturl/model&quot;</code><br />
+<code>$gopath/src/shorturl/model</code> 모듈을 추가 합니다.</p></li>
+</ol>
+
+<p>여기에서는 <code>import</code>에 대하여 일반적인 몇 가지 방법을 설명 했습니다.<br />
+이 방법 외에도 특수한 import가 몇가지 있습니다. 초보자에게는 낯설게 보이는 몇가지에 대해서 알아보겠습니다.</p>
+
+<ol>
+<li><p>도트(.)<br />
+간혹 다음과 같이 패키지를 가져 오는 방법을 볼 수 있습니다.</p>
+
+<pre><code class="language-go">    import (
+      . &quot;fmt&quot;
+    )
+</code></pre></li>
+</ol>
+
+<p>이런 방식의 의미는 해당 패키지를 가져온 후에, 패키지의 함수를 호출 할 때 패키지 이름을 생략 할 수 있습니다.<br />
+   즉, <code>fmt.Println(&quot;hello world&quot;)</code>로 호출하는 것을 <code>Println(&quot;hello world&quot;)</code>와 같이 패키지이름을<br />
+   <code>.</code> 사용해서 생략할 수 있습니다.</p>
+
+<ol>
+<li><p>별칭(Alias)<br />
+별칭은 이름에 대하여 동일한 별명을 사용해서 읽기 편하게 사용할 수 있습니다.</p>
+
+<pre><code class="language-go">import (
+        f &quot;fmt&quot;
+)
+</code></pre></li>
+</ol>
+
+<p>별칭으로 사용할 경우 패키지 함수 호출 할 때 접두사를 별칭으로 사용할 수 있습니다.<br />
+   즉 <code>f.Println(&quot;hello world&quot;)</code></p>
+
+<ol>
+<li><p>_ (언더바)<br />
+일반적으로 이해하기 힘든 경우에 속합니다. 다음의 import를 참조 하십시오.</p>
+
+<pre><code class="language-go">import (
+    &quot;database / sql&quot;
+    _ &quot;github.com/ziutek/mymysql/godrv&quot;
+)
+</code></pre></li>
+</ol>
+
+<p>_(언더바)는 패키지를 가져 오기만 하는 것으로 패키지내의 함수를 직접 사용하는 것이 아니라,<br />
+이 패키지 안에 있는 <code>init() 함수만 호출</code> 합니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/04-struct"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/02-go-foundation">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

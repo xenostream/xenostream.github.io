@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Devtools on XenoStream&#39;s Private Site</title>
+    <link>http://xenostream.github.io/tags/devtools/</link>
+    <description>Recent content in Devtools on XenoStream&#39;s Private Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
+    <lastBuildDate>Wed, 17 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://xenostream.github.io/tags/devtools/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Sublime Text3 &#43; GoSublime Installation</title>
+      <link>http://xenostream.github.io/2016/02/sublime-text3--gosublime-installation</link>
+      <pubDate>Wed, 17 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/sublime-text3--gosublime-installation</guid>
+      <description>
+
+&lt;h1 id=&#34;sublime-text3-3101-portable:69a516083885cb8e88a13ce847862f25&#34;&gt;Sublime Text3 3101 Portable&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;ctrl +&lt;/code&gt;` (Tilde)터미널 오픈&lt;br /&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://packagecontrol.io/installation#st3&#34;&gt;패키지컨트롤 설치&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import urllib.request,os,hashlib; h = &#39;2915d1851351e5ee549c20394736b442&#39; + &#39;8bc59f460fa1548d1514676163dafc88&#39;; pf = &#39;Package Control.sublime-package&#39;; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( &#39;http://packagecontrol.io/&#39; + pf.replace(&#39; &#39;, &#39;%20&#39;)).read(); dh = hashlib.sha256(by).hexdigest(); print(&#39;Error validating download (got %s instead of %s), please try manual install&#39; % (dh, h)) if dh != h else open(os.path.join( ipp, pf), &#39;wb&#39; ).write(by) 
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Ctrl + Shift + P&lt;/code&gt; -&amp;gt; &lt;code&gt;Install Package&lt;/code&gt;  -&amp;gt; &lt;code&gt;GoSublime&lt;/code&gt; 설치&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Tools -&amp;gt; Build System&lt;/code&gt; -&amp;gt; &lt;code&gt;GoSublime&lt;/code&gt;선택&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;파일 작성 -&amp;gt;  &lt;code&gt;Ctrl + B&lt;/code&gt; -&amp;gt; &lt;code&gt;go run filename.go&lt;/code&gt;로 실행&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&#34;margo-관련-에러-발생시-대처:69a516083885cb8e88a13ce847862f25&#34;&gt;Margo 관련 에러 발생시 대처&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ST3 ROOT\Data\Packages\GoSublime\src폴더에 보면 gosubli.me 폴더가 있는데, 얘를 GOROOT\src로 옮겨준다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;옮긴 폴더에 들어가보면 margo, something-borrowed 폴더가 있는데, something-borrowed 폴더에서 cmd창을 열고,&lt;br /&gt;
+gocode폴더로 이동 후 go build -&amp;gt; go install 순으로 입력해 준다. (에러발생시 대부분 환경변수 문제이므로 알아서 해결한다.)&lt;/li&gt;
+&lt;li&gt;something-borrowed\types 폴더에 가서도 go build -&amp;gt; go install 입력.&lt;/li&gt;
+&lt;li&gt;이제 다시 gosubli.me 폴더에 가서, margo 폴더로 이동 후, go build를 입력하면, Margo.exe 파일이 생성된다.&lt;/li&gt;
+&lt;li&gt;해당 파일을 이름을 바꾸어 주어야 하는데, ST3 에서 발생했던 로그를 View - Console을 열어서 잘 보면, Margo 어쩌고 하는&lt;br /&gt;
+exe파일이 없다고 나오는게 원인인데, 지금까지 했던 작업이 그 파일을 수동으로 빌드해서 넣는 과정이었으므로, 파일명을&lt;br /&gt;
+에러 로그에서 없다고 찍힌 파일명으로 변경해준다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;해당 파일을 ST3 ROOT\Data\Packages\User\GoSublime\windows-x64\bin\ 경로에, 방금 exe파일을 옮겨준다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;ST3 재시작&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;sftp-설치:69a516083885cb8e88a13ce847862f25&#34;&gt;SFTP 설치&lt;/h4&gt;
+
+&lt;h4 id=&#34;markdown:69a516083885cb8e88a13ce847862f25&#34;&gt;Markdown&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://webdir.tistory.com/418&#34;&gt;MarkdownEditing 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Preferences -&amp;gt; Package Settings -&amp;gt; Markdown Editing -&amp;gt; Markdown GFM Settings - User&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;color_scheme&amp;quot;: &amp;quot;Packages/MarkdownEditing/MarkdownEditor-Dark.tmTheme&amp;quot;,
+   // Layout
+   &amp;quot;draw_centered&amp;quot;: false,
+   &amp;quot;word_wrap&amp;quot;: false,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;disable-update-check:69a516083885cb8e88a13ce847862f25&#34;&gt;Disable Update Check&lt;/h3&gt;
+
+&lt;p&gt;Preferences -&amp;gt; Settings-User&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;쉼표 주의 : 그대로 복사해서 붙여넣기&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;update_check&amp;quot;: false,         
+  &amp;quot;ignored_packages&amp;quot;:
+  [
+    &amp;quot;Markdown&amp;quot;,
+    &amp;quot;Vintage&amp;quot;
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;sublime-text3-3101-portable-1:69a516083885cb8e88a13ce847862f25&#34;&gt;Sublime Text3 - 3101 Portable&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://xenostream.github.io/images/sublime3.zip&#34;&gt;Portable_x64 Apply All&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Vim Go  - Linux</title>
+      <link>http://xenostream.github.io/2016/02/vim-go----linux</link>
+      <pubDate>Wed, 17 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/vim-go----linux</guid>
+      <description>
+
+&lt;h2 id=&#34;vim-go-plugin-installation-guide:d6ac5b2eecfc12afd25350cc0802f0f4&#34;&gt;Vim Go Plugin Installation Guide&lt;/h2&gt;
+
+&lt;h3 id=&#34;vim-go-기능:d6ac5b2eecfc12afd25350cc0802f0f4&#34;&gt;vim-go 기능&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;syntax highlighting&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;gocode를 이용한 자동완성&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;gofmt를 이용한 자동 포멧팅&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;godoc를 이용한 go 언어 도움말&lt;br /&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;GoRUN, GoBuild등의 명령을 이용해서 에디팅 환경에서 코드 실행 및 컴파일&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Vim Manager 설치&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# mkdir -p ~/.vim/autoload ~/.vim/bundle
+# cd ~/.vim/autoload
+# curl -LSso pathogen.vim https://tpo.pe/pathogen.vim
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;.vimrc 편집&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# cat ~/.vimrc
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;vim-go 설치&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# cd ~/.vim/bundle
+# git clone https://github.com/fatih/vim-go.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;환경변수 추가 (&lt;code&gt;vi ~/.bash_profile&lt;/code&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# export GOPATH=$HOME/golang 
+# export PATH=$PATH:$GOPATH/bin
+# mkdir $HOME/golang
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;vim 실행 후 다음 실행&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;### vim
+~
+~
+:GoInstallBinaries
+vim-go: gocode not found. Installing github.com/nsf/gocode to folder /home/pjkwon/.vim-go/
+vim-go: goimports not found. Installing code.google.com/p/go.tools/cmd/goimports to folder /home/pjkwon/.vim-go/
+vim-go: godef not found. Installing code.google.com/p/rog-go/exp/cmd/godef to folder /home/pjkwon/.vim-go/
+vim-go: oracle not found. Installing code.google.com/p/go.tools/cmd/oracle to folder /home/pjkwon/.vim-go/
+vim-go: golint not found. Installing github.com/golang/lint/golint to folder /home/pjkwon/.vim-go/
+vim-go: errcheck not found. Installing github.com/kisielk/errcheck to folder /home/pjkwon/.vim-go/
+vim-go: gotags not found. Installing github.com/jstemmer/gotags to folder /home/pjkwon/.vim-go/
+계속하려면 엔터 혹은 명령을 입력하십시오
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;vim-go-명령어:d6ac5b2eecfc12afd25350cc0802f0f4&#34;&gt;vim-go 명령어&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;:GoRun           // 실행 
+
+:make
+:GoBuild         // 빌드 실행 
+
+:GoErrCheck      // 에러체크 
+
+:GoDoc           // GoDoc 호출 
+
+:GoDef           // 변수 정의 이동 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;vimrc-파일-추가:d6ac5b2eecfc12afd25350cc0802f0f4&#34;&gt;.vimrc 파일 추가&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;set ic
+set nobackup
+set nu
+set ts=4
+set softtabstop=4
+set shiftwidth=4
+set formatoptions=croql
+set ruler
+set showmode
+set smartindent
+set statusline=\ %&amp;lt;%l:%v\ [%P]%=%a\ %h%m%r\ %F\
+syntax on
+
+set encoding=utf-8
+set termencoding=utf-8
+
+
+execute pathogen#infect()
+filetype plugin indent on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;root&lt;/code&gt;계정에서는 &lt;em&gt;.vimrc&lt;/em&gt; 파일이 적용되지 않는데, &lt;code&gt;alias vi=&#39;vim&lt;/code&gt; 명령을 &lt;code&gt;.bash_profile&lt;/code&gt;에&lt;br /&gt;
+추가 해주면 적용 됩니다.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

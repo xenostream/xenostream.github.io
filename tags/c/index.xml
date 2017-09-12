@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C on XenoStream&#39;s Private Site</title>
+    <link>http://xenostream.github.io/tags/c/</link>
+    <description>Recent content in C on XenoStream&#39;s Private Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
+    <lastBuildDate>Wed, 04 Jan 2017 16:05:37 +0930</lastBuildDate>
+    <atom:link href="http://xenostream.github.io/tags/c/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Snorkel Embedded Webserver with C Language</title>
+      <link>http://xenostream.github.io/2017/01/snorkel-embedded-webserver-with-c-language</link>
+      <pubDate>Wed, 04 Jan 2017 16:05:37 +0930</pubDate>
+      
+      <guid>http://xenostream.github.io/2017/01/snorkel-embedded-webserver-with-c-language</guid>
+      <description>
+
+&lt;h1 id=&#34;snorkel-embedded-web-compile-on-x64-linux:54b3ffa9aab45f436545aea0e041b607&#34;&gt;Snorkel Embedded Web Compile on x64 Linux&lt;/h1&gt;
+
+&lt;p&gt;Snorkel Library는 32bit 이므로, 필수 라이브러리 설치&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install glibc.i686 glibc-devel.i686 libzip.i686 libzip-devel.i686
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;gcc -m32 -lsnorkel32 -lrt -lm -lnsl -lpthread src.c&lt;/code&gt; 로 컴파일!!&lt;/p&gt;
+
+&lt;h1 id=&#34;snorkel-example:54b3ffa9aab45f436545aea0e041b607&#34;&gt;Snorkel Example&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;snorkel.h&amp;gt;
+
+void syntax(char *pszProg)
+{
+    fprintf(stderr, &amp;quot;Syntax Error:\n&amp;quot;);
+    fprintf(stderr, &amp;quot;%s [-i &amp;lt;index_file_directory&amp;gt;] [-p &amp;lt;port&amp;gt;]\n&amp;quot;, pszProg);
+    exit(1);
+}
+
+
+
+void main(int argc, char *argv[])
+{
+    int i = 1;
+    int port = 80;
+    char *pszIndex = 0;
+    char szExit[10];
+    snorkel_obj_t  http = 0;
+
+    for(; i &amp;lt; argc; i++)
+    {
+        if( argv[i][0] == &#39;-&#39; || argv[i][0] == &#39;/&#39; )
+        {
+            char carg = argv[i][1];
+
+            switch(carg)
+            {
+                case &#39;p&#39;:
+                    port = atoi(argv[i + 1]);
+                    i++;
+                    break;
+                case &#39;i&#39;:
+                    pszIndex = argv[i + 1];
+                    i++;
+                    break;
+                default:
+                    syntax(argv[0]);
+                    break;
+            }
+        }
+    }
+
+    if( !pszIndex )
+        syntax(argv[0]);
+
+
+    if( snorkel_init() != SNORKEL_SUCCESS )
+    {
+        perror(&amp;quot;Could not Initialize Snorkel\n&amp;quot;);
+        exit(1);
+    }
+
+
+    http = snorkel_obj_create(snorkel_obj_server, 2, pszIndex);
+    if( !http )
+    {
+        perror(&amp;quot;Could not Create HTTP Server\n&amp;quot;);
+        exit(1);
+    }
+
+    if( snorkel_obj_set(http, snorkel_attrib_listener, port, 0) != SNORKEL_SUCCESS )
+    {
+        fprintf(stderr, &amp;quot;Could not Create Listener\n&amp;quot;);
+        snorkel_obj_destroy(http);
+        exit(1);
+    }
+
+    if( snorkel_obj_set(http, snorkel_attrib_ipvers, IPVERS_IPV4, SOCK_SET) != SNORKEL_SUCCESS )
+    {
+        fprintf(stderr, &amp;quot;Error Could not Set IP Version\n&amp;quot;);
+        exit(1);
+    }
+
+
+    fprintf(stderr, &amp;quot;\n\n[ H T T P ] Starting Embedded Server\n&amp;quot;);
+    if( snorkel_obj_start(http) != SNORKEL_SUCCESS )
+    {
+        perror(&amp;quot;Could not Start Server\n&amp;quot;);
+        snorkel_obj_destroy(http);
+        exit(1);
+    }
+
+    fprintf(stderr, &amp;quot;\n[ H T T P ] Started!!\n\n&amp;quot; &amp;quot;--Hit Enter to Terminate --\n&amp;quot;);
+    fgets(szExit, sizeof(szExit), stdin);
+    fprintf(stderr, &amp;quot;[ H T T P ] Bye!!\n&amp;quot;);
+
+
+    snorkel_obj_destroy(http);
+    exit(0);
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

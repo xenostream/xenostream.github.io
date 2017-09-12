@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [03/02] Build a Simple Web Server &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-03/02-build-a-simple-web-server" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [03/02] Build a Simple Web Server &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [03/02] Build a Simple Web Server</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="build-a-simple-web-server:d115748a3fa1ffa0c9cfad97f0e254b0">Build a Simple Web Server</h1>
+
+<p>앞 절에서 Web은 http 프로토콜에 기반한 <code>서비스</code>라고 설명 했습니다.<br />
+Go 언어에서는 <code>net/http</code> 패키지를 통해서 웹에 대한 전반적인 기능을 제공하고 있습니다.<br />
+<code>http 패키지</code>를 통해서 Web 서비스를 아주 쉽게 작성할 수 있습니다.<br />
+이와 동시에 이 패키지를 사용해서 쉽게 Web 라우팅 정적 파일, 템플릿, cookie 등의 데이터에 대해서 설정하고<br />
+조작 할 수 있습니다.</p>
+
+<h2 id="http-패키지로-web-서버-제작:d115748a3fa1ffa0c9cfad97f0e254b0">http 패키지로 Web 서버 제작</h2>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;net / http&quot;
+    &quot;strings&quot;
+    &quot;log&quot;
+)
+
+func sayhelloName(w http.ResponseWriter, r *http.Request) {
+    r.ParseForm()            // 옵션을 분석합니다. 기본적으로 분석하지 않습니다.
+    fmt.Println(r.Form)      // 서버의 분석 데이터를 출력됩니다.
+    fmt.Println(&quot;path&quot;r.URL.Path)
+    fmt.Println(&quot;scheme&quot;r.URL.Scheme)
+    fmt.Println(r.Form [&quot;url_long&quot;])
+    for k, v := range r.Form {
+        fmt.Println(&quot;key :&quot;, k)
+        fmt.Println(&quot;val :&quot;, strings.Join(v, &quot;&quot;))
+    }
+    fmt.Fprintf(w,&quot;Hello XenoStream!&quot;)  // w에 기록하는 것이 클라이언트에 출력 됩니다.
+}
+
+func main () {
+    http.HandleFunc(&quot;/&quot;, sayhelloName)        // 접근 라우팅을 설정 합니다.
+    err := http.ListenAndServe(&quot;: 9090&quot;, nil) // 대기하는 포트를 설정 합니다.
+    if err != nil {
+        log.Fatal(&quot;ListenAndServe :&quot;, err)
+    }
+}
+</code></pre>
+
+<p>위의 코드를 Web.go로 저장하고, <code>go build web.go</code>명령으로 빌드한 후, <code>web.exe</code>를  실행하면<br />
+9090 포트에서 <code>http 연결 요청</code>을 모니터링하며 대기 합니다.</p>
+
+<p>웹 브라우저에서 <code>http://localhost:9090</code>을 입력하고 엔터키를 입력하면, 웹 브라우저의 화면에<br />
+<code>Hello XenoStream!</code> 이라는 문자열이 출력된 것을 알 수 있습니다.</p>
+
+<p>웹 브라우저의 주소입력란에서 다음과 같이 입력하시길 바랍니다.</p>
+
+<pre><code>http://localhost:9090/?url_long=111&amp;url_long=222
+</code></pre>
+
+<p>웹 브라우저에 출력 되는 내용은 무엇일까요? 서버에서 출력되는 내용은 다음과 같습니다.</p>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/3.2.goweb.png" alt="" /><br />
+그림 3.8 사용자가 Web에 액세스하여 입력한 정보를 서버에서 출력하는 정보</p>
+
+<p>위의 코드에서 알 수 있듯이 <code>Web 서버</code>를 제작하는 것은 단지, <code>http 패키지</code>의 두가지 함수를 호출하는것<br />
+으로만 처리됨을 알 수 있습니다.</p>
+
+<p>만약 PHP 프로그래머 였다면, 이런 궁금증이 생길수도 있겠습니다. nginx, apache와 같은 별도의 웹서버는 필요<br />
+하지 않나요? <code>Go</code>언어에서는 <code>net/http</code> 패키지에서 직접 tcp 포트를 감시하기 때문에 별도의 웹서버가 필요하지<br />
+않습니다. 예제에서 사용한 <code>sayhelloName()</code> 함수는 php의 컨트롤러(controller) 함수와 유사합니다.</p>
+
+<p>만약 Python 프로그래머 였다면, <code>tornado</code>를 알고 있을 것입니다. 예제 코드와 유사함을 알 수 있습니다.<br />
+<code>Go</code> 언어는 <code>Python</code>과 같은 동적 언어와 <code>비슷한 특성</code>을 가지고 있습니다.</p>
+
+<p>이렇듯, <code>Go</code>를 이용해서 <code>Web 응용 프로그램</code>을 작성하는 매우 간단하고 편리하기 까지 합니다.</p>
+
+<p>만약 Ruby 프로그래머 였다면, ROR의 <code>/script/server</code>를 사용하는 것과 약간 유사함을 알 수 있습니다.</p>
+
+<p><code>Go</code> 언어를 통해서 간단한 몇 줄의 코드를 입력하는 것만으로도 web 서버를 제작할 수 있을을 알게 되었습니다.<br />
+또한 이렇게 생성된 Web 서버는 내부에서는 멀티스레드 특성을 지원 합니다.<br />
+이어지는 두 절에서 <code>Go</code>에서 Web 멀티스레드를 어떻게 구현해서 처리하는지를 자세히 설명 합니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-03/03-how-go-works-with-web"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-03/01-web-working-principles">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

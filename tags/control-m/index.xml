@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Control M on XenoStream&#39;s Private Site</title>
+    <link>http://xenostream.github.io/tags/control-m/</link>
+    <description>Recent content in Control M on XenoStream&#39;s Private Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
+    <lastBuildDate>Wed, 04 Jan 2017 15:20:10 +0930</lastBuildDate>
+    <atom:link href="http://xenostream.github.io/tags/control-m/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Install BMC Control-M on Redhat Enterprise Linux</title>
+      <link>http://xenostream.github.io/2017/01/install-bmc-control-m-on-redhat-enterprise-linux</link>
+      <pubDate>Wed, 04 Jan 2017 15:20:10 +0930</pubDate>
+      
+      <guid>http://xenostream.github.io/2017/01/install-bmc-control-m-on-redhat-enterprise-linux</guid>
+      <description>
+
+&lt;h1 id=&#34;install-bmc-control-m:6c81db782dd271de9c619becf0181899&#34;&gt;Install BMC Control-M&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;  Minimal 설치(개발툴 모두 설치: 추가적으로 Java Developement는 설치)
+  /etc/hosts 파일 생성(반드시!!)
+  groupadd dba
+  useradd -g dba -s /bin/csh ctmuser
+  useradd -g dba -s /bin/csh emuser
+  chmod 755 /home/ctmuser
+  chmod 755 /home/emuser
+  /BMC/setup.sh (chmod -R 777 /BMC 선행)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;CTM/EM설치시에 미리 ctmuser로 &lt;code&gt;/home/ctmuser/pgsql/app_data/em700&lt;/code&gt; 폴터를 생성하고
+  &lt;code&gt;chmod 770 em700&lt;/code&gt; 명령으로 퍼미션 생성후 CTM/EM을 설치!!&lt;/p&gt;
+
+&lt;h1 id=&#34;control-m-7-x-gui-실행시-먹통-현상:6c81db782dd271de9c619becf0181899&#34;&gt;Control-M 7.x GUI 실행시 먹통 현상&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;GUI 설치 및 실행시 &amp;ldquo;관리자권한&amp;rdquo; 으로 실행&lt;/li&gt;
+&lt;li&gt;Enterprise Manager Fixpack을 최신 상태로 설치후 실행&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&#34;control-m-버전별-권장-os:6c81db782dd271de9c619becf0181899&#34;&gt;Control-M 버전별 권장 OS&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;Control-M v7.x == RHEL 5.x
+Control-M v8.x == RHEL 6.x
+Control-M v9.x == RHEL 7.x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;상기의 매핑은 별다른 설정 변경이 필요하지 않음.
+Mix형태로 설치할 경우는 하기의 추가적인 패키지를 설정해야함.&lt;/p&gt;
+
+&lt;h1 id=&#34;설치-dvd를-yum-repository로-사용:6c81db782dd271de9c619becf0181899&#34;&gt;설치 DVD를 yum Repository로 사용&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir /media/dvd                             : 마운트포인트 생성
+mount -t iso9660 /dev/cdrom /media/dvd       : 마운트 
+
+
+vi /etc/yum.repos.d/rhel-dvd.repo            : 설치 DVD 리포지토리 
+
+[rhel-dvd]
+name=Red Hat Enterprise Linux $releasever - $basearch - DVD
+baseurl=file:///media/dvd/
+gpgcheck=0
+
+yum clean all
+yum grouplist
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;mixed환경에서-사용시-설치-패키지:6c81db782dd271de9c619becf0181899&#34;&gt;Mixed환경에서 사용시 설치 패키지&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;Cann&#39;t Starting Configuration Agent Problem....
+ yum install libcurl.i686 libstdc++.i686 libgcc.i686 pam-devel.i686
+
+필요시.....  
+ln -s /usr/lib/libcurl.so.4.1.1 /usr/lib/libcurl.so.3
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

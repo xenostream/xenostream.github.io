@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go by Example: [03] Variables &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-by-example-03-variables" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-16T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="gobyexample" />
+  
+  
+
+  <title>
+     Go by Example: [03] Variables &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go by Example: [03] Variables</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-16T00:00:00Z">
+          Feb 16, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/gobyexample">#gobyexample</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="variables:64cc36482eb29fe8811ee9b4e6206a5e">Variables</h1>
+
+<p><code>Go</code>언어에서는 <code>반드시</code> 명시적으로 변수를 선언해서 사용해야 합니다. 또한 선언만 하고<br />
+사용하지 않는다면 컴파일 에러가 발생합니다.  번거로울 수 있겠지만, 이것은 다음과 같은<br />
+장점이 있습니다. (강타입 언어)</p>
+
+<blockquote>
+<p>함수 호출시에 데이터값을 컴파일타임에서 검출할 수 있습니다.</p>
+</blockquote>
+
+<p>먼저, 변수를 선언하고 사용하는 간단한 예제를 살펴보겠습니다.</p>
+
+<blockquote>
+<p>소스코드에 <code>[숫자]</code> 부분은 하기의 설명용으로 붙인 것입니다.!!</p>
+</blockquote>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+    
+    var a string = &quot;initial&quot;   // [1] 
+    fmt.Println(a)
+    
+    var b, c int = 1, 2        // [2]
+    fmt.Println(b, c)
+    
+    var d = true               // [3]
+    fmt.Println(d)
+    
+    var e int                  // [4]
+    fmt.Println(e)
+     
+    f := &quot;short&quot;               // [5]
+    fmt.Println(f)
+}
+</code></pre>
+
+<ol>
+<li><code>var</code> 키워드를 사용해서 변수를 선언할 수 있습니다.<br /></li>
+<li>변수는 한번에 여러개를 동시에 선언할 수 있습니다.<br /></li>
+<li>변수를 선언함과 동시에 초기값을 지정할 수 있습니다.<br /></li>
+<li>초기값을 지정하지 않고 변수를 선언하면, 각 변수에 맞는 초기값이 자동 지정됩니다.<br />
+예를들어, <code>int</code>형 변수일 경우 <code>0</code>으로 자동으로 초기화 됩니다.<br /></li>
+<li><code>:=</code> 연산자는 <code>var</code> 키워드와 <code>값</code>지정을 한번에 할 수 있습니다. (단축선언)<br />
+예제의 <code>var f string = &quot;short&quot;</code>와 같은 코드를 단축한 예제입니다.</li>
+</ol>
+
+<p>실행하면 다음과 같습니다.</p>
+
+<pre><code>$ go run variables.go
+initial
+1 2
+true
+0
+short
+</code></pre>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-by-example-04-constant"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-by-example-02-values">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

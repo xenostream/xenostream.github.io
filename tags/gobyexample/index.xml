@@ -1,0 +1,986 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gobyexample on XenoStream&#39;s Private Site</title>
+    <link>http://xenostream.github.io/tags/gobyexample/</link>
+    <description>Recent content in Gobyexample on XenoStream&#39;s Private Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
+    <lastBuildDate>Tue, 16 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://xenostream.github.io/tags/gobyexample/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go by Example: Perface</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-perface</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-perface</guid>
+      <description>
+
+&lt;h1 id=&#34;go-by-example-kor-edition:d28325cce6acf5df37486f4a3b78f198&#34;&gt;Go by Example - Kor Edition&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://golonag.org&#34;&gt;Go&lt;/a&gt;언어는 프로그램을 단순하게 작성하고, 빠르고, 안정적인&lt;br /&gt;
+오픈소스 프로그래밍 언어입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://gobyexample.com&#34;&gt;Go by Example&lt;/a&gt;(영문)은 예제를 통해서 빠르게 &lt;code&gt;Go&lt;/code&gt;언어를&lt;br /&gt;
+학습할 수 있는 사이트 입니다.&lt;/p&gt;
+
+&lt;p&gt;본 문서는 원문의 예제를 한국어로 변환함과 동시에 필자의 개인적인 설명이 추가된&lt;br /&gt;
+문서입니다.&lt;/p&gt;
+
+&lt;p&gt;본 문서에서는 다음과 같은 예제로 구성되어 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://xeno.gitbooks.io/go-by-example/content/hello_world.html&#34;&gt;Hello World&lt;/a&gt;&lt;br /&gt;
+[Values]()&lt;br /&gt;
+[Variables]()&lt;br /&gt;
+[Constants]()&lt;br /&gt;
+[For]()&lt;br /&gt;
+[If/Else]()&lt;br /&gt;
+[Switch]()&lt;br /&gt;
+[Arrays]()&lt;br /&gt;
+[Slices]()&lt;br /&gt;
+[Maps]()&lt;br /&gt;
+[Range]()&lt;br /&gt;
+[Functions]()&lt;br /&gt;
+[Multiple Return Values]()&lt;br /&gt;
+[Variadic Functions]()&lt;br /&gt;
+[Closures]()&lt;br /&gt;
+[Recursion]()&lt;br /&gt;
+[Pointers]()&lt;br /&gt;
+[Structs]()&lt;br /&gt;
+[Methods]()&lt;br /&gt;
+[Interfaces]()&lt;br /&gt;
+[Errors]()&lt;br /&gt;
+[Goroutines]()&lt;br /&gt;
+[Channels]()&lt;br /&gt;
+[Channel Buffering]()&lt;br /&gt;
+[Channel Synchronization]()&lt;br /&gt;
+[Channel Directions]()&lt;br /&gt;
+[Select]()&lt;br /&gt;
+[Timeouts]()&lt;br /&gt;
+[Non-Blocking Channel Operations]()&lt;br /&gt;
+[Closing Channels]()&lt;br /&gt;
+[Range over Channels]()&lt;br /&gt;
+[Timers]()&lt;br /&gt;
+[Tickers]()&lt;br /&gt;
+[Worker Pools]()&lt;br /&gt;
+[Rate Limiting]()&lt;br /&gt;
+[Atomic Counters]()&lt;br /&gt;
+[Mutexes]()&lt;br /&gt;
+[Stateful Goroutines]()&lt;br /&gt;
+[Sorting]()&lt;br /&gt;
+[Sorting by Functions]()&lt;br /&gt;
+[Panic]()&lt;br /&gt;
+[Defer]()&lt;br /&gt;
+[Collection Functions]()&lt;br /&gt;
+[String Functions]()&lt;br /&gt;
+[String Formatting]()&lt;br /&gt;
+[Regular Expressions]()&lt;br /&gt;
+[JSON]()&lt;br /&gt;
+[Time]()&lt;br /&gt;
+[Epoch]()&lt;br /&gt;
+[Time Formatting / Parsing]()&lt;br /&gt;
+[Random Numbers]()&lt;br /&gt;
+[Number Parsing]()&lt;br /&gt;
+[URL Parsing]()&lt;br /&gt;
+[SHA1 Hashes]()&lt;br /&gt;
+[Base64 Encoding]()&lt;br /&gt;
+[Reading Files]()&lt;br /&gt;
+[Writing Files]()&lt;br /&gt;
+[Line Filters]()&lt;br /&gt;
+[Command-Line Arguments]()&lt;br /&gt;
+[Command-Line Flags]()&lt;br /&gt;
+[Environment Variables]()&lt;br /&gt;
+[Spawning Processes]()&lt;br /&gt;
+[Exec&amp;rsquo;ing Processes]()&lt;br /&gt;
+[Signals]()&lt;br /&gt;
+[Exit]()&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [01] Hello World</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-01-hello-world</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-01-hello-world</guid>
+      <description>
+
+&lt;h1 id=&#34;hello-world:5fa2f6673befabccd6af4fe55b025712&#34;&gt;Hello World&lt;/h1&gt;
+
+&lt;p&gt;첫 번째예제는 화면에 &lt;code&gt;Hello world&lt;/code&gt;메세지를 출력하는 예제입니다. 다음은 코드입니다&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    fmt.Println(&amp;quot;Hello world&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;프로그램을 실행하려면, 상기의 코드를 &lt;code&gt;hello-world.go&lt;/code&gt;라는 파일명으로 저장한 후,&lt;br /&gt;
+(프로그램이름 지정은 강제사항이 아닙니다.알기쉬운 이름으로 저장하시기 바랍니다.)&lt;br /&gt;
+&lt;code&gt;go run&lt;/code&gt; 명령을 입력하면 됩니다. 다음과 같이 입력하시기 바랍니다.&lt;/p&gt;
+
+&lt;p&gt;######&lt;code&gt;$표시&lt;/code&gt;는 프롬프트입니다. 곧바로 실행 결과를 표시하고 있습니다. 참고하시기 바랍니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$go run hello-world.go
+hello world
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;상기의 예제는 곧바로 실행한 경우입니다. 대부분의 경우는 실행파일을 생성하기 위해서,&lt;br /&gt;
+프로그램을 작성하는 경우일 것입니다. 이제 다음의 명령을(build) 입력해서 실행파일을 생성합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go build hello-world.go
+hello-world    hello-world.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;실행파일(&lt;code&gt;hello-world&lt;/code&gt;)이 생성되었으니, 곧바로 실행해 보겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ./hello-world
+Hello world
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제, &lt;code&gt;Go&lt;/code&gt;언어를 이용해서, 프로그램을 &lt;code&gt;작성&lt;/code&gt;하는 법과 &lt;code&gt;컴파일&lt;/code&gt;해서 실행파일을 생성하는 법과,&lt;br /&gt;
+프로그램을 &lt;code&gt;실행&lt;/code&gt;하는 방법에 대해서 익혔습니다.  모든것은 이단계를 벗어나지 않습니다.&lt;/p&gt;
+
+&lt;p&gt;계속 &lt;code&gt;Go&lt;/code&gt;언어의 여러가지를 알아 보도록 하겠습니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [02] Values</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-02-values</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-02-values</guid>
+      <description>
+
+&lt;h1 id=&#34;values:a2531f3a402b1b14fbd68a677f445ed8&#34;&gt;Values&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어는 다양한 &lt;code&gt;데이터값&lt;/code&gt;을 다룰수 있습니다. 문자열, 정수형, 실수형, 불 등을 지원합니다.&lt;br /&gt;
+몇가지 예를 통해서 알아보겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    fmt.Println(&amp;quot;go&amp;quot; + &amp;quot;lang&amp;quot;)             // 문자열
+    
+    fmt.Println(&amp;quot;1 + 1 = &amp;quot;, 1 + 1)         // 정수 
+    ftm.Println(&amp;quot;7.0 / 3.0 = &amp;quot;, 7.0 / 3.0) // 실수 
+    
+    fmt.Println(true &amp;amp;&amp;amp; false)             // 참거짓(불)
+    fmt.Println(true || false)
+    fmt.Println(!true)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;문자열은 &lt;code&gt;+&lt;/code&gt; 기호를 통해서 연결할 수 있습니다. 단지 데이터값만 보시기 바랍니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run values.go
+golang
+1 + 1 = 2
+7.0 / 3.0 = 2.3333333333333335
+false
+true
+false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;실행하면 상기와 같습니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [03] Variables</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-03-variables</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-03-variables</guid>
+      <description>
+
+&lt;h1 id=&#34;variables:64cc36482eb29fe8811ee9b4e6206a5e&#34;&gt;Variables&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어에서는 &lt;code&gt;반드시&lt;/code&gt; 명시적으로 변수를 선언해서 사용해야 합니다. 또한 선언만 하고&lt;br /&gt;
+사용하지 않는다면 컴파일 에러가 발생합니다.  번거로울 수 있겠지만, 이것은 다음과 같은&lt;br /&gt;
+장점이 있습니다. (강타입 언어)&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;함수 호출시에 데이터값을 컴파일타임에서 검출할 수 있습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;먼저, 변수를 선언하고 사용하는 간단한 예제를 살펴보겠습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;소스코드에 &lt;code&gt;[숫자]&lt;/code&gt; 부분은 하기의 설명용으로 붙인 것입니다.!!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    
+    var a string = &amp;quot;initial&amp;quot;   // [1] 
+    fmt.Println(a)
+    
+    var b, c int = 1, 2        // [2]
+    fmt.Println(b, c)
+    
+    var d = true               // [3]
+    fmt.Println(d)
+    
+    var e int                  // [4]
+    fmt.Println(e)
+     
+    f := &amp;quot;short&amp;quot;               // [5]
+    fmt.Println(f)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;var&lt;/code&gt; 키워드를 사용해서 변수를 선언할 수 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;변수는 한번에 여러개를 동시에 선언할 수 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;변수를 선언함과 동시에 초기값을 지정할 수 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;초기값을 지정하지 않고 변수를 선언하면, 각 변수에 맞는 초기값이 자동 지정됩니다.&lt;br /&gt;
+예를들어, &lt;code&gt;int&lt;/code&gt;형 변수일 경우 &lt;code&gt;0&lt;/code&gt;으로 자동으로 초기화 됩니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:=&lt;/code&gt; 연산자는 &lt;code&gt;var&lt;/code&gt; 키워드와 &lt;code&gt;값&lt;/code&gt;지정을 한번에 할 수 있습니다. (단축선언)&lt;br /&gt;
+예제의 &lt;code&gt;var f string = &amp;quot;short&amp;quot;&lt;/code&gt;와 같은 코드를 단축한 예제입니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run variables.go
+initial
+1 2
+true
+0
+short
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [04] Constant</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-04-constant</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-04-constant</guid>
+      <description>
+
+&lt;h1 id=&#34;constants:ac2f8bb40154c839f893c4f16de8f75c&#34;&gt;Constants&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어에서는 &lt;code&gt;문자열, 불, 숫자&lt;/code&gt;에 대하여 상수형 변수를 지원합니다.&lt;br /&gt;
+상수는 선언시에 초기화 해야하며, 한번 값을 지정하면 값을 변경할 수 없는 변수를 의미합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+import &amp;quot;math&amp;quot;
+
+const s string = &amp;quot;constant&amp;quot;      // [1]
+
+func main() {
+    fmt.Println(s)
+    
+    const n = 50000000           // [2]
+    
+    const d = 3e20 / n           // [3]
+    fmt.Println(d)
+    
+    fmt.Println(int64(d))        // [4]
+    
+    fmt.Println(math.Sin(n))     // [5]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;const&lt;/code&gt; 키워드를 사용해서 상수를 선언하고 상수값(문자열, 불, 숫자)을 지정합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;const&lt;/code&gt; 문장은 &lt;code&gt;var&lt;/code&gt;문장이 나타날수 있는곳 어디서나 동일하게 사용할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;상수식은 실수형의 산술식형태로 기술해도 값을 먼저 계산한 후 대입합니다.&lt;/li&gt;
+&lt;li&gt;숫자 상수의 경우 값의 형이 정해지지 않으므로, 명시적으로 값을 정할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;문장내에서 알맞은 값으로 값이 지정됩니다.예제에서는 함수를 호출해서 해당 값을 지정합니다.&lt;br /&gt;
+&lt;code&gt;math.Sin&lt;/code&gt;함수의 경우는 &lt;code&gt;float64&lt;/code&gt;값으로 반환합니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;프로그램을 실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run constant.go 
+constant
+6e+11
+600000000000
+-0.28470407323754404
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [05] For</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-05-for</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-05-for</guid>
+      <description>
+
+&lt;h1 id=&#34;for:9a74561741dde7297ee54d20592a59eb&#34;&gt;For&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;for&lt;/code&gt; 키워드는 &lt;code&gt;Go&lt;/code&gt;언어에서 제공하는 &lt;strong&gt;유일한&lt;/strong&gt; 반복문입니다. 3가지 형식으로 사용할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    
+    i := 1
+    for i &amp;lt;= 3 {                // [1]
+        fmt.Println(i)
+        i = i + 1
+    }
+    
+    for j := 7; j &amp;lt;= 9; j++ {   // [2]
+        fmt.Println(j)
+    }
+    
+    
+    for {                       // [3]
+        fmt.Println(&amp;quot;loop&amp;quot;)
+        break
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;한가지 조건으로 사용하는 경우입니다. (타 언어의 while에 해당합니다.)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;가장 표준적이고 정상적인 사용법입니다. 초기값 / 조건식 / 증감식 형태로 사용합니다.&lt;/li&gt;
+&lt;li&gt;초기값 / 조건식 / 증감식을 생략하면, &lt;code&gt;break&lt;/code&gt;문을 만날때까지 무한루프로 작동합니다.&lt;br /&gt;
+함수내에서 사용할 경우에는 &amp;lsquo;return` 문장으로 무한루프를 탈출할 수도 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같이 출력됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run for.go
+1
+2
+3
+7
+8
+9
+loop
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;range&lt;/code&gt;문과 결합하여 &lt;code&gt;for&lt;/code&gt;문을 사용하는 것은 채널과 데이터구조를 설명할때 설명하겠습니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [06] If / Else</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-06-if-/-else</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-06-if-/-else</guid>
+      <description>
+
+&lt;h1 id=&#34;if-else:e843a95fd95c27841869c132e185e473&#34;&gt;If / Else&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;에서는 다른 언어와 같은 방법으로, &lt;code&gt;if&lt;/code&gt;문과 &lt;code&gt;else&lt;/code&gt;문으로 분기를 수행할 수 있습니다.&lt;br /&gt;
+하지만, 다른언어와는 향상된 방법으로 사용할 수 있습니다. 예제를 통해서 알아보겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    
+    if 7 % 2 == 0 {                              // [1]
+        fmt.Println(&amp;quot;7 is even&amp;quot;)
+    } else {
+        fmt.Println(&amp;quot;7 is odd&amp;quot;)
+    }
+    
+    if 8 % 4 == 0 {                              // [2]
+        fmt.Println(&amp;quot;8 is divisible by 4&amp;quot;)
+    }
+    
+    if num := 9; num &amp;lt; 0 {                       // [3]
+        fmt.Println(num, &amp;quot;is negative&amp;quot;)
+    } else if num &amp;lt; 10 {
+        fmt.Println(num, &amp;quot;has 1 digit&amp;quot;)
+    } else {
+        fmt.Println(num, &amp;quot;has multiple digits&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;가장 기본적인 형식의 문장입니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;else&lt;/code&gt;문장 없이도 사용할 수 있습니다. (경우에 따라서&amp;hellip;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;if&lt;/code&gt;문장내에서 &lt;code&gt;;&lt;/code&gt;을 사용해서 조건값을 계산할 수 있습니다. 값을 계산한 후 비교합니다.&lt;br /&gt;
+또한, 변수를 선언할 수 도 있습니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어에서는 &lt;code&gt;if&lt;/code&gt;문의 조건에 괄호를 사용하지 않습니다. 하지만, 중괄호는 필수입니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run if-else.go 
+7 is odd
+8 is divisible by 4
+9 has 1 digit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어에는 3중대입연산자(&lt;code&gt;?:&lt;/code&gt;)가 없지만, &lt;code&gt;if/else&lt;/code&gt;문장으로도 충분히 표현할 수 있습니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [07] Switch</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-07-switch</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-07-switch</guid>
+      <description>
+
+&lt;h1 id=&#34;switch:efcf2a51808913ac5ed75e3d160e3a4b&#34;&gt;Switch&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;switch&lt;/code&gt;문장은 여러개의 조건 분기를 처리할 경우에 사용하면, 읽기도 편하고 이해하기도 쉽습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+import &amp;quot;time&amp;quot;
+
+func main() {
+
+    i := 2
+    fmt.Print(&amp;quot;write &amp;quot;, i, &amp;quot; as &amp;quot;)
+    
+    switch i {                           // [1]
+    case 1:
+        fmt.Println(&amp;quot;one&amp;quot;)
+    case 2:
+        fmt.Println(&amp;quot;two&amp;quot;)
+    case 3:
+        fmt.Println(&amp;quot;three&amp;quot;)
+    }
+    
+    switch time.Now().Weekday() {        // [2]
+    case time.Saturday, time.Sunday:
+        fmt.Println(&amp;quot;it&#39;s the weekend&amp;quot;)
+    default:
+        fmt.Println(&amp;quot;it&#39;s a weekday&amp;quot;)
+    }
+    
+    t := time.Now()
+    switch {                             // [3]
+    case t.Hour() &amp;lt; 12:
+        fmt.Println(&amp;quot;its&#39;s before noon&amp;quot;)
+    default:
+        fmt.Println(&amp;quot;it&#39;s after noon&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;기본적인 &lt;code&gt;switch&lt;/code&gt;문장입니다.&lt;/li&gt;
+&lt;li&gt;쉼표(&lt;code&gt;,&lt;/code&gt;)로 분리된 여러개의 값을 한개의 &lt;code&gt;case&lt;/code&gt;문에서 사용할 수 있습니다.&lt;br /&gt;
+&lt;code&gt;default&lt;/code&gt;를 추가적으로 사용할 수 있습니다. (case문에서 원하는 값이 없을 경우 수행합니다.)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;switch&lt;/code&gt;문장은 &lt;strong&gt;수식없이&lt;/strong&gt; 사용할 수 있습니다. &lt;code&gt;if/else&lt;/code&gt;문장과 유사한 효과를 낼 수 있습니다.&lt;br /&gt;
+예제에서와 같이 &lt;code&gt;case&lt;/code&gt;문에서 상수값이 아닌값도 사용할 수 있습니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run switch.go 
+write 2 as two
+it&#39;s the weekend
+it&#39;s before noon
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [08] Arrays</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-08-arrays</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-08-arrays</guid>
+      <description>
+
+&lt;h1 id=&#34;arrays:78cb1a2cfee1f6861c3d8bafa5874c8b&#34;&gt;Arrays&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어에서 &lt;code&gt;배열&lt;/code&gt;은 &lt;strong&gt;크기가 정해진&lt;/strong&gt; 동일한 타입의 변수의 집합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    
+    var a [5]int                      // [1]
+    fmt.Println(&amp;quot;emp:&amp;quot;, a)
+    
+    a[4] = 100                        // [2]
+    fmt.Println(&amp;quot;set:&amp;quot;, a)
+    fmt.Println(&amp;quot;get:&amp;quot;, a[4])
+    
+    fmt.Println(&amp;quot;len:&amp;quot;, len(a))       // [3]
+    
+    b := [5]int{1, 2, 3, 4, 5}        // [4]
+    fmt.Println(&amp;quot;dcl:&amp;quot;, b)
+    
+    var twoD[2][3]int                 // [5]
+    for i := 0; i &amp;lt; 2; i++ {
+        for j := 0; j &amp;lt; 3; j++ {
+            twoD[i][j] = i + j
+        }
+    }
+    fmt.Println(&amp;quot;2d:&amp;quot;, twoD)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;int&lt;/code&gt;형 5개로 이루어진 배열을 선언했습니다. 배열에서 크기값([5]int)도 배열의 일부입니다.&lt;br /&gt;
+기본적으로 배열의 요소들은 자동으로 기본값으로 초기화 됩니다. &lt;code&gt;int&lt;/code&gt;형이므로, &lt;code&gt;0&lt;/code&gt;값.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;배열명[인덱스] = 값&lt;/code&gt;형태로 각 요소에 해당 값을 설정할 수 있습니다. 값을 가져올 수도 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;기본적으로 제공하는 &lt;code&gt;len()&lt;/code&gt;함수를 통해서 배열의 크기(5)를 알아낼 수 있습니다.&lt;/li&gt;
+&lt;li&gt;단축선언으로  값을 지정해서 배열을 선언해서 곧바로 생성할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;배열은 1차원만 지원되는 것이 아닙니다. 몇차원이던지 생성할 수 있습니다.예제는 2차원 배열입니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run arrays.go
+emp: [0 0 0 0 0]
+set: [0 0 0 0 100]
+get: 100
+len: 5
+dcl: [1 2 3 4 5]
+2d:  [[0 1 2] [1 2 3]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;fmt.Println()&lt;/code&gt;함수에서 배열명을 지정할 경우 &lt;code&gt;[값1 값2 값3 ...]&lt;/code&gt;과 같이 배열내용을 표시합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어에서는 &lt;code&gt;slice&lt;/code&gt;라는 배열과 유사한 형태가 있습니다. 유사하지만 다릅니다!!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [09] Slices</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-09-slices</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-09-slices</guid>
+      <description>
+
+&lt;h1 id=&#34;slices:ff3e023c1b4afd0ad477a477ba380f75&#34;&gt;Slices&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어에서는 슬라이스라는 특수항 데이터 타입이 존재합니다. 배열과 유사하지만 좀더 유연하게&lt;br /&gt;
+데이터를 처리할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+fucn main() {
+    
+    s := make([]string, 3)            // [1]
+    fmt.Println(&amp;quot;emp:&amp;quot;, s)
+    
+    s[0] = &amp;quot;a&amp;quot;                        // [2]
+    s[1] = &amp;quot;b&amp;quot;
+    s[2] = &amp;quot;c&amp;quot;
+    fmt.Println(&amp;quot;set:&amp;quot;, s)
+    fmt.Println(&amp;quot;get:&amp;quot;, s[2])
+    
+    fmt.Println(&amp;quot;len:&amp;quot;, len(s))       // [3]
+    
+    s = append(s, &amp;quot;d&amp;quot;)                // [4]
+    s = append(s, &amp;quot;e&amp;quot;, &amp;quot;f&amp;quot;)
+    fmt.Println(&amp;quot;apd:&amp;quot;, s)
+    
+    c := make([]string, len(s))       // [5]
+    copy(c, s)
+    fmt.Println(&amp;quot;cpy:&amp;quot;, c)
+    
+    l := s[2:5]                       // [6]
+    fmt.Println(&amp;quot;sl1:&amp;quot;, l)
+    
+    l = s[:5]                         // [7]
+    fmt.Println(&amp;quot;sl2:&amp;quot;, l)
+    
+    l = s[2:]                         // [8]
+    fmt.Println(&amp;quot;sl3:&amp;quot;, l)
+    
+    t := []string{&amp;quot;g&amp;quot;, &amp;quot;h&amp;quot;, &amp;quot;i&amp;quot;}      // [9]
+    fmt.Println(&amp;quot;dcl:&amp;quot;, t)
+    
+    towD := make([][]int, 3)          // [10]
+    for i := 0; i &amp;lt; 3; i++ {
+        twoD[i] = make([]int, innerLen)
+        for j := 0; j &amp;lt; innerLen; j++ {
+            twoD[i][j] = i + j
+        }
+    }
+    
+    fmt.Prinln(&amp;quot;2d:&amp;quot;, twoD)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;슬라이스는 배열과 다르게, &lt;strong&gt;크기&lt;/strong&gt;를 지정하지 않으며 단지 변수들의 타입만 지정합니다.&lt;br /&gt;
+내부함수 &lt;code&gt;make&lt;/code&gt;를 사용해서 초기값으로 초기화된 일정 크기의 슬라이스를 생성할 수 있습니다.&lt;br /&gt;
+예제에서는 3개의 &lt;strong&gt;크기&lt;/strong&gt;를 갖는 슬라이스를 생성했습니다. (&amp;ldquo;&amp;rdquo; 문자로 자동 초기화 되었습니다.)&lt;/li&gt;
+&lt;li&gt;배열과 동일한 방법으로 값을 가져오거나 설정할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;슬라이스 역시 배열과 같이 &lt;code&gt;len()&lt;/code&gt;함수를 통해서 크기를 알아낼 수 있습니다.&lt;/li&gt;
+&lt;li&gt;배열에서와는 다르게 추가적으로 데이터를 다룰수 있는기능을 제공합니다.(배열은 크기가 고정되면 불변)&lt;br /&gt;
+예를들어, &lt;code&gt;append()&lt;/code&gt;내장 함수를 사용해서 기존의 슬라이스에 내용을 추가할 수 있습니다.(가변배열)&lt;br /&gt;
+이것으로 값이 추가된 새로운 슬라이스를 얻을 수 있게 됩니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;copy()&lt;/code&gt;내장 함수를 사용해서, 슬라이스를 통째로 복사할 수 있습니다.&lt;br /&gt;
+예제에는 &lt;code&gt;c&lt;/code&gt;라는 빈 슬라이스를 생성한 후 기존의 슬라이스 &lt;code&gt;s&lt;/code&gt;를 복사하고 있습니다. (단축선언)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;slice[low:high]&lt;/code&gt;형식으로, 이름답게 자료를 가공할 수 있습니다.&lt;br /&gt;
+예제의 경우 &lt;code&gt;s[2], s[3] s[4]&lt;/code&gt;값을 &lt;code&gt;s&lt;/code&gt;슬라이스에서 추출한 후 &lt;code&gt;l&lt;/code&gt;변수에 대입하고 있습니다.&lt;br /&gt;
+배열의 경우는 크기가 이미 고정되어 있기때문에 이와같은 작업을 수행할 수 없습니다!!&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;예제의 경우는 &lt;code&gt;s[5]&lt;/code&gt;값을 &lt;strong&gt;제외한&lt;/strong&gt; 값을 &lt;code&gt;l&lt;/code&gt;변수에 대입하고 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;예제의 경우 &lt;code&gt;s[2]&lt;/code&gt;부터 끝까지의 내용을 추출하고 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;슬라이스를 선언함과 동시에 초기값을 지정해서 생성 할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;슬라이스 또한, 배열과 같이 다차원형태로 데이터를 다룰 수 있습니다. 이경우 내부 차원의 크기는&lt;br /&gt;
+가변적입니다. 이점이 배열과 다른 점입니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run slices.go
+emp: [  ]
+set: [a b c]
+get: c
+len: 3
+apd: [a b c d e f]
+cpy: [a b c d e f]
+sl1: [c d e]
+sl2: [a b c d e]
+sl3: [c d e f]
+dcl: [g h i]
+2d:  [[0] [1 2] [2 3 4]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;배열과 동일하게, &lt;code&gt;fmt.Println()&lt;/code&gt;함수에서 출력함을 알 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.golang.org/go-slices-usage-and-internals&#34;&gt;Go Team Slice&lt;/a&gt;에서 자세한 정보를 확인하시기바랍니다.&lt;/p&gt;
+
+&lt;p&gt;배열(Array)과 슬라이스(Slice) 는 유사한 점도 많다는 것을 알게되었습니다.&lt;br /&gt;
+&lt;code&gt;Go&lt;/code&gt;언어에서는 여기에 추가적으로, 맵(Map)이라는 내부적인 데이터 구조를 제공하고 있습니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [10] Maps</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-10-maps</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-10-maps</guid>
+      <description>
+
+&lt;h1 id=&#34;maps:056a53517e884b56b128a471f2aed929&#34;&gt;Maps&lt;/h1&gt;
+
+&lt;p&gt;맵(Map)은 &lt;code&gt;Go&lt;/code&gt;언어에서 기본적으로 제공하는 연관된 데이터를 다룰 수 있는 자료구조입니다.&lt;br /&gt;
+이 자료형은 다른언어에서는 해쉬(hash)값이나 사전(Dicts)형으로 불리는 데이터 구조입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    
+    m := make(map[string]int)                // [1]
+    
+    m[&amp;quot;k1&amp;quot;] = 7                              // [2]
+    m[&amp;quot;k2&amp;quot;] = 13
+    
+    fmt.Println(&amp;quot;map:&amp;quot;, m)                   // [3]
+    
+    v1 := m[&amp;quot;k1&amp;quot;]                            // [4]
+    fmt.Println(&amp;quot;v1:&amp;quot;, v1)
+    
+    fmt.Println(&amp;quot;len:&amp;quot;, len(m))              // [5]
+    
+    delete(m, &amp;quot;k2&amp;quot;)                          // [6]
+    fmt.Println(&amp;quot;map:&amp;quot;, m)
+    
+    _, prs := m[&amp;quot;k2&amp;quot;]                        // [7]
+    fmt.Println(&amp;quot;prs:&amp;quot;, prs)
+    
+    n := map[string]int{&amp;quot;foo&amp;quot;: 1, &amp;quot;bar&amp;quot;: 2}  // [8]
+    fmt.Println(&amp;quot;map:&amp;quot;, n)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;make(map[key-type]value-type)&lt;/code&gt;형식을 사용해서 빈 맵을 생성하고 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;name[key] = value&lt;/code&gt;형태로 맵에 데이터를 키값을 기준으로 설정하고 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fmt.Println()&lt;/code&gt;함수로 맵을 출력하면 모든 &lt;code&gt;key/vaue&lt;/code&gt;를 출력합니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;name[key]&lt;/code&gt;형식으로 맵의 해당키의 값을 추출해 낼 수 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;len()&lt;/code&gt; 내장함수를 통해서, 현재 맵의 &lt;code&gt;키/값&lt;/code&gt; 쌍의 개수를 알아낼 수 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;delete()&lt;/code&gt; 내장함수를 통해서, 현재 맵의 특정 값(키/값)을 제거할 수 있습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;맵은 내부적으로 데이터를 구별하는 맵식별자를 추가적으로 리턴합니다.&lt;br /&gt;
+이값은 &lt;code&gt;0&lt;/code&gt;이거나 빈문자열(&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;)값을 가진 키를 찾을때 사용합니다.  예제에서는 이값이&lt;br /&gt;
+특별히 필요하지 않기 때문에 &lt;strong&gt;&lt;code&gt;_&lt;/code&gt;&lt;/strong&gt; 변수로 해당 값을 무시했습니다.&lt;/li&gt;
+&lt;li&gt;맵은 선언과 동시에 초기화해서 맵을 생성할 수 있습니다. (&lt;code&gt;make()&lt;/code&gt;함수를 통하지 않았습니다.)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run maps.go 
+map: map[k1:7 k2:13]
+v1:  7
+len: 2
+map: map[k1:7]
+prs: false
+map: map[foo:1 bar:2]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;fmt.Println()&lt;/code&gt;함수를 이용해서 맵을 출력하면 &lt;code&gt;map[k:v k:v]&lt;/code&gt;와 같이 키/값을 모두 출력합니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [11] Range</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-11-range</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-11-range</guid>
+      <description>
+
+&lt;h1 id=&#34;range:78ccbf4d62ebb575032bc5b8677211ad&#34;&gt;Range&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;range&lt;/code&gt;키워드는 복합데이터구조(배열,슬라이스, 맵등)의 데이터를 나열할때 유용하게&lt;br /&gt;
+사용할 수 있는 키워드입니다.&lt;/p&gt;
+
+&lt;p&gt;이미 배운 이러한 데이터구조의 항목을 나열하는 것으로 사용법을 익히도록 하겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    
+    nums := []int{2, 3, 4}             // [1]
+    sum := 0
+    
+    for _, num := range nums {
+        sum += num
+    }
+    fmt.Println(&amp;quot;sum:&amp;quot;, sum)
+    
+    for i, num := range nums {         // [2]
+        if num == 3 {
+            fmt.Println(&amp;quot;index:&amp;quot;, i)
+        }
+    }
+    
+    kvs := map[string]string{&amp;quot;a&amp;quot;: &amp;quot;apple&amp;quot;, &amp;quot;b&amp;quot;: &amp;quot;banana&amp;quot;}   // [3]
+    for k, v := range kvs {
+        fmt.Printf(&amp;quot;%s -&amp;gt; %s\n&amp;quot;, k, v)
+    }
+    
+    for i, c := range &amp;quot;go&amp;quot; {           // [4]
+        fmt.Println(i, c)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;range&lt;/code&gt;키워드를 슬라이스에 사용하는 예제입니다. 배열 또한 사용법이 동일합니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;range&lt;/code&gt;키워드를 배열과 슬라이스에 사용할때에도 &lt;strong&gt;인덱스&lt;/strong&gt;와 &lt;strong&gt;값&lt;/strong&gt;을 제공합니다.&lt;br /&gt;
+상기의 코드에서는 인덱스값이 필요없고  값만 필요한 경우여서 &lt;code&gt;_&lt;/code&gt;변수를 이용해서&lt;br /&gt;
+인덱스값을 버렸습니다.&lt;br /&gt;
+때로는 혹은 자주 배열과 슬라이스의 인덱스값이 연산에 필요할 때가 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;range&lt;/code&gt;키워드를 맵의 키/값 항목에 사용해서 각 요소에 순차적으로 접근합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;range&lt;/code&gt;키워드는 유니코드의 각 문자를 열거할때 사용할 수 있습니다.&lt;br /&gt;
+유니코드글자 한글자는 &lt;code&gt;rune&lt;/code&gt;타입에 저장되는데, 문자열에서의 인덱스값을 처음으로&lt;br /&gt;
+반환하고, &lt;code&gt;rune&lt;/code&gt;형태의 글자 자체를 두번째로 반환합니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run range.go 
+sum: 9
+index: 1
+a -&amp;gt; apple
+b -&amp;gt; banana
+0 103
+1 111
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [12] Functions</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-12-functions</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-12-functions</guid>
+      <description>
+
+&lt;h1 id=&#34;functions:a019f2c41146d9b55bb8f97ef9dfc1df&#34;&gt;Functions&lt;/h1&gt;
+
+&lt;p&gt;함수는 &lt;code&gt;Go&lt;/code&gt;언어의 핵심중의 &lt;strong&gt;핵심&lt;/strong&gt; 입니다.&lt;br /&gt;
+몇가지 예제를 통해서 간단하게 함수에 대해서 알아보도록 하겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func plus(a int, b int) int {          // [1]
+    return a + b                       // [2]
+}
+
+func plusPlus(a, b, c int) int {       // [3]
+    return a + b + c
+}
+
+func main() {
+    
+    res := plus(1, 2)                  // [4]
+    fmt.Println(&amp;quot;1 + 2 = &amp;quot;, res)
+    
+    res = plusPlus(1, 2, 3)
+    fmt.Println(&amp;quot;1 + 2 + 3 = &amp;quot;, res)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;두개의 인수를 받아서 &lt;code&gt;int&lt;/code&gt;값 한개를 반환하는 함수를 선언 및 정의 했습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Go&lt;/code&gt;언어에서는 &lt;strong&gt;명시적&lt;/strong&gt;으로 값을 반환해야 합니다. 마지막값을 자동으로 반환하지 않습니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;동일한 형태의 인수를 넘겨줄때는 쉼표(&lt;code&gt;,&lt;/code&gt;)를 변수를 나열한 후 마지막에 변수들의 형태를&lt;br /&gt;
+한번만 지정해도 됩니다.&lt;/li&gt;
+&lt;li&gt;이름을 사용해서 해당 함수를 호출하고 있습니다. 물론, 인수도 포함해서 호출합니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run functions.go 
+1+2 = 3
+1+2+3 = 6
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어의 함수에는 여러가지 기법이 존재합니다. 그중 대표적인 것은 바로 함수는&lt;br /&gt;
+여러개의 값을 리턴할 수 있다는 것이 기존의 다른 언어와 차별된 점 중 하나 입니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [13] Multiple Return Values</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-13-multiple-return-values</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-13-multiple-return-values</guid>
+      <description>
+
+&lt;h1 id=&#34;multiple-return-values:dc9d91c44ff69e6de576f4a622b78d65&#34;&gt;Multiple Return Values&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어에서는 &lt;strong&gt;다수개의 결과값을 리턴&lt;/strong&gt; 할 수 있는 기능을 기본적으로 제공합니다.&lt;br /&gt;
+이 기능이 &lt;code&gt;Go&lt;/code&gt;언어를 특징짓는 기능 중 하나이기도 합니다.&lt;br /&gt;
+예를들면, 특정함수를 호출할 경우, 정상적인 결과값과 에러발생 유무를 반환할 수 있게됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func vals()(int, int) {       // [1]
+    return 3, 7
+}
+
+func main() {
+    
+    a, b := vals()            // [2]
+    fmt.Println(a)
+    fmt.Println(b)
+    
+    _, c := vals()            // [3]
+    fmt.Println(c)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;(int int)&lt;/code&gt;로 표시한것이 바로 정수형 2개값을 반환한다는 선언입니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;함수 선언에서 2개의 정수값을 반환하도록 되어 있으므로, 2개의 변수를 &lt;code&gt;단축선언&lt;/code&gt;으로&lt;br /&gt;
+선언한 후 각각 순차적으로 값을 대입 받을 수 있습니다.&lt;/li&gt;
+&lt;li&gt;만약 2개를 반환하는 함수인데, 1개의 값만 사용하고 싶다면, 이미 배웠듯이 &lt;code&gt;_&lt;/code&gt; 변수로&lt;br /&gt;
+해당 값을 무시할 수 있습니다. (이렇게 하지 않으면, 사용하지 않는 변수에러가 발생합니다.)&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run multiple-return-values.go
+3
+7
+7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어의 또다른 특징중 하나는 바로 불특정 다수개의 인수를 넘겨줄 수 있는 기능입니다.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go by Example: [14] Variadic Functions</title>
+      <link>http://xenostream.github.io/2016/02/go-by-example-14-variadic-functions</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-by-example-14-variadic-functions</guid>
+      <description>
+
+&lt;h1 id=&#34;variadic-functions:beac1a0e44f3f487dc26badfd178afaf&#34;&gt;Variadic Functions&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;가변함수&lt;/code&gt;라는 것은, 함수를 호출할때 불특정 다수개의 인자를 전달할 수 있는 기능입니다.&lt;br /&gt;
+대표적인 것이, 지금까지 무심코 사용해왔던, &lt;code&gt;fmt.Println()&lt;/code&gt;함수 입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func sum(nums ...int) {              // [1]
+    fmt.Print(nums, &amp;quot; &amp;quot;)
+    total := 0
+    
+    for _, num := range nums {
+        total += num
+    }
+    fmt.Println(total)
+}
+
+func main() {
+    
+    sum(1, 2)                        // [2]
+    sum(1, 2, 3)
+    
+    nums := []int{1, 2, 3, 4}        // [3]
+    sum(nums...)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;정수형(&lt;code&gt;int&lt;/code&gt;)인자 불특정 다수개를 인수로 처리하는 함수를 선언했습니다. (&lt;code&gt;...&lt;/code&gt; 키워드)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;가변함수&lt;/code&gt;는 특정개수를 지정해서 호출하면 알아서 처리합니다.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;심지어 가변함수의 인자로 슬라이스를 전달해도 정확하게 처리하고 있습니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;실행하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ go run variadic-functions.go 
+[1 2] 3
+[1 2 3] 6
+[1 2 3 4] 10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;언어의 또다른 특징중 하나는 클로저(&lt;code&gt;Closures&lt;/code&gt;)를 언어차원에서 지원합니다.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

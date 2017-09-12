@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [02/01] Hello, Go!! &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-02/01-hello-go" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [02/01] Hello, Go!! &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [02/01] Hello, Go!!</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="hello-go:26559df69bf5bb9f9eb0a79259c4e843">Hello, Go!!</h1>
+
+<p><code>Go</code>언어를 이용해서 응용 프로그램을 작성하기 전에 먼저 기본이되는 프로그램으로 시작 하도록 하겠습니다.<br />
+집을 짓기 전에 건물의 기초를 알아야 하듯이, 프로그램을 작성하는 것도 기본적인 것부터 시작해야 합니다.<br />
+본 장에서는, 가장 기본적인 문법을 학습하고 Go 프로그램을 작성하고 실행하는 것에 대해서 알아 보겠습니다.</p>
+
+<h2 id="program:26559df69bf5bb9f9eb0a79259c4e843">Program</h2>
+
+<p>다음은 <code>전통적인</code>것으로서 대부분의 언어를 학습 할 때 화면에 <code>hello world</code>를 출력하는 프로그램을<br />
+작성하는 것으로 프로그래밍을 시작하게 됩니다.</p>
+
+<p>준비 되셨나요? 시작하겠습니다!</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main () {
+    fmt.Printf(&quot;Hello, world or 你好 세계 or καλημ ρα κóσμ or 안녕하세요 \n&quot;)
+}
+</code></pre>
+
+<p>입력한 후 실행하면 다음과 같이 출력됩니다.</p>
+
+<pre><code>Hello, world or 你好 세계 or καλημ ρα κóσμ or 안녕하세요
+</code></pre>
+
+<h2 id="설명:26559df69bf5bb9f9eb0a79259c4e843">설명</h2>
+
+<p>우리는 먼저 개념을 이해할 필요가 있습니다.</p>
+
+<blockquote>
+<p>Go 프로그램은 모든것이 <code>package</code>로 구성되어 있습니다.</p>
+</blockquote>
+
+<p><code>package &lt;pkgName&gt;</code>(예제에서는 <code>package main</code>)이 한 줄이 현재 파일이 어떤 패키지에<br />
+속해 있는지를 나타냅니다. 또한 <code>main</code> 패키지는 바로 독립적으로 실행 할 수 있는 패키지임을 보여<br />
+줍니다. 컴파일 과정을 거치면  실행 파일이 생성 됩니다.</p>
+
+<p><code>main</code> 패키지가 아닌 다른 패키지일 경우에는 컴파일 과정 후에 <code>* .a</code>라는 파일이 생성 됩니다.<br />
+(<code>패키지 파일</code>이라고도 합니다.) <code>$GOPATH/pkg/$GOOS_$GOARCH</code> 경로에 생성 됩니다.<br />
+(Mac에서는 <code>$GOPATH/pkg/darwin_amd64</code>에 생성 됩니다.)</p>
+
+<blockquote>
+<p>독립적으로 실행 할 수있는 Go 프로그램은,<br />
+반드시<code>package main</code>으로 시작 됩니다.</p>
+</blockquote>
+
+<p>또한, 독립실행 패키지의 <code>main</code> 패키지에는 <strong>반드시</strong> <code>main</code> 함수가 포함되어 있습니다.<br />
+이 <code>main()</code> 함수는 <code>인수가없고, 반환 값 또한 없는 구조</code>로 되어 있습니다. (<code>main.main()</code>)</p>
+
+<p><code>Hello, world ...</code>와 같은 문자열을 화면에 출력하기 위해서, <code>Printf()</code> 함수를 사용 합니다.<br />
+이 함수는 <code>fmt</code> 패키지에 포함되어 있기 때문에, 시스템에서 기본적으로 제공하는 <code>fmt</code> 패키지를 임포트하고<br />
+있습니다. (예제의 경우 <code>import &quot;fmt&quot;</code>)</p>
+
+<p>패키지는 Python의 package와 비슷 합니다. 패키지를 사용하면 특별한 장점이 있습니다. 그것은 바로,<br />
+<code>모듈화</code>(프로그램을 여러 모듈로 분할)와 <code>재사용성</code>(각 모듈은 다른 프로그램에서 재사용) 입니다.</p>
+
+<p>지금은 패키지의 개념을 이해하는 것으로 그치고, 자세한 내용은 <code>패키지</code>를 설명하는장에서 설명 합니다.</p>
+
+<p>다섯번째 줄은 키워드 <code>func</code>를 통해 <code>main()</code> 함수를 <strong>정의</strong>하고 있습니다.<br />
+함수의 내용은 <code>{ ... }</code> 안에 기록 합니다. 이런 방식은 <code>C/C++, Java</code>언어와 동일 합니다.</p>
+
+<blockquote>
+<p><code>main()</code> 함수는 아무런 인수도 없고 반환값도 없습니다.</p>
+</blockquote>
+
+<p>뒷장에서 인자와, 0개 이상의 값을 반환하는 함수를 사용하는 방법에 대해서 학습하게 됩니다.</p>
+
+<p>여섯번째 줄에서는 <code>fmt</code> 패키지에 정의 된 <code>Printf()</code> 함수를 호출 합니다.<br />
+이렇듯 함수는 <code>&lt;pkgName&gt;.&lt;funcName&gt;</code>형식으로 호출합니다. 이 점은 Python과 비슷 합니다.</p>
+
+<p>1장에서 알아본것과 같이, 패키지 이름과 실제로 패키지가 존재하는 디렉토리의 이름이 달라도 상관 없습니다.<br />
+예제에서 말하는 <code>&lt;pkgName&gt;</code>이 실제 디렉토리 이름이 아닐 수 있습니다.  단지 <code>package &lt;pkgName&gt;</code>으로<br />
+선언 된 패키지 이름에 불과 합니다.</p>
+
+<p>마지막으로, 우리가 출력 한 내용을 유심히 살펴보시면 <code>ASCII</code>코드가 아닌 문자가 많이, 포함 되어있는 것을 알 수<br />
+있습니다. 실제로 <code>Go 언어</code>는  <strong>UTF-8</strong>을 기본적으로 지원하고 있으며, 어떤 문자든지 직접 출력 할 수 있습니다.<br />
+당연히, UTF-8 문자를 식별자로 사용해도 오류가 발생하지 않습니다. (권장하지는 않습니다!!)</p>
+
+<h2 id="결론:26559df69bf5bb9f9eb0a79259c4e843">결론</h2>
+
+<blockquote>
+<p>Go언어는 <code>package</code>를 사용하여 코드를 구성 합니다.</p>
+</blockquote>
+
+<p><code>main.main()</code> 함수는 현재 파일이 <code>실행 파일</code>임을 의미 합니다.</p>
+
+<p>Go언어는 기본적으로 UTF-8 문자열과 식별자를 사용하기 때문에, 언어차원에서 다국어를 지원하고 있습니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/02-go-foundation"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/00-basic-knowledge">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

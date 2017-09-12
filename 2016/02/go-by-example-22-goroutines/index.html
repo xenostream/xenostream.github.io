@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go by Example: [22] GoRoutines &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-by-example-22-goroutines" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-16T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="gobyexample" />
+  
+  
+
+  <title>
+     Go by Example: [22] GoRoutines &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go by Example: [22] GoRoutines</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-16T00:00:00Z">
+          Feb 16, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/gobyexample">#gobyexample</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="goroutines:579687b351e902c5aa1adb566f4b0e07">Goroutines</h1>
+
+<p><code>goroutine</code>은 경량적인 실행 스레드이며, <code>Go</code>언어차원에서 지원하는 병렬실행 기능입니다.</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func f(from string) {
+    for i := 0; i &lt; 3; i++ {
+        fmt.Println(from, &quot;:&quot;, i)
+    }
+}
+
+func main() {
+
+    f(&quot;direct&quot;)                     // [1]
+    
+    go f(&quot;goroutine&quot;)               // [2]
+    
+    go func(msg string) {           // [3]
+        fmt.Println(msg)
+    }(&quot;going&quot;)
+    
+    var input string
+    fmt.Scanln(&amp;input)              // [4]
+    fmt.Println(&quot;done&quot;)
+}
+</code></pre>
+
+<ol>
+<li><code>f(s)</code>함수를 일반적으로 호출하고 있습니다. 동기적으로 작동하는지를 보기위해서 호출한 것입니다.<br /></li>
+<li><code>goroutine</code>을 <code>go</code>키워드를 사용하여 호출했습니다. 고루틴은 병렬적으로 실행됩니다.<br /></li>
+<li>익명함수를 생성한 후, 고루틴으로 실행할 수도 있습니다.<br /></li>
+<li>현재 2개의 함수는 고루틴에 의해서 비동기적으로 호출되고 있습니다. <code>main()</code>함수 또한 고루틴입니다.<br />
+호출 및 실행순서를 보기위해서 <code>main()</code>함수 고루틴을 <code>fmt.Scanln()</code>함수를 사용하여, 사용자로 부터<br />
+입력을 대기하게 한 것입니다.  이 부분이 없다면 실행하자말자 종료해버립니다.</li>
+</ol>
+
+<p>실행하면 다음과 같습니다.</p>
+
+<pre><code>$ go run goroutines.go
+direct : 0
+direct : 1
+direct : 2
+goroutine : 0
+going
+goroutine : 1
+goroutine : 2
+&lt;enter&gt;
+done
+</code></pre>
+
+<p>프로그램이 실행되면서 처음 일반적인 <code>f(direct)</code>함수가 실행된 뒤에, 고루틴이 동시에 실행됨을<br />
+알 수 있습니다. 하지만 순서는 일관되지 않습니다. 이런 동시실행기능은 시스템 리소스를 적게 먹으면서도,<br />
+<code>Go</code>언어 엔진차원에서 기본적으로 제공하는 기능중 하나입니다. (경량쓰레드와 유사합니다.)</p>
+
+<p>다음으로는 프로그램에서 고루틴이 가장많이 사용되는 <code>채널(channels)</code>에 대해서 알아보겠습니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-by-example-23-channels"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-by-example-21-errors">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

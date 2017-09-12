@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [04/01] Process FORM Inputs &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-04/01-process-form-inputs" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [04/01] Process FORM Inputs &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [04/01] Process FORM Inputs</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="process-form-inputs:20f16e9aff77ac8b2277de9910c4e67a">Process form inputs</h1>
+
+<p>먼저 사용자가 입력한 양식 전송의 예를 살펴 보겠습니다. 다음과 같은 양식의 내용이 있다고 가정 합니다.<br />
+다음의 내용을 <code>login.gtpl</code>파일로 생성합니다.(새로운 디렉토리를 만들고 그 안에 넣어주세요)</p>
+
+<pre><code class="language-html">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form action=&quot;/login&quot; method=&quot;post&quot;&gt;
+        이름 : &lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;
+        암호 : &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;로그인&quot;&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>상기에서 작성한 페이지에서 내용을 입력 후 전송 버튼을 누르면 양식은 서버의 <code>/login</code>에 전달 됩니다.<br />
+사용자가 정보를 입력하고 로그인을 클릭 하면, 서버의 <code>login</code>으로 그 입력 데이터를 리디렉션 합니다.<br />
+먼저 <code>전송방법</code>이 <code>POST/GET</code>인지를 판단해야 합니다.</p>
+
+<p><code>http</code> 패키지를 통하면 아주 쉽게 이것을 처리할 수 있습니다. 이전 장에서 설명한 예제를 기초로해서<br />
+login 페이지의 form 데이터를 어​​떻게 처리하는지 살펴 보겠습니다.</p>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;html/template&quot;
+    &quot;log&quot;
+    &quot;net/http&quot;
+    &quot;strings&quot;
+)
+
+func sayhelloName(w http.ResponseWriter, r *http.Request) {
+    r.ParseForm()          // url의 전달 옵션을 분석 합니다. 
+               // POST방식일 경우 응답 패킷의 바디를 분석 합니다.(request body)
+               // !!! 주의: ParseForm() 메소드가 호출되지 않으면 양식 데이터를 검색 할 수 없습니다.
+    fmt.Println(r.Form)       // 분석한 데이터를 출력합니다.
+    fmt.Println(&quot;path&quot;, r.URL.Path)
+    fmt.Println(&quot;scheme&quot;, r.URL.Scheme)
+    fmt.Println(r.Form[&quot;url_long&quot;])
+    for k, v := range r.Form {
+        fmt.Println(&quot;key :&quot;, k)
+        fmt.Println(&quot;val :&quot;, strings.Join(v, &quot;&quot;))
+    }
+    fmt.Fprintf(w, &quot;Hello Xenostream!&quot;) // w에 기록하게되면 클라이언트에 출력 됩니다.
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(&quot;method :&quot;, r.Method)       // 요청 처리 방식 
+    if r.Method == &quot;GET&quot; {
+        t , _ := template.ParseFiles(&quot;login.gtpl&quot;)
+        t.Execute(w, nil)
+    } else {
+        // 로그인 데이터가 요청되고, 로그인 처리로직이 실행됩니다.
+        fmt.Println(&quot;username :&quot;, r.Form[&quot;username&quot;])
+        fmt.Println(&quot;password :&quot;, r.Form[&quot;password&quot;])
+    }
+}
+
+func main() {
+    http.HandleFunc(&quot;/&quot;, sayhelloName)        // 라우팅을 설정합니다
+    http.HandleFunc(&quot;/login&quot;, login)         // 라우팅을 설정합니다
+    err := http.ListenAndServe(&quot;: 9090&quot;, nil) // 감시하는 포트를 설정 합니다
+    if err != nil {
+        log.Fatal(&quot;ListenAndServe :&quot;, err)
+    }
+}
+</code></pre>
+
+<p>위의 코드에서 사용자의 요청 메소드를 구하려면 단지 <code>r.Method</code> 메소드만 호출함으로 모든<br />
+처리가 완료됩니다. 이 메소드의 반환값은 <code>문자열 변수</code> 입니다.<br />
+<code>GET, POST, PUT</code>등의 <strong>요청 method 정보를 반환</strong> 합니다.</p>
+
+<p>login 함수에서 <code>r.Method</code>의 반환값에 따라 로그인 화면표시와 로그인 로직을 처리할지를<br />
+결정하게 됩니다. <code>GET</code> 메소드에 의한 요청일 경우 로그인 화면을 표시하고, 다른 방법에 의한 요청은<br />
+로그인 로직을 처리 합니다. 예를 들어 데이터베이스를 검색하거나 로그인 정보를 확인하는 등의 일 입니다.</p>
+
+<p>브라우저에서 <code>http:/127.0.0.1:9090/login</code>을 입력하면 다음과 같은 화면이 나타납니다.</p>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/4.1.login.png" alt="" /><br />
+그림 4.1 사용자 로그인 화면</p>
+
+<p>사용자 이름과 암호를 입력해도 서버는 아무것도 출력하지 않습니다. 왜 일까요?<br />
+기본적으로는 <strong>Handler에서는 form의 내용을 자동으로 분석하지 않기 때문 입니다.</strong><br />
+<strong>반드시</strong> 명시적으로 <code>r.ParseForm()</code> 메소드를 호출하지 않는다면, 아무 데이터도 분석하지 않게 됩니다.</p>
+
+<p>이제, 코드를 약간 <code>수정</code>하여 <code>fmt.Println(&quot;username :&quot;, r.Form[&quot;username&quot;])</code> 앞부분에<br />
+<code>r.ParseForm()</code> 코드를 추가하시기 바랍니다.<br />
+다시 컴파일한 후 정보를 입력하면 서버가 사용자가 입력 한,<code>사용자 이름</code>과 <code>암호</code>를 정상적으로 출력하게 됩니다.</p>
+
+<p><code>r.Form</code>에는 사용자가 입력했던 모든 요청의 데이터가 모두 포함되어 있습니다. 예를 들어 URL에 입력한<br />
+<code>query-string, POST 데이터, PUT 데이터</code>등 입니다. URL의 <code>query-string</code> 필드 및 <code>POST</code> 데이터가<br />
+충돌하는 경우에는 slice에 저장 됩니다. 여기에는 여러가지 값이 저장되어 있습니다.<br />
+Go의 <code>공식 문서</code>에 따르면, 다음 버전에서 POST, GET 등의 데이터를 분리해서 저장한다고 밝힌바 있습니다.</p>
+
+<p>이제는 <code>login.gtpl</code>의 form의 action 값인 <code>http:/127.0.0.1:9090/login</code>을<br />
+<code>http:/127.0.0.1:9090/login?username=xenostream</code>으로 변경한 후 다시 시도하면, 서버의 출력은<br />
+다음과 같습니다.</p>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/4.1.slice.png" alt="" /></p>
+
+<p>그림 4.1 서버가 수신 한 데이터를 표시</p>
+
+<p><code>request.Form</code>은 url.Values 형 입니다.<code>key = value</code>구조로 해당 데이터가 저장되어 있습니다.<br />
+form 데이터에 어떤것이 있는지 간단한 몇 가지 예제를 살펴보겠습니다.</p>
+
+<pre><code class="language-go">v := url.Values{}
+v.Set(&quot;name&quot;, &quot;Ava&quot;)
+v.Add(&quot;friend&quot;, &quot;Jess&quot;)
+v.Add(&quot;friend&quot;, &quot;Sarah&quot;)
+v.Add(&quot;friend&quot;, &quot;Zoe&quot;)
+// v.Encode () == &quot;name = Ava &amp; friend = Jess &amp; friend = Sarah &amp; friend = Zoe&quot;
+fmt.Println(v.Get(&quot;name&quot;))
+fmt.Println(v.Get(&quot;friend&quot;))
+fmt.Println(v[&quot;friend&quot;])
+</code></pre>
+
+<h2 id="tips:20f16e9aff77ac8b2277de9910c4e67a">Tips</h2>
+
+<p><code>Request</code>패키지의 <code>FormValue()</code> 함수에서도 사용자가 전송한 데이터를 얻을 수 있습니다.<br />
+예를 들어 <code>r.Form[&quot;username&quot;]</code>은 <code>r.FormValue(&quot;username&quot;)</code>로도 쓸수 있습니다. <code>r.FormValue</code>를<br />
+호출할때 자동으로 <code>r.ParseForm</code>이 호출되므로 미리 호출 할 필요는 없습니다.<br />
+<code>r.FormValue</code>는 동일한 데이터 중에서 첫번째 데이터를 반환 합니다. 만약 데이터가 존재하지 않는 경우는<br />
+<code>빈 문자열</code>을 반환 합니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-04/02-validation-of-inputs"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-04/00-http-form">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

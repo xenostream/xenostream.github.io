@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on XenoStream&#39;s Private Site</title>
+    <link>http://xenostream.github.io/tags/golang/</link>
+    <description>Recent content in Golang on XenoStream&#39;s Private Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
+    <lastBuildDate>Wed, 17 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://xenostream.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go Oracle Driver Setting - Linux</title>
+      <link>http://xenostream.github.io/2016/02/go-oracle-driver-setting---linux</link>
+      <pubDate>Wed, 17 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://xenostream.github.io/2016/02/go-oracle-driver-setting---linux</guid>
+      <description>
+
+&lt;h1 id=&#34;go-oracle-driver-setting-how-to:cfc80950fe14b5b9c47178d48dcca6a3&#34;&gt;Go Oracle Driver Setting How To&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://qiita.com/qt-luigi/items/fbbe6792a77b493a58f9&#34;&gt; Go  - Lang : Oracle Access used by go-oci8 on Linux &lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;https://github.com/mattn/go-oci8&#34;&gt;Official URL&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;#1. Instant Client 설치
+ instantclient-basic-linux.x64-11.2.0.4.0.zip
+ instantclient-sdk-linux.x64-11.2.0.4.0.zip&lt;/p&gt;
+
+&lt;p&gt;unzip 으로 모두 압축해제 ( tar xvpf )&lt;/p&gt;
+
+&lt;p&gt;#2. root권한으로 심볼릭 링크 생성
+ cd /home/pjkwon/Go/instantclient_11_2
+ ln -s libclntsh.so.11.1 libclntsh.so&lt;/p&gt;
+
+&lt;p&gt;#3. root권한으로 oci8.pc 생성
+ &lt;code&gt;vi /usr/lib/pkgconfig/oci8.pc&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;prefix=/home/pjkwon/Go/instantclient_11_2
+libdir=${prefix}
+includedir=${prefix}/sdk/include/
+
+Name: OCI
+Description: Oracle database engine
+Version: 11.2
+Libs: -L${libdir} -lclntsh
+Libs.private:
+Cflags: -I${includedir}
+
+#4. home디렉토리 .bash_profile 생성 
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+export PKG_CONFIG_PATH=/usr/lib/pkgconfig
+export GOPATH=/home/pjkwon/Go
+export PATH=$PATH:/usr/local/go/bin
+export ORACLE_HOME=/home/pjkwon/Go/instantclient_11_2
+export PATH=$PATH:$ORACLE_HOME
+export LD_LIBRARY_PATH=$ORACLE_HOME
+export NLS_LANG=American_America.KO16MSWIN949
+export TNS_ADMIN=$ORACLE_HOME/network/admin
+export ORACLE_SID=ORCL
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;#5. go-oci8 설치&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd $GOPATH/src
+go get github.com/mattn/go-oci8
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;#6. Example 실행&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd $GOPATH/src/github.com/mattn/go-oci8/_example 
+go run oracle.go scott/tiger@localhost:1521/orcl
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://apextips.blogspot.kr/2015/09/making-connections-to-oracle-database.html&#34;&gt;Example&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

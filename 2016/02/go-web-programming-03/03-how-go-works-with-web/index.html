@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [03/03] How Go Works with Web &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-03/03-how-go-works-with-web" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [03/03] How Go Works with Web &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [03/03] How Go Works with Web</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="how-go-works-with-web:622fd93900fd179932bca89eb59d2007">How Go Works with Web</h1>
+
+<p>앞 절에서는 Go 언어를 이용해서 Web 서비스를 작성하는 방법에 대해서 설명했습니다. 바로 <code>net/http</code> 패키지를<br />
+사용하면 쉽고 간편하게 작성 할 수 있을을 알게 되었습니다.<br />
+Go 언어는 실제 로레벨에서는 어떻게 구현해서 처리하는 것에 대해서 알아보도록 하겠습니다.<br />
+모든것의 근원은 동일합니다. Go의 Web 서비스도 1절에서 설명했던 Web의 작동 방식에 근거하고 있습니다.</p>
+
+<h2 id="web-작업-방법의-몇-가지-개념:622fd93900fd179932bca89eb59d2007">web 작업 방법의 몇 가지 개념</h2>
+
+<p>다음은 서버의 개념 중의 일부를 설명한 것입니다.</p>
+
+<ul>
+<li>Request<br />
+사용자가 요구하는 데이터입니다. 사용자의 요청정보를 분석 합니다.<br />
+<code>post, get, cookie, url</code>등의 정보를 포함 합니다.</li>
+<li>Response<br />
+서버에서 클라이언트에 데이터를 반환하는 데이터 입니다.<br /></li>
+<li>Conn<br />
+사용자의 연결 정보 입니다.<br /></li>
+<li>Handler<br />
+요청을 처리하고 데이터를 생성해서 반환하는 처리 로직입니다.<br /></li>
+</ul>
+
+<h2 id="http-패키지가-수행하는-기능을-분석하는:622fd93900fd179932bca89eb59d2007">http 패키지가 수행하는 기능을 분석하는</h2>
+
+<p>아래의 그림은 Go가 제공하는 Web 서비스의 작업모드 프로세스 그림 입니다.</p>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/3.3.http.png" alt="" /><br />
+그림 3.9 http 패키지의 실행 흐름</p>
+
+<ol>
+<li><code>Listen Socket</code>을 생성하고 지정된 포트를 모니터링 합니다. 클라이언트의 요청을 기다립니다.<br /></li>
+<li><code>Listen Socket</code>은 클라이언트의 요청을 받아들인 후, <code>Client Socket</code>을 통해서 클라이언트와 통신 합니다.<br /></li>
+<li>클라이언트의 요청을 처리 합니다.먼저 Client Socket에서 <code>HTTP 요청</code>의 프로토콜 헤더를 읽고 만약<br />
+POST 메서드인 경우는 클라이언트가 입력한 데이터를 읽을 수 없습니다.그후 해당 <code>handler</code>가 요청을 처리 합니다.<br />
+handler에서 클라이언트에 제공하는 데이터를 준비했으면 Client Socket을 통해서 클라이언트에 전송 합니다.<br /></li>
+</ol>
+
+<p>이 모든 과정은 다음의 <code>3가지 개념</code>만 이해하면 됩니다.<br />
+이 개념을 이해한다는 것은 <code>Go</code> 언어에서 어떻게 Web을 처리하는 것인지를 이해한 것입니다.</p>
+
+<ul>
+<li>포트를 감시 하는 방법<br /></li>
+<li>클라이언트의 요청 처리 방법<br /></li>
+<li>handler의 처리 방법</li>
+</ul>
+
+<p>이전 절의 예제에서는 Go 함수 <code>ListenAndServe()</code>를 사용해서 이러한 작업을 처리 했습니다.<br />
+여기에서는 다음과 같은 방법으로 처리하고 있습니다.</p>
+
+<ol>
+<li><code>server 객체</code>를 초기화 합니다.<br /></li>
+<li><code>net.Listen(&quot;tcp&quot;, addr)</code>함수를 호출 합니다.로레벨의 TCP 프로토콜을 이용해서 해당 서비스를 시작합니다.<br /></li>
+<li>설정한 포트를 모니터링 합니다.</li>
+</ol>
+
+<p>아래의 코드는 Go의 <code>http 패키지</code>의 소스 코드에서 일부를 인용 한 것입니다.<br />
+이 코드를 통해서 <code>HTTP 처리 과정</code>에 대하여 전반적으로 처리방식을 알 수 있습니다.</p>
+
+<pre><code class="language-go">func (srv *Server) Serve(l net.Listener) error {
+    defer l.Close()
+    var tempDelay time.Duration 
+    for {
+        rw e := l.Accept()
+        if e != nil {
+            if ne, ok := e(net.Error); ok &amp;&amp; ne.Temporary() {
+                if tempDelay == 0 {
+                    tempDelay = 5 * time.Millisecond
+                } else {
+                    tempDelay * = 2
+                }
+                if max := 1 * time.Second; tempDelay &gt; max {
+                    tempDelay = max
+                }
+                log.Printf(&quot;http: Accept error: %v; retrying in %v&quot;, e, tempDelay)
+                time.Sleep(tempDelay)
+                continue
+            }
+            return e
+        }
+    tempDelay = 0
+    c, err := srv.newConn(rw)
+    if err != nil {
+        continue
+    }
+    go c.serve()
+    }
+}
+</code></pre>
+
+<p>지정 포트를 모니터링한 후 어떤 방식으로 클라이언트의 요청을 처리할까요?<br />
+상기의 코드에서는 포트모니터링을 수행 한 후, <code>srv.Serve(net.Listener)</code>함수를 호출하고 있습니다.<br />
+이 함수는 클라이언트의 요청 정보를 처리하고 있습니다. 이 함수는 무한루프를 (<code>for {}</code>) 사용해서 사용자의 요청을<br />
+Listener를 통해서 요청받은 후, Conn를 연결 객체를 생성 합니다.<br />
+마지막으로 단일 goroutine을 생성합니다. 이 요청의 데이터를 인수로해서 conn에 전달 합니다.<code>go c.serve()</code>.<br />
+이것은 멀티스레드를 구현해서 처리하고 있으므로 사용자의 새로운 정보 요청은 새로운 goroutine에서 이루어 지므로,<br />
+이전의 연결 정보와는 상호 영향을주지 않습니다.</p>
+
+<p>좀더 구체적으로 요청을 처리하는 함수에 대해서 자세히 알아보도록 하겠습니다.</p>
+
+<ul>
+<li>conn 객체에서 request를 분석 합니다. <code>c.readRequest()</code><br /></li>
+<li>원하는 handler를 가져 옵니다. <code>handler := sh.srv.Handler</code><br />
+즉, 조금 전에 <code>ListenAndServe()</code> 함수를 호출했을 때, 두 번째 인수 입니다.<br />
+예제에서는 <code>nil</code> 값을 전달했는데, 이것은 비어있는 것과 같습니다.<br />
+기본적으로 <code>handler = DefaultServeMux</code>를 가져와서 사용합니다.<br />
+이 변수의 용도는 바로 <code>라우터</code> 입니다. url에 매핑되는 해당 handler함수로 리디렉션하는 데 사용 됩니다.<br />
+가장먼저 호출했던 코드가 <code>http.HandleFunc(&quot;/&quot;, sayhelloName)</code> 였습니다.<br />
+이 코드의 의미는 사용자가 <code>/</code> 경로를 요청할 경우 수행할 함수에 대한 매핑입니다.(경로 규칙 등록)<br />
+url에서 &ldquo;/&rdquo; 경로를 요청한다면 sayhelloName() 함수로 처리를 리디렉션 합니다.<br /></li>
+<li>DefaultServeMux는 ServeHTTP 메소드를 호출 합니다.<br />
+이 메소드는 실제로는 sayhelloName() 함수의 본체를 호출하고 있습니다.<br /></li>
+<li>마지막으로 response 정보를 입력하여 클라이언트에 피드백을 제공합니다.<br /></li>
+</ul>
+
+<p>전체적인 흐름의 자세한 내용은 아래 그림과 같습니다.</p>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/3.3.illustrator.png" alt="" /><br />
+그림 3.10 http 접속의 처리 흐름</p>
+
+<p>지금까지 3가지 문제에 대해 모든 해답을 얻었습니다.<br />
+Go 언어에서 Web을 처리하는 방식에 대한 기본적인 지식에 대해서 배웠습니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-03/04-get-into-http-package"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-03/02-build-a-simple-web-server">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+

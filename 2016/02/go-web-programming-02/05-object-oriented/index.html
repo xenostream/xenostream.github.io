@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" Go Web Programming: [02/05] Object Oriented &middot;  XenoStream&#39;s Private Site" />
+  
+  <meta property="og:site_name" content="XenoStream&#39;s Private Site" />
+  <meta property="og:url" content="http://xenostream.github.io/2016/02/go-web-programming-02/05-object-oriented" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:published_time" content="2016-02-17T00:00:00Z" />
+  
+  <meta property="og:article:tag" content="goweb" />
+  
+  
+
+  <title>
+     Go Web Programming: [02/05] Object Oriented &middot;  XenoStream&#39;s Private Site
+  </title>
+
+  <link rel="stylesheet" href="http://xenostream.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/main.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://xenostream.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="shortcut icon" href="http://xenostream.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="http://xenostream.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.jpg )">
+    <section class="header-text">
+      <h1><a href="http://xenostream.github.io/">XenoStream&#39;s Private Site</a></h1>
+      
+      <div class="tag-line">
+        Software &amp; System Engineer!!
+      </div>
+      
+      <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+      
+      <a href="http://xenostream.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+
+<article>
+  <header>
+    <h1 class="text-primary">Go Web Programming: [02/05] Object Oriented</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2016-02-17T00:00:00Z">
+          Feb 17, 2016
+        </time>
+      </div>
+      <div class="pull-right">
+        
+        <span class="post-tag small"><a href="http://xenostream.github.io//tags/goweb">#goweb</a></span>
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h1 id="object-oriented:f3782d2577647ff9b9710d08a8be7b61">Object Oriented</h1>
+
+<p>앞의 두 장에서 <code>함수</code>와 <code>struct</code>를 설명 했습니다. 함수를 struct의 필드로 처리할 수 있습니다.<br />
+이번장에서는 함수의 또 다른 형태에 대해서 설명 합니다.</p>
+
+<p>다른 객체지향프로그래밍 언어에서는 이 기능을 <code>method</code>라고 부르는 기능 입니다.</p>
+
+<h2 id="method:f3782d2577647ff9b9710d08a8be7b61">method</h2>
+
+<p>사각형이라는 struct를 정의하고 이 사각형의 넓이를 구하는 프로그램을 작성하고 있다고 가정 하겠습니다.<br />
+먼저, 일반적인 사고방식으로 접근하면 다음과 같이 프로그래밍 하게 됩니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+type Rectangle struct {
+    width, height float64
+}
+
+func area(r Rectangle) float64 {
+    return r.width * r.height
+}
+
+func main() {
+    r1 := Rectangle{12, 2}
+    r2 := Rectangle{9, 4}
+    fmt.Println(&quot;Area of​​ r1 is :&quot;, area(r1))
+    fmt.Println(&quot;Area of​​ r2 is :&quot;, area (r2))
+}
+</code></pre>
+
+<p>상기의 코드로 사각형의 면적을 구할 수 있겠지만, <code>area()</code> 함수는 Rectangle 구조체와 연관된 함수라고<br />
+볼 수 없습니다. Rectangle 객체(여기서는 r1, r2)들의 면적을 계산하는 함수에 그저 인수로 전달하고 있을 뿐입니다.</p>
+
+<p>이렇게 구현해도 상관없지만 여러가지 종류의 면적을 구할려면, 예를들어 사각형, 오각형, 다각형에 대한 면적을 구하는<br />
+상황이 발생한다면 어떻게 처리해야 할까요? 이런 경우의 해결책은 해당 처리 함수의 개수를 늘릴 수밖에 없습니다.<br />
+함수 이름 또한 개별적으로 중복되지 않게 준비해야 합니다. <code>area_rectangle, area_circle...</code></p>
+
+<p>아래의 그림은 타원 함수를 나타내고 있습니다. 이 함수는 struct에 속하지 않기(객체지향의 class에 속하지 않는)<br />
+때문에 struct 외부에 별도로 존재하고,  개념적으로도 어떤 struct과도 연관되지 않은 일반적인 함수 입니다.</p>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/2.5.rect_func_without_receiver.png" alt="" /></p>
+
+<p>그림 2.8 함수와 struct의 관계도</p>
+
+<p>이런 함수류의 구현 방법에는 무리가 있습니다. 또한 개념적으로봐도, &ldquo;면적&rdquo;은 &ldquo;형상&rdquo;의 한 속성 입니다.<br />
+이 속성은 특정 형상과 연관되어 있습니다. 사각형의 가로, 세로와 같이 서로 뗄레야 뗄수 없는 존재인 것 입니다.</p>
+
+<p>이런 이유로 <code>method</code>라는 개념이 생겨 났습니다. 즉, <code>method</code>는 어떤 형태와 연관되어 존재한다 라는 의미 입니다.<br />
+<code>method</code>선언 문법과 함수 선언 문법은 거의 동일 합니다. 단지,</p>
+
+<blockquote>
+<p><code>func</code> 키워드 뒤에<br />
+receiver(method가 연관된 표시)를 추가해서 선언 합니다.</p>
+</blockquote>
+
+<p>위에서 언급 한 형상 예제로 보면 <code>area()</code> 함수(methos)는 형상(Rectangle)에 연관되어서 작동한다는 것입니다.<br />
+<code>Rectangle.area()</code>의 의미는 Rectangle 형상에 <strong>연관된</strong> area() 함수라는 의미 입니다.<br />
+Rectangle에 연관된 <code>메소드</code>는 <code>구조체 외부에 선언</code>하고, <strong>리시버를 통해서 해당 <code>구조체의 함수</code>로 연관짓게 됩니다.</strong></p>
+
+<p>더 구체적으로 말하면, Rectangle은 length와 width <code>필드가 존재</code>하고, 또한 area() <code>메소드</code>도 존재 합니다.<br />
+이런 필드 및 메소드는 모두 Rectangle에 속한다 라는 의미 입니다.</p>
+
+<p>Go언어의 개발자 중 하나인 <code>Rob Pike</code>의 말을 잠시 빌리면 다음과 같습니다.</p>
+
+<blockquote>
+<p>&ldquo;A method is a function with an implicit first argument, called a receiver.&rdquo;</p>
+</blockquote>
+
+<p>method의 문법은 다음과 같습니다.</p>
+
+<pre><code class="language-go">func (r ReceiverType) funcName(parameters) (results)
+</code></pre>
+
+<p>이전에 설명한 예제를 가지고 method를 설명하겠습니다.</p>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;math&quot;
+)
+
+type Rectangle struct {
+    width, height float64
+}
+
+type Circle struct {
+    radius float64
+}
+
+func (r Rectangle) area() float64 {
+    return r.width * r.height
+}
+
+func (c Circle) area() float64 {
+    return c.radius * c.radius * math.Pi
+}
+
+
+func main() {
+    r1 := Rectangle{12, 2}
+    r2 := Rectangle{9, 4}
+    c1 := Circle{10}
+    c2 := Circle{25}
+
+    fmt.Println(&quot;Area of​​ r1 is :&quot;, r1.area())
+    fmt.Println(&quot;Area of​​ r2 is :&quot;, r2.area())
+    fmt.Println(&quot;Area of​​ c1 is :&quot;, c1.area())
+    fmt.Println(&quot;Area of​​ c2 is :&quot;, c2.area())
+}
+</code></pre>
+
+<p>method를 사용할 때는 다음의 몇가지를 주의하시기 바랍니다.</p>
+
+<ul>
+<li>method는 동일한 이름이라도 수신자가 다르면 method도 다릅니다.<br /></li>
+<li>method는 수신자 필드에 액세스 할 수 있습니다.<br /></li>
+<li>method의 호출은 <code>.</code> 통해 액세스 합니다. struct이 필드에 액세스하는 것과 동일 합니다.</li>
+</ul>
+
+<p><img src="http://xenostream.github.io/post/go-web-programming/images/2.5.shapes_func_with_receiver_cp.png" alt="" /></p>
+
+<p>그림 2.9 다른 struct의 method는 다른 것입니다.</p>
+
+<p>위의 예에서 method area()는 각각 Rectangle과 Circle에 속한 메소드가 됩니다. 이때 Rectangle과 Circle이<br />
+리시버가 됩니다. 또한 area() 메소드는 Rectangle/Circle에 속하게 되고, 사용되어 집니다.</p>
+
+<blockquote>
+<p>method는 점선으로 표시하고 있습니다.
+메소드의 리시버는 <code>값에 의한 전달</code>이며, <code>참조</code>가 아닙니다.</p>
+</blockquote>
+
+<p>리시버를 포인터로 처리해도 문제 없습니다. 차이점은 포인터는 리시버가 엔터티의 내용에 직접 수정할 수 있는 반면,<br />
+일반적인 방법의 리시버의 조작은 값의 복사본을 조작하는 것입니다. 원래 엔터티에 대한 수정이 발생하지 않는 것입니다.</p>
+
+<p>method는 struct에서만 사용할 수 있는 것일까요? <strong>당연히 아닙니다!!</strong><br />
+메소드는 사용자 정의형, 내장형, struct 등 <code>모든 형으로도 선언</code>할 수 있습니다. 조금 헷갈리시는가요?<br />
+여기서 사용자 정의형이 struct 아닌가요? struct는 사용자 정의형 중에서도 비교적 특수한 형태의 타입일 뿐입니다.</p>
+
+<p>타입 선언은 다음과 같은 선언을 제공하고 있습니다.</p>
+
+<pre><code class="language-go">type typeName typeLiteral
+</code></pre>
+
+<p>다음의 예제는 <code>사용자 정의 타입</code>을 선언하는 예제입니다.</p>
+
+<pre><code class="language-go">type ages int
+
+type money float32
+
+type months map [string] int
+
+m := months {
+    &quot;January&quot;: 31
+    &quot;February&quot;: 28,
+    ...
+    &quot;December&quot;: 31
+}
+</code></pre>
+
+<p>사용법을 아시겠습니까? 코드에 타입의 이름을 별도로 지정해서 가독성을 좋게 만드는것 일 뿐입니다.<br />
+실제로는 별칭을 정의해서 사용하는 것일 뿐입니다. C의 <code>typedef</code>와 유사한 것으로, 상기의 예제에서는 ages는<br />
+int형과 같은 의미로 사용되는 것외에는 아무런 의미는 없습니다.</p>
+
+<p>다시, <code>method</code> 설명으로 돌아와서, 사용자 정의형을 임의의 <code>method</code>와 연관지을 수 있습니다.<br />
+다음은 이러한 기능을 하는 조금 복잡한 예제를 살펴 보겠습니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+const (
+    WHITE = iota          // 열거형 사용 
+    BLACK
+    BLUE
+    RED
+    YELLOW
+)
+
+type Color byte
+
+type Box struct {
+    width, height, depth float64
+    color Color
+}
+
+type BoxList[] Box       // boxes 슬라이스 
+
+func (b Box) Volume() float64 {
+    return b.width * b.height * b.depth
+}
+
+func (b * Box) SetColor(c Color) {
+    b.color = c
+}
+
+func (bl BoxList) BiggestColor() Color {
+    v := 0.00
+    k := Color(WHITE)
+    for _,  b := range bl {
+        if bv := b.Volume(); bv &gt; v {
+            v = bv
+            k = b.color
+        }
+    }
+    return k
+}
+
+func (bl BoxList) PaintItBlack() {
+    for i,  _ := range bl {
+        bl[i].SetColor(BLACK)
+    }
+}
+
+func (c Color) String() string {
+    strings := []string{ &quot;WHITE&quot;, &quot;BLACK&quot;, &quot;BLUE&quot;, &quot;RED&quot;, &quot;YELLOW&quot;}
+    return strings [c]
+}
+
+func main() {
+    boxes := BoxList {
+                Box{4, 4, 4, RED}
+                Box{10, 10, 1, YELLOW}
+                Box{1, 1, 20, BLACK}
+                Box{10, 10, 1, BLUE}
+                Box{10, 30, 1, WHITE}
+                Box{20, 20, 20, YELLOW}
+    }
+
+    fmt.Printf(&quot;We have %d boxes in our set \n&quot;, len(boxes))
+    fmt.Println(&quot;The volume of the first one is&quot;, boxes[0].Volume(),  &quot;cm³&quot;)
+    fmt.Println(&quot;The color of the last one is&quot;, boxes[len(boxes) -1].color.String())
+    fmt.Println(&quot;The biggest one is&quot;, boxes.BiggestColor().String())
+
+    fmt.Println(&quot;Let 's paint them all black&quot;)
+    boxes.PaintItBlack()
+    fmt.Println(&quot;The color of the second one is&quot;, boxes[1].color.String())
+
+    fmt.Println(&quot;Obviously, now, the biggest one is&quot;, boxes.BiggestColor().String())
+}
+</code></pre>
+
+<p>위의 코드는 <code>const</code> 키워드로 몇개의 정수상수를 정의한 후, 몇가지의 <code>사용자 정의형</code>을 선언하고 있습니다.</p>
+
+<ul>
+<li>Color는 byte의 별칭 입니다.<br /></li>
+<li>struct Box를 선언 합니다. 3 개의 가로, 세로, 높이 필드와 색상 속성을 가지고 있습니다.</li>
+<li>slice BoxList을 선언 합니다. Box를 가지고 있습니다.</li>
+</ul>
+
+<p>다음으로 사용자 정의형을 리시버로 method를 선언 합니다.</p>
+
+<ul>
+<li>Volume()의 리시버를 Box로 선언 합니다. Box의 부피를 반환 합니다.</li>
+<li>SetColor(c Color)는 Box의 색을 c로 변경 합니다.</li>
+<li>BiggestColor()는 BoxList에 선언되어 있습니다.<br /></li>
+<li>PaintItBlack()는 BoxList의 모든 Box의 색을 모두 검정색으로 변경 합니다.</li>
+<li>String()는 Color로 정의되어 있으며, Color의 구체적인 색을 돌려줍니다 (문자열 형식)</li>
+</ul>
+
+<p>위의 코드를 문자로 표현하면 쉽게 생각됩니다. 문제를 해결할 경우 문제를 묘사한 후 해당 코드를 작성하여 제공 합니다.</p>
+
+<h3 id="포인터-receiver:f3782d2577647ff9b9710d08a8be7b61">포인터 receiver</h3>
+
+<p>그럼 여기서, SetColor 구현방법에 대해서 잠시 생각해 보겠습니다.<br />
+이 receiver는 Box의 포인터를 사용하고 있습니다. 즉, <code>*Box</code>를 사용 하고 있습니다.<br />
+왜 <code>Box</code>가 아닌 포인터를 사용하는 것일까요? SetColor를 선언하는 진짜 목적은 실제 Box의 색을 변경하는 것입니다.<br />
+만약 Box의 포인터를 전달하지 않았다면, SetColor가 받는 것은 사실 Box의 복사본인 것입니다.<br />
+즉, 메소드 내에서 색상을 변경하는 것은 Box의 복사본을 조작하는 것일뿐, 실제 Box에는 아무런 변화가 없습니다.</p>
+
+<blockquote>
+<p>따라서 포인터를 전달해서 저장된 실제 값을 변경 해야 합니다.</p>
+</blockquote>
+
+<p>여기서는 receiver를 함수선언의 첫번째로 기술했습니다. 이전의 함수 설명에서 값전달과 참조로 쉽게 처리 됩니다.<br />
+혹시 SetColor() 함수에서 다음과 같이 사용해야 하는게 아닐까? 라는 생각이 생길지도 모릅니다. <code>*b.Color = c</code><br />
+그런데 실제로는 <code>b.Color = c</code>로 사용했습니다. 포인터에 저장된 실제 값을 읽을 수 있어야하기 때문 입니다.</p>
+
+<p>Go에서는 이 두 가지 방법 모두 맞습니다.<br />
+포인터를 사용해서 해당 필드에 액세스 한 경우(포인터에 아무런 필드가 없다고해도) Go는 포인터를 통해 그 값에<br />
+액세스하려는 것을 <code>이미</code><code>알고 있습니다. 생각 많은 개발자는 이렇게 생각할지도 모릅니다.     
+PointItBlack에서 SetColor를 호출했을 때, 혹시</code>(&amp;bl[i]).SetColor(BLACK)<code>로 써야 하지 않을까? 라고 말입니다.     
+SetColor()의 receiver는</code>*Box<code>이지</code>Box`가 아니니까요. <strong>하지만</strong>, 두 가지 방법 모두 정상적으로 처리됩니다.<br />
+Go는 receiver가 포인터임을 이미 알고 있습니다. 그래서 내부적으로 자동으로 해석해서 처리해 주는 것입니다.</p>
+
+<p>만약 메소드의 receiver가 <code>*T</code>라면, <code>T</code>형 엔티티 변수 V에서 이 메소드를 호출 할 수 있습니다.<br />
+이때 <code>&amp;V</code>를 통해서 메소드를 호출 할 필요는 없습니다.</p>
+
+<p>마찬가지로,</p>
+
+<p>만약 메소드의 receiver가 <code>T</code>라면, <code>*T</code>형 변수 P에서 이 메소드를 호출 할 수 있습니다.<br />
+이때 <code>*P</code>를 사용하여 메소드를 호출 할 필요는 없습니다.</p>
+
+<p>결과적으로 호출하고있는 메소드가 포인터 메소드인지는 신경 쓸 필요가 없습니다. Go는 당신이 시도하고있는 모든 것을<br />
+이미 알고있는 것입니다. C/C++ 프로그램을 작성해본 개발자라면, 이점이 아주 유용할 것입니다.</p>
+
+<h3 id="method-상속:f3782d2577647ff9b9710d08a8be7b61">method 상속</h3>
+
+<p>이전 장에서는 <code>익명 필드</code>를 통한 필드의 <code>상속</code>에 대해서 배웠습니다. 마찬가지로!!!</p>
+
+<blockquote>
+<p>method도 상속 할 수 있습니다.</p>
+</blockquote>
+
+<p>만약 익명필드가 한개의 메소드를 구현하는 경우이 익명 필드를 포함해서 sturct에서 메소드를 호출 할 수 있습니다.<br />
+다음의 예제를 통해서 알아보도록 하겠습니다.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+type Human struct {
+    name string
+    age int
+    phone string
+}
+
+type Student struct {
+    Human            // 익명 필드
+    school string
+}
+
+type Employee struct {
+    Human             // 익명 필드
+    company string
+}
+
+// human에서 메소드를 정의
+func (h * Human) SayHi() {
+    fmt.Printf(&quot;Hi, I am %s you can call me on %s \n&quot;, h.name, h.phone)
+}
+
+func main() {
+    mark := Student{Human{&quot;Mark&quot;, 25 &quot;222-222-YYYY&quot;}, &quot;MIT&quot;}
+    sam := Employee{Human{&quot;Sam&quot;, 45 &quot;111-888-XXXX&quot;}, &quot;Golang Inc&quot;}
+
+    mark.SayHi()
+    sam.SayHi()
+}
+</code></pre>
+
+<h3 id="method-재-작성-methos-override:f3782d2577647ff9b9710d08a8be7b61">method 재 작성(Methos Override)</h3>
+
+<p>위의 예에서 만약 Employee에서 SayHi() 함수를 구현하려면 어떻게하면 좋을까요?  간단합니다.<br />
+익명필드의 충돌처리와 같은 이치로, Employee에서도 메소드를 <code>재 정의</code> 할 수 있습니다.<br />
+익명 필드를 <code>재 정의</code> 방법은 아래의 예를 참조 하십시오.</p>
+
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+
+type Human struct {
+    name string
+    age int
+    phone string
+}
+
+type Student struct {
+    Human           // 익명 필드
+    school string
+}
+
+type Employee struct {
+    Human           // 익명 필드
+    company string
+}
+
+// Human에 method를 정의
+func (h *Human) SayHi() {
+    fmt.Printf(&quot;Hi, I am %s you can call me on %s \n&quot;, h.name, h.phone)
+}
+
+// Employee의 method로 Human의 method를 재정의 
+func (e * Employee) SayHi() {
+    fmt.Printf(&quot;Hi, I am %s, I work at %s. Call me on %s \n&quot;, e.name,
+            e.company, e.phone) // 2줄로 나눠서 작성해도 됩니다!!!
+}
+
+func main() {
+    mark := Student{Human{&quot;Mark&quot;, 25 &quot;222-222-YYYY&quot;}, &quot;MIT&quot;}
+    sam := Employee{Human{&quot;Sam&quot;, 45 &quot;111-888-XXXX&quot;}, &quot;Golang Inc&quot;}
+
+    mark.SayHi()
+    sam.SayHi()
+}
+</code></pre>
+
+<p>위의 코드에서 본 것과 같이 <code>Go언어</code>는 아주 유연하게 디자인 되어 있습니다.<br />
+이런 지식을 토대로 기본적인 객체 지향 프로그램을 설계 할 수 있습니다.</p>
+
+<blockquote>
+<p>Go객체지향은 이렇게 간단히 구현 됩니다.</p>
+</blockquote>
+
+<p>public/private 라는 키워드는 필요하지 않습니다. 대문자와 소문자를 사용해서 처리합니다.<br />
+즉, 대문자로 시작하면 외부에 공개하고, 소문자로 시작하면 비공개입니다. 메서드도 동일한 규칙이 적용됩니다.</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'xenostream';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/06-interface"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next"><a href="http://xenostream.github.io/2016/02/go-web-programming-02/04-struct">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy;Xenostream.com. &reg;2017 All Rights Reserved.
+    </div>
+    <div class="sns-links hidden-print">
+  
+  <a href="http://xenostream.github.io/2016/02/about">
+	  <i class="fa fa-user-md fa-fw"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/tags">
+	  <i class="fa fa-tags"></i>
+  </a>
+  
+  
+  <a href="http://xenostream.github.io/post">
+      <i class="fa fa-archive fa-fw"></i>
+  </a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <script src="http://xenostream.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  
+</body>
+</html>
+
