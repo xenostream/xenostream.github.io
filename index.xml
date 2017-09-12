@@ -7,15 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
-    <lastBuildDate>Tue, 12 Sep 2017 16:18:23 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 12 Sep 2017 07:18:23 +0000</lastBuildDate>
     <atom:link href="http://xenostream.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Acme Editor for Windows</title>
-      <link>http://xenostream.github.io/2017/09/acme-editor-for-windows</link>
-      <pubDate>Tue, 12 Sep 2017 16:18:23 +0900</pubDate>
+      <title>Acme Editor for Windows #1</title>
+      <link>http://xenostream.github.io/2017/09/acme-editor-for-windows-</link>
+      <pubDate>Tue, 12 Sep 2017 07:18:23 +0000</pubDate>
       
-      <guid>http://xenostream.github.io/2017/09/acme-editor-for-windows</guid>
+      <guid>http://xenostream.github.io/2017/09/acme-editor-for-windows-</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://xenostream.github.io/images/plan9/acme.png&#34; alt=&#34;Acme Editor for Windows x64&#34; /&gt;&lt;/p&gt;
@@ -265,29 +265,29 @@ i386, amd64, SPARC, SPARC64, PowerPC, MIPS등과 같은 다른 플랫폼에 별�
 struct sockaddr_in sock_in;  
 struct servent *sp;  
 struct hostent *host;  
-		...  
-		memset(&amp;amp;sock_in, 0, sizeof (sock_in));  
+...  
+memset(&amp;amp;sock_in, 0, sizeof (sock_in));  
+sock_in.sin_family = AF_INET;  
+f = socket(AF_INET, SOCK_STREAM, 0);  
+if (f &amp;lt; 0)  
+	error(&amp;quot;socket&amp;quot;);  
+if (bind(f, (struct sockaddr*)&amp;amp;sock_in, sizeof sock_in) &amp;lt; 0){  
+	error(&amp;quot;bind&amp;quot;);  
+	host = gethostbyname(argv[1]);  
+	if(host) {  
+		sock_in.sin_family = host-&amp;gt;h_addrtype;  
+		memmove(&amp;amp;sock_in.sin_addr, host-&amp;gt;h_addr, host-&amp;gt;h_length);
+	} else {  
 		sock_in.sin_family = AF_INET;  
-		f = socket(AF_INET, SOCK_STREAM, 0);  
-		if (f &amp;lt; 0)  
-			error(&amp;quot;socket&amp;quot;);  
-		if (bind(f, (struct sockaddr*)&amp;amp;sock_in, sizeof sock_in) &amp;lt; 0){  
-			error(&amp;quot;bind&amp;quot;);  
-		host = gethostbyname(argv[1]);  
-		if(host) {  
-			sock_in.sin_family = host-&amp;gt;h_addrtype;  
-			memmove(&amp;amp;sock_in.sin_addr, host-&amp;gt;h_addr, host-&amp;gt;h_length);
-		} else {  
-			sock_in.sin_family = AF_INET;  
-			sock_in.sin_addr.s_addr = inet_addr(argv[1]);  
-			if (sock_in.sin_addr.s_addr == -1)  
-			error(&amp;quot;unknown host %s&amp;quot;, argv[1]);  
-		}  
-		sp = getservbyname(&amp;quot;discard&amp;quot;, &amp;quot;tcp&amp;quot;);   
-		if (sp)  
-			sock_in.sin_port = sp-&amp;gt;s_port;   
-		else   
-			sock_in.sin_port = htons(9);   
+		sock_in.sin_addr.s_addr = inet_addr(argv[1]);  
+		if (sock_in.sin_addr.s_addr == -1)  
+		error(&amp;quot;unknown host %s&amp;quot;, argv[1]);  
+	}  
+	sp = getservbyname(&amp;quot;discard&amp;quot;, &amp;quot;tcp&amp;quot;);   
+	if (sp)  
+		sock_in.sin_port = sp-&amp;gt;s_port;   
+	else   
+		sock_in.sin_port = htons(9);   
 		if (connect(f, (struct sockaddr*)&amp;amp;sock_in, sizeof sock_in) &amp;lt; 0)   
 			error(&amp;quot;connect:&amp;quot;);			
 &lt;/code&gt;&lt;/pre&gt;
@@ -312,8 +312,10 @@ if(fd &amp;lt; 0)
 &lt;p&gt;결론적으로 요약하면, UNIX개발자들이 현재에 맞도록 모든것을 다시 새롭게 만든 운영체제가  Plan 9라는&lt;br /&gt;
 운영체제이다. 2002년 4판을 마지막으로 더이상 만들지 않고 있다!!! 2005년에 GUI를 가진 전화기를&lt;br /&gt;
 만들기 위해서 Inferno 라는 운영체제를 Plan 9의 여러가지 사상을 투입해서 만들었다.&lt;br /&gt;
-Inferno또한 할얘기가 많지만, Java와 같은 구조로 구성된 멀티플랫폼 가상운영체제이다란것만 알아두기
+Inferno또한 할얘기가 많지만, Java와 같은 구조로 구성된 멀티플랫폼 가상운영체제이다란것만 알아두기&lt;br /&gt;
 바란다. Acme Eidtor for Windows 파일이 바로 Inferno OS에 구현된 것을 윈도우에서 사용하게 된다.!!&lt;/p&gt;
+
+&lt;p&gt;2편에서 계속해서 &lt;strong&gt;Acme Editor for Windows&lt;/strong&gt; 에 대해서 설명하도록 하겠다.&lt;/p&gt;
 
 &lt;hr /&gt;
 
