@@ -345,29 +345,29 @@ i386, amd64, SPARC, SPARC64, PowerPC, MIPS등과 같은 다른 플랫폼에 별�
 struct sockaddr_in sock_in;  
 struct servent *sp;  
 struct hostent *host;  
-		...  
-		memset(&amp;sock_in, 0, sizeof (sock_in));  
+...  
+memset(&amp;sock_in, 0, sizeof (sock_in));  
+sock_in.sin_family = AF_INET;  
+f = socket(AF_INET, SOCK_STREAM, 0);  
+if (f &lt; 0)  
+	error(&quot;socket&quot;);  
+if (bind(f, (struct sockaddr*)&amp;sock_in, sizeof sock_in) &lt; 0){  
+	error(&quot;bind&quot;);  
+	host = gethostbyname(argv[1]);  
+	if(host) {  
+		sock_in.sin_family = host-&gt;h_addrtype;  
+		memmove(&amp;sock_in.sin_addr, host-&gt;h_addr, host-&gt;h_length);
+	} else {  
 		sock_in.sin_family = AF_INET;  
-		f = socket(AF_INET, SOCK_STREAM, 0);  
-		if (f &lt; 0)  
-			error(&quot;socket&quot;);  
-		if (bind(f, (struct sockaddr*)&amp;sock_in, sizeof sock_in) &lt; 0){  
-			error(&quot;bind&quot;);  
-		host = gethostbyname(argv[1]);  
-		if(host) {  
-			sock_in.sin_family = host-&gt;h_addrtype;  
-			memmove(&amp;sock_in.sin_addr, host-&gt;h_addr, host-&gt;h_length);
-		} else {  
-			sock_in.sin_family = AF_INET;  
-			sock_in.sin_addr.s_addr = inet_addr(argv[1]);  
-			if (sock_in.sin_addr.s_addr == -1)  
-			error(&quot;unknown host %s&quot;, argv[1]);  
-		}  
-		sp = getservbyname(&quot;discard&quot;, &quot;tcp&quot;);   
-		if (sp)  
-			sock_in.sin_port = sp-&gt;s_port;   
-		else   
-			sock_in.sin_port = htons(9);   
+		sock_in.sin_addr.s_addr = inet_addr(argv[1]);  
+		if (sock_in.sin_addr.s_addr == -1)  
+		error(&quot;unknown host %s&quot;, argv[1]);  
+	}  
+	sp = getservbyname(&quot;discard&quot;, &quot;tcp&quot;);   
+	if (sp)  
+		sock_in.sin_port = sp-&gt;s_port;   
+	else   
+		sock_in.sin_port = htons(9);   
 		if (connect(f, (struct sockaddr*)&amp;sock_in, sizeof sock_in) &lt; 0)   
 			error(&quot;connect:&quot;);			
 </code></pre>
@@ -392,8 +392,10 @@ if(fd &lt; 0)
 <p>결론적으로 요약하면, UNIX개발자들이 현재에 맞도록 모든것을 다시 새롭게 만든 운영체제가  Plan 9라는<br />
 운영체제이다. 2002년 4판을 마지막으로 더이상 만들지 않고 있다!!! 2005년에 GUI를 가진 전화기를<br />
 만들기 위해서 Inferno 라는 운영체제를 Plan 9의 여러가지 사상을 투입해서 만들었다.<br />
-Inferno또한 할얘기가 많지만, Java와 같은 구조로 구성된 멀티플랫폼 가상운영체제이다란것만 알아두기
+Inferno또한 할얘기가 많지만, Java와 같은 구조로 구성된 멀티플랫폼 가상운영체제이다란것만 알아두기<br />
 바란다. Acme Eidtor for Windows 파일이 바로 Inferno OS에 구현된 것을 윈도우에서 사용하게 된다.!!</p>
+
+<p>2편에서 계속해서 <strong>Acme Editor for Windows</strong> 에 대해서 설명하도록 하겠다.</p>
 
 <hr />
 
