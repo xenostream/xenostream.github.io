@@ -7,13 +7,13 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
-    <lastBuildDate>Tue, 12 Sep 2017 16:18:23 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 12 Sep 2017 07:18:23 +0000</lastBuildDate>
     <atom:link href="http://xenostream.github.io/tags/plan9/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Acme Editor for Windows</title>
       <link>http://xenostream.github.io/2017/09/acme-editor-for-windows</link>
-      <pubDate>Tue, 12 Sep 2017 16:18:23 +0900</pubDate>
+      <pubDate>Tue, 12 Sep 2017 07:18:23 +0000</pubDate>
       
       <guid>http://xenostream.github.io/2017/09/acme-editor-for-windows</guid>
       <description>
@@ -129,59 +129,59 @@ IT를 하는 사람이라면 누구라도 들어보았던 사람들이다.&lt;/p
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th align=&#34;center&#34;&gt;Purpose&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Purpose&lt;/th&gt;
 &lt;th align=&#34;left&#34;&gt;Directory&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Networking&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Networking&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/net/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Authentication&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Authentication&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/mnt/factotum/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Encryption&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Encryption&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/net/tls/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Graphics&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Graphics&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/dev/draw/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Window System&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Window System&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/dev/wsys/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Process Control and debugging&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Process Control and debugging&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/proc/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Environment&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Environment&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/env/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Email&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Email&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;/mail/fs/&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Etc Stuff&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Etc Stuff&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;cdfs, webfs, tarfs, ftpfs, etc&amp;hellip;.&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td align=&#34;center&#34;&gt;Web Stuff&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Web Stuff&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;wikifs, gpsfs, sshnet, iostats and others.&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
