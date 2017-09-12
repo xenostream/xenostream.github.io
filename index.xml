@@ -7,13 +7,13 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy;Xenostream.com. &amp;reg;2017 All Rights Reserved.</copyright>
-    <lastBuildDate>Tue, 12 Sep 2017 16:18:23 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 12 Sep 2017 07:18:23 +0000</lastBuildDate>
     <atom:link href="http://xenostream.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Acme Editor for Windows</title>
       <link>http://xenostream.github.io/2017/09/acme-editor-for-windows</link>
-      <pubDate>Tue, 12 Sep 2017 16:18:23 +0900</pubDate>
+      <pubDate>Tue, 12 Sep 2017 07:18:23 +0000</pubDate>
       
       <guid>http://xenostream.github.io/2017/09/acme-editor-for-windows</guid>
       <description>
@@ -288,8 +288,9 @@ if (bind(f, (struct sockaddr*)&amp;amp;sock_in, sizeof sock_in) &amp;lt; 0){
 		sock_in.sin_port = sp-&amp;gt;s_port;   
 	else   
 		sock_in.sin_port = htons(9);   
-		if (connect(f, (struct sockaddr*)&amp;amp;sock_in, sizeof sock_in) &amp;lt; 0)   
-			error(&amp;quot;connect:&amp;quot;);			
+	if (connect(f, (struct sockaddr*)&amp;amp;sock_in, sizeof sock_in) &amp;lt; 0)   
+		error(&amp;quot;connect:&amp;quot;);	
+}		
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;전형적인 UNIX기반에서 작성한 소켓 프로그램의 소스코드이다. 이것을 Plan 9로 구현하면 다음과 같다.&lt;/p&gt;
