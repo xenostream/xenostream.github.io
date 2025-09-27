@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <title>Mini Editor</title>
   <style>
-    :root {
-      --console-h: 200px;
-    }
+    :root { --console-h: 200px; }
     html, body {
       margin: 0; padding: 0;
       height: 100%; width: 100%;
@@ -14,44 +12,23 @@
       font-family: "Cascadia Mono", monospace;
       background: #1e1e1e;
     }
-    #editor {
-      height: calc(100vh - var(--console-h));
-      width: 100vw;
-      transition: height 0.2s ease;
-    }
+    #editor { height: calc(100vh - var(--console-h)); width: 100vw; transition: height 0.2s ease; }
     #console {
-      height: var(--console-h);
-      width: 100vw;
-      background: #111;
-      color: #0f0;
-      display: flex;
-      flex-direction: column;
+      height: var(--console-h); width: 100vw;
+      background: #111; color: #0f0;
+      display: flex; flex-direction: column;
       border-top: 1px solid #333;
-      overflow: hidden;
-      transition: height 0.2s ease;
+      overflow: hidden; transition: height 0.2s ease;
     }
     #console-header {
-      background: #222;
-      padding: 4px 8px;
-      font-size: 12px;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      background: #222; padding: 4px 8px; font-size: 12px;
+      user-select: none; display: flex; align-items: center; gap: 8px;
       cursor: pointer;
     }
     #toggle-btn { font-weight: 600; }
     .hint { color: #999; margin-left: auto; font-size: 11px; }
-    #console-output {
-      flex: 1;
-      padding: 6px;
-      overflow-y: auto;
-      font-size: 13px;
-    }
-    #console-input {
-      height: 80px;
-      border-top: 1px solid #333;
-    }
+    #console-output { flex: 1; padding: 6px; overflow-y: auto; font-size: 13px; }
+    #console-input { height: 80px; border-top: 1px solid #333; }
   </style>
   <!-- Monaco Editor CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
@@ -109,15 +86,11 @@
       // 콘솔 입력 실행 (Enter 실행, Shift+Enter 줄바꿈)
       jsConsole.onKeyDown(e => {
         if (e.keyCode === monaco.KeyCode.Enter) {
-          if (e.shiftKey) {
-            // 줄바꿈 허용
-            return;
-          } else {
-            const code = jsConsole.getValue();
-            jsConsole.setValue("");
-            runCode(code);
-            e.preventDefault(); // 줄바꿈 방지
-          }
+          if (e.shiftKey) return;
+          const code = jsConsole.getValue();
+          jsConsole.setValue("");
+          runCode(code);
+          e.preventDefault();
         }
       });
     });
@@ -130,22 +103,13 @@
 
     // console.log 가로채기
     const origLog = console.log;
-    console.log = (...args) => {
-      origLog(...args);
-      log(args.join(" "));
-    };
+    console.log = (...args) => { origLog(...args); log(args.join(" ")); };
 
     // Ctrl+O / Ctrl+S
     const fileInput = document.getElementById("fileInput");
     window.addEventListener("keydown", (e) => {
-      if (e.ctrlKey && e.key.toLowerCase() === "o") {
-        e.preventDefault();
-        fileInput.click();
-      }
-      if (e.ctrlKey && e.key.toLowerCase() === "s") {
-        e.preventDefault();
-        saveFile();
-      }
+      if (e.ctrlKey && e.key.toLowerCase() === "o") { e.preventDefault(); fileInput.click(); }
+      if (e.ctrlKey && e.key.toLowerCase() === "s") { e.preventDefault(); saveFile(); }
     });
 
     // 파일 열기
@@ -185,16 +149,31 @@
       log(`파일 저장 완료: ${a.download}`);
     }
 
-    // 코드 실행 / 정규식 치환
+    // 코드 실행 / 정규식 치환 ($ 지원)
     function runCode(code) {
       try {
-        const rangeMatch = code.match(/^(\d+)(?:,(\d+))?\s+\/(.+)\/(\w*)\s*,\s*["'](.+)["']$/);
+        const model = editor.getModel();
+    
+        // 범위 삭제: 1,$ d / 10,20 d / 5 d
+        const deleteMatch = code.match(/^(\d+|\$)(?:,(\d+|\$))?\s+d$/);
+        if (deleteMatch) {
+          const [, startStr, endStr] = deleteMatch;
+          const start = startStr === "$" ? model.getLineCount() : parseInt(startStr, 10);
+          const end   = endStr   === "$" ? model.getLineCount() : (endStr ? parseInt(endStr, 10) : start);
+    
+          const range = new monaco.Range(start, 1, end, model.getLineMaxColumn(end));
+          editor.executeEdits("console-delete", [{ range, text: "" }]);
+          log(`줄 ${startStr}${endStr ? "~" + endStr : ""} 삭제 완료`);
+          return;
+        }
+    
+        // 범위 치환: 1,30 /^.../flags, "replacement"
+        const rangeMatch = code.match(/^(\d+|\$)(?:,(\d+|\$))?\s+\/(.+)\/(\w*)\s*,\s*["'](.+)["']$/);
         if (rangeMatch) {
           const [, startStr, endStr, pattern, flags, replacement] = rangeMatch;
-          const start = parseInt(startStr, 10);
-          const end = endStr ? parseInt(endStr, 10) : start;
+          const start = startStr === "$" ? model.getLineCount() : parseInt(startStr, 10);
+          const end   = endStr   === "$" ? model.getLineCount() : (endStr ? parseInt(endStr, 10) : start);
           const regex = new RegExp(pattern, flags);
-          const model = editor.getModel();
           const edits = [];
           for (let i = start - 1; i < end && i < model.getLineCount(); i++) {
             const lineContent = model.getLineContent(i + 1);
@@ -209,15 +188,16 @@
           }
           if (edits.length > 0) {
             editor.executeEdits("console-replace", edits);
-            log(`줄 ${start}${endStr ? "~" + end : ""} 치환 완료: ${regex} → "${replacement}"`);
+            log(`줄 ${startStr}${endStr ? "~" + endStr : ""} 치환 완료: ${regex} → "${replacement}"`);
           }
           return;
         }
+    
+        // 전역 치환: /^.../flags, "replacement"
         const globalMatch = code.match(/^\/(.+)\/(\w*)\s*,\s*["'](.+)["']$/);
         if (globalMatch) {
           const [, pattern, flags, replacement] = globalMatch;
           const regex = new RegExp(pattern, flags);
-          const model = editor.getModel();
           const fullText = model.getValue();
           const newText = fullText.replace(regex, replacement);
           if (newText !== fullText) {
@@ -228,6 +208,8 @@
           }
           return;
         }
+    
+        // 일반 JS 실행
         const result = eval(code);
         if (result !== undefined) log(String(result));
       } catch (err) {
