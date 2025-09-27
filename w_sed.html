@@ -150,13 +150,13 @@
       log(`파일 저장 완료: ${a.download}`);
     }
 
-    // sed 실행 (exec → run)
+    // sed 실행 (exec 사용)
     async function runCode(cmd){
       if(!sedReady){ log("sed 초기화 중…"); return; }
       try{
         if(!cmd.startsWith("sed")) cmd="sed "+cmd;
         const input=editor.getValue();
-        const result=await sedInstance.run(cmd,{stdin:input});  // ✅ run 사용
+        const result=await sedInstance.exec(cmd,{stdin:input});  // ✅ exec 사용
         if(result.stdout) editor.setValue(result.stdout);
         if(result.stderr) log("stderr: "+result.stderr);
         log(`실행됨: ${cmd}`);
