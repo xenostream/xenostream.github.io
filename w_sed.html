@@ -63,7 +63,7 @@
     let currentFileName = "untitled.txt";
     let sedReady = false;
 
-    // sed 초기화 (최신 방식)
+    // sed 초기화
     async function initSed() {
       if (typeof window.Aioli === "undefined") {
         log("Aioli 라이브러리 로드 실패!");
@@ -71,7 +71,7 @@
       }
       try {
         log("sed 초기화 중…");
-        sedInstance = await Aioli(["sed/4.8"]);   // ✅ init() 없음
+        sedInstance = new Aioli(["sed/4.8"]);   // ✅ new + init() 없음
         sedReady = true;
         log("sed 로드 완료 ✅ (GNU sed 4.8)");
         if (jsConsole) jsConsole.updateOptions({ readOnly: false });
