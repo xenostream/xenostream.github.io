@@ -61,11 +61,11 @@ async function initSed() {
     return;
   }
   try {
-    log("sed.wasm 초기화 중… 잠시만 기다려주세요 ⏳");
-    sedInstance = new window.Aioli("sed.wasm");
+    log("sed 초기화 중… 잠시만 기다려주세요 ⏳");
+    sedInstance = new window.Aioli(["sed/4.8"]);   // ✅ 수정된 부분
     await sedInstance.init();
     sedReady = true;
-    log("sed.wasm 로드 완료 ✅ (GNU sed 4.8)");
+    log("sed 로드 완료 ✅ (GNU sed 4.8)");
     if (jsConsole) jsConsole.updateOptions({ readOnly: false });
   } catch(e) { log("sed 초기화 실패: " + e.message); }
 }
@@ -145,7 +145,7 @@ function saveFile(){
 }
 
 async function runCode(cmd){
-  if(!sedReady){ log("sed.wasm 초기화 중… 잠시만 기다려주세요 ⏳"); return; }
+  if(!sedReady){ log("sed 초기화 중… 잠시만 기다려주세요 ⏳"); return; }
   try{
     if(!cmd.startsWith("sed")) cmd="sed "+cmd;
     const input=editor.getValue();
