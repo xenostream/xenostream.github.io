@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -33,12 +34,12 @@
   <!-- Monaco Editor Loader -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
-  <!-- Aioli 3.0.1: define 충돌 방지 -->
+  <!-- Aioli: define 충돌 방지 -->
   <script>
     var defineBackup = window.define;
     window.define = undefined;
   </script>
-  <script src="https://biowasm.com/cdn/v3/aioli/3.0.1/aioli.js"></script>
+  <script src="https://biowasm.com/cdn/v3/aioli/latest/aioli.js"></script>
   <script>
     window.define = defineBackup;
   </script>
@@ -71,11 +72,14 @@
       }
       try {
         log("sed 초기화 중…");
-        sedInstance = new Aioli(["sed/4.8"]);   // ✅ exec() 지원 버전
+        // 반드시 await + printInterleaved:false
+        sedInstance = await new Aioli(["sed/4.8"], { printInterleaved: false });
         sedReady = true;
         log("sed 로드 완료 ✅ (GNU sed 4.8)");
         if (jsConsole) jsConsole.updateOptions({ readOnly: false });
-      } catch(e) { log("sed 초기화 실패: " + e.message); }
+      } catch(e) {
+        log("sed 초기화 실패: " + e.message);
+      }
     }
 
     window.addEventListener("load", initSed);
@@ -150,17 +154,23 @@
       log(`파일 저장 완료: ${a.download}`);
     }
 
-    // sed 실행 (exec 사용)
+    // sed 실행
     async function runCode(cmd){
       if(!sedReady){ log("sed 초기화 중…"); return; }
       try{
         if(!cmd.startsWith("sed")) cmd="sed "+cmd;
         const input=editor.getValue();
-        const result=await sedInstance.exec(cmd,{stdin:input});  // ✅ exec 사용
-        if(result.stdout) editor.setValue(result.stdout);
-        if(result.stderr) log("stderr: "+result.stderr);
+
+        // stdin 전달
+        sedInstance.stdin = input;
+
+        const result=await sedInstance.exec(cmd);
+
+        if(result && result.stdout) editor.setValue(result.stdout);
+        if(result && result.stderr) log("stderr: "+result.stderr);
+
         log(`실행됨: ${cmd}`);
-      }catch(e){ log("Error: " + e.message); }
+      }catch(e){ log("Error: "+e.message); }
     }
 
     // 콘솔 토글
@@ -176,3 +186,4 @@
   </script>
 </body>
 </html>
+```
