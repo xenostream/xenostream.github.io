@@ -55,7 +55,6 @@
     let currentFileName = "untitled.txt";
     let sedReady = false;
 
-    // sed.wasm 초기화 (GitHub Pages 루트)
     async function initSed() {
       if (!window.Aioli) {
         log("Aioli 라이브러리 로드 실패! aioli.js 경로 확인 필요");
@@ -64,11 +63,10 @@
 
       try {
         log("sed.wasm 초기화 중… 잠시만 기다려주세요 ⏳");
-        sedInstance = new window.Aioli("sed.wasm"); // 루트 폴더
+        sedInstance = new window.Aioli("sed.wasm");
         await sedInstance.init();
         sedReady = true;
         log("sed.wasm 로드 완료 ✅ (GNU sed 4.8)");
-
         if (jsConsole) jsConsole.updateOptions({ readOnly: false });
       } catch (err) {
         log("sed 초기화 실패: " + err.message);
@@ -123,12 +121,12 @@
       out.scrollTop = out.scrollHeight;
     }
 
-    // 파일 열기/저장
     const fileInput = document.getElementById("fileInput");
     window.addEventListener("keydown", (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "o") { e.preventDefault(); fileInput.click(); }
       if (e.ctrlKey && e.key.toLowerCase() === "s") { e.preventDefault(); saveFile(); }
     });
+
     fileInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -140,6 +138,7 @@
       };
       reader.readAsText(file);
     });
+
     function saveFile() {
       const text = editor.getValue();
       const blob = new Blob([text], { type: "text/plain" });
@@ -152,7 +151,6 @@
       log(`파일 저장 완료: ${a.download}`);
     }
 
-    // sed 실행
     async function runCode(cmd) {
       if (!sedReady) {
         log("sed.wasm 초기화 중… 잠시만 기다려주세요 ⏳");
@@ -172,7 +170,6 @@
       }
     }
 
-    // 콘솔 토글
     const rootStyle = document.documentElement.style;
     const toggleBtn = document.getElementById("toggle-btn");
     const header = document.getElementById("console-header");
