@@ -175,9 +175,9 @@
 
         sedInstance.stdin = input;
 
-        // 토큰화 해서 실행
+        // 따옴표-aware 토큰화 후 문자열로 합침
         const args = tokenize(cmd);
-        const result = await sedInstance.exec(args);
+        const result = await sedInstance.exec(args.join(" "));
 
         if(result && result.stdout) editor.setValue(result.stdout);
         if(result && result.stderr) log("stderr: "+result.stderr);
