@@ -34,7 +34,7 @@
   <!-- Monaco Editor Loader -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
-  <!-- Aioli: define 충돌 방지 -->
+  <!-- Aioli -->
   <script>
     var defineBackup = window.define;
     window.define = undefined;
@@ -72,7 +72,6 @@
       }
       try {
         log("sed 초기화 중…");
-        // 반드시 await + printInterleaved:false
         sedInstance = await new Aioli(["sed/4.8"], { printInterleaved: false });
         sedReady = true;
         log("sed 로드 완료 ✅ (GNU sed 4.8)");
@@ -154,6 +153,19 @@
       log(`파일 저장 완료: ${a.download}`);
     }
 
+    // 간단 쉘 토큰화 (따옴표 지원)
+    function tokenize(str) {
+      const re = /'([^']*)'|"([^"]*)"|(\S+)/g;
+      const tokens = [];
+      let match;
+      while ((match = re.exec(str)) !== null) {
+        if (match[1] !== undefined) tokens.push(match[1]);
+        else if (match[2] !== undefined) tokens.push(match[2]);
+        else tokens.push(match[3]);
+      }
+      return tokens;
+    }
+
     // sed 실행
     async function runCode(cmd){
       if(!sedReady){ log("sed 초기화 중…"); return; }
@@ -161,10 +173,11 @@
         if(!cmd.startsWith("sed")) cmd="sed "+cmd;
         const input=editor.getValue();
 
-        // stdin 전달
         sedInstance.stdin = input;
 
-        const result=await sedInstance.exec(cmd);
+        // 토큰화 해서 실행
+        const args = tokenize(cmd);
+        const result = await sedInstance.exec(args);
 
         if(result && result.stdout) editor.setValue(result.stdout);
         if(result && result.stderr) log("stderr: "+result.stderr);
