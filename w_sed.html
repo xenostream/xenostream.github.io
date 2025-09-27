@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -112,6 +111,7 @@
       ro.observe(document.getElementById("editor"));
       requestAnimationFrame(() => editor.layout());
 
+      // Enter 실행, Shift+Enter 줄바꿈
       jsConsole.onKeyDown(async e => {
         if(e.keyCode===monaco.KeyCode.Enter){ 
           if(e.shiftKey) return; e.preventDefault();
@@ -138,7 +138,24 @@
       const file=e.target.files[0];
       if(!file) return;
       const reader=new FileReader();
-      reader.onload=()=>{ editor.setValue(reader.result); currentFileName=file.name; log(`파일 로드 완료: ${file.name}`); };
+      reader.onload=()=>{
+        editor.setValue(reader.result); 
+        currentFileName=file.name; 
+        log(`파일 로드 완료: ${file.name}`);
+
+        // 확장자별 언어 설정
+        const ext = file.name.split(".").pop().toLowerCase();
+        let lang = "plaintext";
+        if (ext==="js") lang="javascript";
+        else if (ext==="ts") lang="typescript";
+        else if (ext==="md"||ext==="markdown") lang="markdown";
+        else if (ext==="cs") lang="csharp";
+        else if (ext==="html"||ext==="htm") lang="html";
+        else if (ext==="css") lang="css";
+        else if (ext==="json") lang="json";
+        else if (ext==="xml") lang="xml";
+        monaco.editor.setModelLanguage(editor.getModel(), lang);
+      };
       reader.readAsText(file);
     });
     function saveFile(){
@@ -172,16 +189,11 @@
       try{
         if(!cmd.startsWith("sed")) cmd="sed "+cmd;
         const input=editor.getValue();
-
         sedInstance.stdin = input;
-
-        // 따옴표-aware 토큰화 후 문자열로 합침
         const args = tokenize(cmd);
         const result = await sedInstance.exec(args.join(" "));
-
         if(result && result.stdout) editor.setValue(result.stdout);
         if(result && result.stderr) log("stderr: "+result.stderr);
-
         log(`실행됨: ${cmd}`);
       }catch(e){ log("Error: "+e.message); }
     }
@@ -199,4 +211,3 @@
   </script>
 </body>
 </html>
-```
