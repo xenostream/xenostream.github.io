@@ -38,7 +38,7 @@
   <div id="console">
     <div id="console-header">
       <span id="toggle-btn">▼ Console</span>
-      <span class="hint">클릭해서 접기/펼치기 • 📂Ctrl+O 열기 • 💾Ctrl+S 저장 • ↩️Ctrl+Z 되돌리기 • ↪️Ctrl+Shift+Z 재실행</span>
+      <span class="hint">코드 입력 후 Enter (Shift+Enter = 줄바꿈) • 📂Ctrl+O 열기 • 💾Ctrl+S 저장 • ↩️Ctrl+Z 되돌리기 • ↪️Ctrl+Shift+Z 재실행</span>
     </div>
     <div id="console-output"></div>
     <div id="console-input"></div>
@@ -65,16 +65,18 @@
         minimap: { enabled: true, side: "right" },
         lineNumbers: "on",
         cursorBlinking: "smooth",
+        automaticLayout: true,        
       });
 
       // 콘솔 입력용 에디터
       jsConsole = monaco.editor.create(document.getElementById("console-input"), {
-        value: "// 여기에 JS 코드 입력 후 Enter (Shift+Enter = 줄바꿈)",
+        value: "// 예) 1,$ d • /foo/g,\"bar\" • console.log(\"hi\")",
         language: "javascript",
         theme: "vs-dark",
         fontSize: 13,
         minimap: { enabled: false },
         lineNumbers: "off",
+        wordWrap: "on",        
         automaticLayout: true,
       });
 
