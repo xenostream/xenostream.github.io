@@ -216,6 +216,12 @@
         log("Error: " + err.message);
       }
     }
+    
+    // 새로고침(F5, Ctrl+R) 방지 팝업
+    window.addEventListener("beforeunload", function (e) {
+      e.preventDefault();
+      e.returnValue = ""; // 브라우저가 기본 경고창을 띄움
+    });
 
     // 콘솔 토글 (CSS 변수로 높이 제어)
     const rootStyle = document.documentElement.style;
