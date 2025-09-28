@@ -180,14 +180,18 @@ function tokenize(str) {
 }
 
 // sed 실행 (매번 새 stdin, 새 인스턴스)
+// sed 실행 (매번 새 stdin, 새 인스턴스)
 async function runSed(cmd){
   try{
     if(!cmd.startsWith("sed")) cmd="sed "+cmd;
     const input = editor.getValue();
     const sedInst = await window.createSedInstance();
     sedInst.stdin = input;
-    const args = tokenize(cmd);
-    const result = await sedInst.exec(args.join(" "));
+    const args = tokenize(cmd);   // ["sed", "s/foo/bar/g"] 같은 배열
+
+    // 여기서 배열 방식으로 실행
+    const result = await sedInst.exec("sed", args.slice(1));
+
     if(result && result.stdout){
       const model = editor.getModel();
       const fullRange = model.getFullModelRange();
