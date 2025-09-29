@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>Mini Editor with sed</title>
+<style>
+:root { --console-h: 200px; }
+html, body {
+  margin: 0; padding: 0;
+  height: 100%; width: 100%;
+  overflow: hidden;
+  font-family: "Cascadia Mono", monospace;
+  background: #1e1e1e;
+}
+#editor { height: calc(100vh - var(--console-h)); width: 100vw; transition: height 0.2s ease; }
+#console {
+  height: var(--console-h); width: 100vw;
+  background: #111; color: #0f0;
+  display: flex; flex-direction: column;
+  border-top: 1px solid #333;
+  overflow: hidden; transition: height 0.2s ease;
+}
+#console-header {
+  background: #222; padding: 4px 8px; font-size: 12px;
+  user-select: none; display: flex; align-items: center; gap: 8px;
+  cursor: pointer;
+}
+#toggle-btn { font-weight: 600; }
+.hint { color: #999; margin-left: auto; font-size: 11px; }
+#console-output { flex: 1; padding: 6px; overflow-y: auto; font-size: 13px; }
+#console-input { height: 80px; border-top: 1px solid #333; }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+
+<!-- Aioli -->
+<script>
+var defineBackup = window.define;
+window.define = undefined;
+</script>
+<script src="https://biowasm.com/cdn/v3/aioli/latest/aioli.js"></script>
+<script>
+window.define = defineBackup;
+</script>
+</head>
+<body>
+<div id="editor"></div>
+<div id="console">
+  <div id="console-header">
+    <span id="toggle-btn">▼ Console</span>
+    <span class="hint">sed 명령 실행 가능 • Ctrl+O 열기 • Ctrl+S 저장 • Ctrl+Z 되돌리기 • Ctrl+Shift+Z 재실행</span>
+  </div>
+  <div id="console-output"></div>
+  <div id="console-input"></div>
+</div>
+
+<input type="file" id="fileInput" style="display:none" />
+
+<script>
+require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" } });
+
+let editor, jsConsole;
+let currentFileName = "untitled.txt";
+
+async function initSed() {
+  if (typeof window.Aioli === "undefined") { log("Aioli 라이브러리 로드 실패!"); return; }
+  try {
+    log("sed 초기화 중…");
+    window.createSedInstance = async () => {
+      const inst = await new Aioli(["sed/4.8"], { printInterleaved: false });
+      return inst;
+    };
+    log("sed 로드 완료 ✅ (GNU sed 4.8)");
+  } catch(e) { log("sed 초기화 실패: " + e.message); }
+}
+window.addEventListener("load", initSed);
+
+require(["vs/editor/editor.main"], function() {
+  editor = monaco.editor.create(document.getElementById("editor"), {
+    value: `foo bar\nfoo baz\n하나 둘 셋\nhello world`,
+    language: "plaintext",
+    theme: "vs-dark",
+    fontFamily: "Cascadia Mono, monospace",
+    fontSize: 14,
+    wordWrap: "on",
+    folding: true,
+    minimap: { enabled: true, side: "right" },
+    lineNumbers: "on",
+    cursorBlinking: "smooth",
+    automaticLayout: true,      
+  });
+
+  jsConsole = monaco.editor.create(document.getElementById("console-input"), {
+    value: "s/foo/bar/g",
+    language: "shell",
+    theme: "vs-dark",
+    fontSize: 13,
+    minimap: { enabled: false },
+    lineNumbers: "off",
+    wordWrap: "on",      
+    automaticLayout: true,
+  });
+
+  const ro = new ResizeObserver(() => editor.layout());
+  ro.observe(document.getElementById("editor"));
+
+  jsConsole.onKeyDown(async e => {
+    if(e.keyCode===monaco.KeyCode.Enter){ 
+      if(e.shiftKey) return; e.preventDefault();
+      const code = jsConsole.getValue().trim();
+      jsConsole.setValue("");
+      await runSed(code);
+    }
+  });
+});
+
+function log(msg){
+  const out=document.getElementById("console-output");
+  out.innerHTML += msg + "<br>";
+  out.scrollTop = out.scrollHeight;
+}
+
+// 파일 열기/저장
+const fileInput=document.getElementById("fileInput");
+window.addEventListener("keydown",(e)=>{
+  if(e.ctrlKey && e.key.toLowerCase()==="o"){ e.preventDefault(); fileInput.click(); }
+  if(e.ctrlKey && e.key.toLowerCase()==="s"){ e.preventDefault(); saveFile(); }
+
+  if(e.ctrlKey && !e.shiftKey && e.key.toLowerCase()==="z"){ e.preventDefault(); editor.trigger('keyboard','undo',null); }
+  if((e.ctrlKey && e.shiftKey && e.key.toLowerCase()==="z") || (e.ctrlKey && e.key.toLowerCase()==="y")){ e.preventDefault(); editor.trigger('keyboard','redo',null); }
+});
+fileInput.addEventListener("change",(e)=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    editor.setValue(reader.result); 
+    currentFileName=file.name; 
+    log(`파일 로드 완료: ${file.name}`);
+    const ext = file.name.split(".").pop().toLowerCase();
+    let lang = "plaintext";
+    if (ext==="js") lang="javascript";
+    else if (ext==="ts") lang="typescript";
+    else if (ext==="md") lang="markdown";
+    else if (ext==="cs") lang="csharp";
+    else if (ext==="html"||ext==="htm") lang="html";
+    else if (ext==="css") lang="css";
+    else if (ext==="json") lang="json";
+    else if (ext==="xml") lang="xml";
+    monaco.editor.setModelLanguage(editor.getModel(), lang);
+  };
+  reader.readAsText(file);
+});
+function saveFile(){
+  const text=editor.getValue();
+  const blob=new Blob([text],{type:"text/plain"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=currentFileName||"untitled.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+  log(`파일 저장 완료: ${a.download}`);
+}
+
+// 쉘 토큰화
+function tokenize(str) {
+  const re = /'([^']*)'|"([^"]*)"|(\S+)/g;
+  const tokens = [];
+  let match;
+  while ((match = re.exec(str)) !== null) {
+    if (match[1] !== undefined) tokens.push(match[1]);
+    else if (match[2] !== undefined) tokens.push(match[2]);
+    else tokens.push(match[3]);
+  }
+  return tokens;
+}
+
+// sed 실행 (mount 방식)
+async function runSed(cmd){
+  try{
+    if(!cmd.startsWith("sed")) cmd="sed "+cmd;
+    const input = editor.getValue();
+
+    const encoder = new TextEncoder();
+    const data = encoder.encode(input);
+
+    const sedInst = await window.createSedInstance();
+
+    // VFS에 파일 저장 (상대경로)
+    await sedInst.fs.writeFile("in.txt", data);
+
+    // sed 실행 (stdout 직접 받기)
+    const args = tokenize(cmd);
+    const result = await sedInst.exec("sed", [...args.slice(1), "in.txt"]);
+
+    if(result && result.stdout){
+      const model = editor.getModel();
+      const fullRange = model.getFullModelRange();
+      editor.executeEdits("sed-replace", [{ range: fullRange, text: result.stdout }]);
+    }
+    if(result && result.stderr) log("stderr: "+result.stderr);
+    log(`실행됨: ${cmd}`);
+  }catch(e){ log("Error: "+e.message); }
+}
+
+// beforeunload
+window.addEventListener("beforeunload", function(e){ e.preventDefault(); e.returnValue = ""; });
+
+// 콘솔 토글
+const rootStyle=document.documentElement.style;
+const toggleBtn=document.getElementById("toggle-btn");
+const header=document.getElementById("console-header");
+function setConsoleHeight(px){ rootStyle.setProperty("--console-h",px); requestAnimationFrame(()=>editor&&editor.layout()); }
+header.addEventListener("click",()=>{
+  const collapsed=toggleBtn.textContent.startsWith("▼")?false:true;
+  if(!collapsed){
+    setConsoleHeight("25px");
+    toggleBtn.textContent="▶ Console";
+  } else {
+    setConsoleHeight("200px");
+    toggleBtn.textContent="▼ Console";
+  }
+});
+</script>
+</body>
+</html>
