@@ -48,7 +48,7 @@ window.define = defineBackup;
 <div id="console">
   <div id="console-header">
     <span id="toggle-btn">▼ Console</span>
-    <span class="hint">sed 명령 실행 가능 • Ctrl+O 열기 • Ctrl+S 저장 • Ctrl+Z 되돌리기 • Ctrl+Shift+Z 재실행</span>
+    <span class="hint">sed 명령 실행 가능 • 📂Ctrl+O 열기 • 💾Ctrl+S 저장 • ↩️Ctrl+Z 되돌리기 • ↪️Ctrl+Shift+Z 재실행</span>
   </div>
   <div id="console-output"></div>
   <div id="console-input"></div>
@@ -91,7 +91,7 @@ require(["vs/editor/editor.main"], function() {
   });
 
   jsConsole = monaco.editor.create(document.getElementById("console-input"), {
-    value: "s/foo/bar/g",
+    value: "s/foo/bar/g or sed -n '2,$p'",
     language: "shell",
     theme: "vs-dark",
     fontSize: 13,
