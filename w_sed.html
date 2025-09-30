@@ -25,6 +25,10 @@ html, body {
   user-select: none; display: flex; align-items: center; gap: 8px;
   cursor: pointer;
 }
+#console-output::-webkit-scrollbar { width: 8px; }
+#console-output::-webkit-scrollbar-track { background: #111; }
+#console-output::-webkit-scrollbar-thumb { background-color: #222; border-radius: 4px; }
+#console-output::-webkit-scrollbar-thumb:hover { background-color: #333; }
 #toggle-btn { font-weight: 600; }
 .hint { color: #999; margin-left: auto; font-size: 11px; }
 #console-output { flex: 1; padding: 6px; overflow-y: auto; font-size: 13px; }
