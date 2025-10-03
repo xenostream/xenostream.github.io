@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>Mini Editor + VFS Web Shell (Integrated)</title>
+<style>
+:root { --console-h: 220px; }
+html, body {
+  margin: 0; padding: 0;
+  height: 100%; width: 100%;
+  overflow: hidden;
+  font-family: "Cascadia Mono", monospace;
+  background: #1e1e1e;
+}
+#editor { height: calc(100vh - var(--console-h)); width: 100vw; transition: height 0.2s ease; }
+#console {
+  height: var(--console-h); width: 100vw;
+  background: #111; color: #0f0;
+  display: flex; flex-direction: column;
+  border-top: 1px solid #333;
+  overflow: hidden; transition: height 0.2s ease;
+}
+#console-header {
+  background: #222; padding: 4px 8px; font-size: 12px;
+  user-select: none; display: flex; align-items: center; gap: 8px;
+  cursor: pointer;
+}
+#toggle-btn { font-weight: 600; }
+.hint { color: #999; margin-left: auto; font-size: 11px; }
+#console-resizer {
+  height: 5px;
+  cursor: ns-resize;
+  background: #333;
+}
+#console-output {
+  flex: 1; padding: 6px; overflow-y: auto; font-size: 13px; white-space: pre-wrap;
+  border-top: 1px solid #333; border-bottom: 1px solid #333; background: #111; color: #0f0;
+}
+#console-input { height: 90px; }
+#console-output::-webkit-scrollbar { width: 8px; }
+#console-output::-webkit-scrollbar-track { background: #111; }
+#console-output::-webkit-scrollbar-thumb { background-color: #222; border-radius: 4px; }
+#console-output::-webkit-scrollbar-thumb:hover { background-color: #333; }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+
+<!-- Aioli -->
+<script>
+var defineBackup = window.define;
+window.define = undefined;
+</script>
+<script src="https://biowasm.com/cdn/v3/aioli/latest/aioli.js"></script>
+<script>
+window.define = defineBackup;
+</script>
+</head>
+<body>
+<div id="editor"></div>
+<div id="console">
+  <div id="console-header">
+    <span id="toggle-btn">▼ Console</span>
+    <span class="hint">🖥️미니쉘 전체 기능 • ⬆️⬇️명령 히스토리 • 🔄Tab 명령 자동완성 • 처리 대상이 input.txt 면 에디터 반영</span>
+  </div>
+  <div id="console-resizer"></div>
+  <div id="console-output"></div>
+  <div id="console-input"></div>
+</div>
+
+<script>
+require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" } });
+
+let editor, jsConsole;
+let currentFileName = "input.txt";
+let CLI = null;
+let currentDir = "/shared/data";
+let history = [];
+let historyIndex = -1;
+let lastHeight = "220px";
+
+const commands = [
+  "pwd","cd","mkdir","rm","ls","cat","tree",
+  "echo","head","tail","sort","uniq","wc","md5sum","tr",
+  "sed","gawk","grep","jq","clear","get"
+];
+
+const HELP_TEXT = `
+ls : 디렉토리 목록 출력
+cat file.txt : 파일 내용 출력
+echo Hello : 문자열 출력
+head -n 10 file : 파일 앞부분 출력
+tail -n 10 file : 파일 끝부분 출력
+sort file : 정렬
+uniq file : 연속 중복 제거
+wc -l file : 단어/라인 수 계산
+md5sum file : MD5 해시 생성
+tr a-z A-Z : 문자 치환
+sed 's/old/new/' file : 텍스트 변환
+tree dir : 디렉토리 구조 출력
+pwd : 현재 경로 출력
+cd dir : 디렉토리 변경
+rm file : 파일 삭제
+mkdir dir : 디렉토리 생성
+gawk '{print $1}' file : 텍스트 처리
+grep 'pattern' file : 문자열 검색
+jq '.key' file.json : JSON 처리
+date : 현재 날짜와 시간 표시
+get file : VFS에 있는 파일을 로컬로 다운로드
+clear : 콘솔 출력 초기화
+
+특기사항:
+- 에디터는 항상 input.txt와 연결됩니다.
+- sed ... input.txt 실행 시 결과가 stdout이면 에디터에 반영됩니다.
+- sed -i 또는 'w file'을 포함하면 VFS 파일만 수정되고, 에디터는 VFS에서 다시 읽어옵니다.
+`;
+
+function log(msg) {
+  const out = document.getElementById("console-output");
+  out.textContent += msg + "\n";
+  out.scrollTop = out.scrollHeight;
+}
+
+function tokenize(str) {
+  const re = /'([^']*)'|"([^"]*)"|(\S+)/g;
+  const tokens = [];
+  let match;
+  while ((match = re.exec(str)) !== null) {
+    if (match[1] !== undefined) tokens.push(match[1]);
+    else if (match[2] !== undefined) tokens.push(match[2]);
+    else tokens.push(match[3]);
+  }
+  return tokens;
+}
+
+// --- Monaco language detection by extension ---
+function extToLanguage(name) {
+  const ext = (name.split(".").pop() || "").toLowerCase();
+  const map = {
+    "txt": "plaintext",
+    "md": "markdown",
+    "js": "javascript",
+    "ts": "typescript",
+    "json": "json",
+    "py": "python",
+    "sh": "shell",
+    "bash": "shell",
+    "html": "html",
+    "htm": "html",
+    "css": "css",
+    "c": "c",
+    "h": "c",
+    "cpp": "cpp",
+    "hpp": "cpp",
+    "java": "java",
+    "go": "go",
+    "rs": "rust",
+    "xml": "xml",
+    "yml": "yaml",
+    "yaml": "yaml",
+    "sql": "sql",
+    "csv": "plaintext",
+    "log": "plaintext"
+  };
+  return map[ext] || "plaintext";
+}
+function applyEditorLanguageByFileName(name) {
+  if (!editor) return;
+  const lang = extToLanguage(name);
+  const model = editor.getModel();
+  if (model) monaco.editor.setModelLanguage(model, lang);
+}
+
+// --- Sync helpers ---
+async function syncEditorToVFS() {
+  if (!CLI) return;
+  const text = editor.getValue();
+  await CLI.fs.writeFile(`${currentDir}/${currentFileName}`, new TextEncoder().encode(text));
+}
+async function syncVFSToEditor() {
+  if (!CLI) return;
+  try {
+    const data = await CLI.fs.readFile(`${currentDir}/${currentFileName}`);
+    const decoded = new TextDecoder().decode(data);
+    const model = editor.getModel();
+    const fullRange = model.getFullModelRange();
+    editor.executeEdits("vfs->editor", [{ range: fullRange, text: decoded }]);
+  } catch (e) {
+    await syncEditorToVFS();
+  }
+}
+
+async function safeMkdir(path) { try { await CLI.mkdir(path); } catch {} }
+
+async function initShell() {
+  try {
+    const start = Date.now();
+    while (typeof window.Aioli === "undefined") {
+      if (Date.now() - start > 5000) { log("Aioli 로드 실패"); return; }
+      await new Promise(r => setTimeout(r, 50));
+    }
+
+    const coreutils = ["ls","cat","echo","head","tail","sort","uniq","wc","md5sum","tr", "date"];
+    const others = [
+      { tool: "sed",  version: "4.8",  program: "sed"  },
+      { tool: "tree", version: "2.0.4", program: "tree" },
+      { tool: "gawk", version: "5.1.0", program: "gawk" },
+      { tool: "grep", version: "3.7",  program: "grep" },
+      { tool: "jq",   version: "1.7",  program: "jq"   }
+    ];
+
+    CLI = await new Aioli([
+      "base/1.0.0",
+      ...coreutils.map(p => ({ tool:"coreutils", version:"8.32", program:p, loading:"lazy", reinit:true })),
+      ...others.map(t => ({ ...t, loading:"lazy", reinit:true }))
+    ], { printInterleaved:false, debug:false });
+
+    await safeMkdir("/shared");
+    await safeMkdir("/shared/data");
+    await CLI.cd("/shared/data");
+    currentDir = (await CLI.pwd()).toString().trim();
+
+    await CLI.fs.writeFile(`${currentDir}/help.txt`, new TextEncoder().encode(HELP_TEXT.trim()));
+    await CLI.fs.writeFile(`${currentDir}/${currentFileName}`, new TextEncoder().encode(`foo bar
+foo baz
+하나 둘 셋
+hello world`));
+    await syncVFSToEditor();
+    applyEditorLanguageByFileName(currentFileName);
+
+    log(`VFS 웹 쉘 준비 완료 ✅ (${currentDir}/help.txt, ${currentFileName} 준비됨)`);
+  } catch (e) {
+    log("초기화 실패: " + e.message);
+  }
+}
+window.addEventListener("load", initShell);
+
+function logResult(result){
+  if(result==null) return;
+  if(typeof result === "string"){
+    if(result.trim()) log(result.trim());
+  }else{
+    if(result.stdout && result.stdout.trim()) log(result.stdout.trim());
+  }
+}
+
+function sedHasWrite(args) {
+  const hasInPlace = args.some(a => a.startsWith("-i"));
+  const script = args.find(a => typeof a === "string" && a.includes("w "));
+  return hasInPlace || !!script;
+}
+
+const handlers = {
+  // Console
+  clear: async () => { document.getElementById("console-output").textContent = ""; },
+
+  // FS navigation
+  cd: async (args) => {
+    const path = args[0] || "/";
+    await CLI.cd(path);
+    const pwd = await CLI.pwd();
+    currentDir = pwd.toString().trim();
+    log(`현재 디렉토리: ${currentDir}`);
+  },
+  pwd: async () => {
+    const pwd = await CLI.pwd();
+    currentDir = pwd.toString().trim();
+    log(currentDir);
+  },
+  mkdir: async (args) => {
+    if (args[0]) { await CLI.mkdir(args[0]); log(`디렉토리 생성 완료: ${args[0]}`); }
+  },
+  rm: async (args) => {
+    if (args[0]) { await CLI.fs.unlink(args[0]); log(`삭제 완료: ${args[0]}`); }
+  },
+
+  // Content/view commands
+  ls: async (args) => { const r = await CLI.exec("ls", args); logResult(r); },
+  cat: async (args) => { const r = await CLI.exec("cat", args); logResult(r); },
+  echo: async (args) => { const r = await CLI.exec("echo", args); logResult(r); },
+  head: async (args) => { const r = await CLI.exec("head", args); logResult(r); },
+  tail: async (args) => { const r = await CLI.exec("tail", args); logResult(r); },
+  sort: async (args) => { const r = await CLI.exec("sort", args); logResult(r); },
+  uniq: async (args) => { const r = await CLI.exec("uniq", args); logResult(r); },
+  wc: async (args) => { const r = await CLI.exec("wc", args); logResult(r); },
+  md5sum: async (args) => { const r = await CLI.exec("md5sum", args); logResult(r); },
+  tr: async (args) => { const r = await CLI.exec("tr", args); logResult(r); },
+  tree: async (args) => { const r = await CLI.exec("tree", args.length ? args : ["."]); logResult(r); },
+  gawk: async (args) => { const r = await CLI.exec("gawk", args); logResult(r); },
+  grep: async (args) => { const r = await CLI.exec("grep", args); logResult(r); },
+  jq: async (args) => { const r = await CLI.exec("jq", args); logResult(r); },
+
+  // sed special handling with editor sync when target is input.txt
+  sed: async (args) => {
+    const target = args[args.length - 1];
+    const hasWrite = sedHasWrite(args);
+
+    if (target === currentFileName) {
+      await syncEditorToVFS();
+    }
+
+    const result = await CLI.exec("sed", args);
+
+    if (target === currentFileName) {
+      if (!hasWrite && result && typeof result.stdout === "string") {
+        const model = editor.getModel();
+        const fullRange = model.getFullModelRange();
+        editor.executeEdits("sed-replace", [{ range: fullRange, text: result.stdout }]);
+        await syncEditorToVFS();
+      } else if (hasWrite) {
+        await syncVFSToEditor();
+      }
+    }
+
+    logResult(result);
+    log(`실행됨: sed ${args.join(" ")}`);
+  },
+
+  // Download
+  get: async (args) => {
+    if (!args[0]) { log("사용법: get <파일명>"); return; }
+    const fname = args[0];
+    try {
+      if (fname === currentFileName) {
+        const blob = new Blob([editor.getValue()], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = currentFileName; a.click();
+        URL.revokeObjectURL(url);
+        log(`⬇️ ${currentFileName} 다운로드 완료`);
+        return;
+      }
+      const data = await CLI.fs.readFile(`${currentDir}/${fname}`);
+      const blob = new Blob([data]);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = fname; a.click();
+      URL.revokeObjectURL(url);
+      log(`⬇️ ${fname} 다운로드 완료`);
+    } catch(err){
+      log("다운로드 실패: " + err.message);
+    }
+  }
+};
+
+async function runCmd(cmd) {
+  if (!CLI) { log("쉘 준비 중..."); return; }
+  try {
+    log(`$ ${cmd}`);
+    const args = tokenize(cmd);
+    if (args.length === 0) return;
+    const prog = args[0];
+    const progArgs = args.slice(1);
+
+    if (handlers[prog]) {
+      await handlers[prog](progArgs);
+      return;
+    }
+    const result = await CLI.exec(prog, progArgs);
+    logResult(result);
+  } catch (e) {
+    log("Error: " + e.message);
+  }
+}
+
+// Monaco setup
+require(["vs/editor/editor.main"], function() {
+  editor = monaco.editor.create(document.getElementById("editor"), {
+    value: "",
+    language: "plaintext",
+    theme: "vs-dark",
+    fontFamily: "Cascadia Mono, monospace",
+    fontSize: 14,
+    wordWrap: "on",
+    folding: true,
+    minimap: { enabled: true, side: "right" },
+    lineNumbers: "on",
+    cursorBlinking: "smooth",
+    automaticLayout: true,
+  });
+
+  jsConsole = monaco.editor.create(document.getElementById("console-input"), {
+    value: "",
+    language: "shell",
+    theme: "vs-dark",
+    fontSize: 13,
+    minimap: { enabled: false },
+    lineNumbers: "off",
+    wordWrap: "on",
+    automaticLayout: true,
+  });
+
+  const ro = new ResizeObserver(() => editor.layout());
+  ro.observe(document.getElementById("editor"));
+
+  jsConsole.onKeyDown(async e => {
+    if (e.keyCode === monaco.KeyCode.Enter) {
+      if (e.shiftKey) return;
+      e.preventDefault();
+      const code = jsConsole.getValue().trim();
+      if (code) {
+        history.push(code);
+        historyIndex = history.length;
+        jsConsole.setValue("");
+        await runCmd(code);
+      } else {
+        jsConsole.setValue("");
+      }
+    }
+    else if (e.keyCode === monaco.KeyCode.UpArrow) {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        jsConsole.setValue(history[historyIndex] || "");
+      }
+    }
+    else if (e.keyCode === monaco.KeyCode.DownArrow) {
+      e.preventDefault();
+      if (historyIndex < history.length - 1) {
+        historyIndex++;
+        jsConsole.setValue(history[historyIndex] || "");
+      } else {
+        historyIndex = history.length;
+        jsConsole.setValue("");
+      }
+    }
+    else if (e.keyCode === monaco.KeyCode.Tab) {
+      e.preventDefault();
+      const val = jsConsole.getValue().trim();
+      if (!val) return;
+      const tokens = tokenize(val);
+      const firstToken = tokens[0] || "";
+      const matches = commands.filter(c => c.startsWith(firstToken));
+      if (matches.length === 1) {
+        tokens[0] = matches[0];
+        jsConsole.setValue(tokens.join(" ") + " ");
+      } else if (matches.length > 1) {
+        log("가능한 명령: " + matches.join(" "));
+      }
+    }
+  });
+
+  // 에디터 초기 내용은 VFS에서 로드됨
+});
+
+// beforeunload
+window.addEventListener("beforeunload", function(e){ e.preventDefault(); e.returnValue = ""; });
+
+// Console toggle + resizer (접으면 25px 고정, 펼치면 마지막 높이 복원, 드래그로 높이 조절)
+const rootStyle=document.documentElement.style;
+const toggleBtn=document.getElementById("toggle-btn");
+const header=document.getElementById("console-header");
+const resizer=document.getElementById("console-resizer");
+function setConsoleHeight(px){ rootStyle.setProperty("--console-h",px); requestAnimationFrame(()=>editor&&editor.layout()); }
+header.addEventListener("click",()=>{
+  const collapsed=toggleBtn.textContent.startsWith("▼")?false:true;
+  if(!collapsed){
+    lastHeight=getComputedStyle(document.documentElement).getPropertyValue("--console-h");
+    setConsoleHeight("25px");
+    toggleBtn.textContent="▶ Console";
+  } else {
+    setConsoleHeight(lastHeight);
+    toggleBtn.textContent="▼ Console";
+  }
+});
+let isResizing=false;
+resizer.addEventListener("mousedown",()=>{ isResizing=true; document.body.style.userSelect="none"; });
+window.addEventListener("mousemove",e=>{
+  if(!isResizing) return;
+  const newHeight=window.innerHeight-e.clientY;
+  if(newHeight>25 && newHeight<window.innerHeight-50){
+    const h = newHeight+"px";
+    setConsoleHeight(h);
+    lastHeight = h;
+  }
+});
+window.addEventListener("mouseup",()=>{ isResizing=false; document.body.style.userSelect=""; });
+
+// Drag & Drop + Ctrl+O file open (언어 자동 변경 포함)
+const editorDiv=document.getElementById("editor");
+editorDiv.addEventListener("dragover", e=>e.preventDefault());
+editorDiv.addEventListener("drop", async e=>{
+  e.preventDefault();
+  const file=e.dataTransfer.files[0];
+  if(file){
+    const text=await file.text();
+    editor.setValue(text);
+    currentFileName=file.name;
+    applyEditorLanguageByFileName(currentFileName);
+    await syncEditorToVFS();
+    log(`드래그로 ${file.name} 불러옴`);
+  }
+});
+window.addEventListener("keydown", async e=>{
+  if(e.ctrlKey && e.key.toLowerCase()==="o"){
+    e.preventDefault();
+    const input=document.createElement("input");
+    input.type="file";
+    input.onchange=async ev=>{
+      const file=ev.target.files[0];
+      if(file){
+        const text=await file.text();
+        editor.setValue(text);
+        currentFileName=file.name;
+        applyEditorLanguageByFileName(currentFileName);
+        await syncEditorToVFS();
+        log(`Ctrl+O로 ${file.name} 불러옴`);
+      }
+    };
+    input.click();
+  }
+});
+</script>
+</body>
+</html>
