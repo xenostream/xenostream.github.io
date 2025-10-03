@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<title>Mini Editor + VFS Web Shell (Integrated)</title>
+<title>SED Web Editor + VFS Shell (Integrated)</title>
 <style>
 :root { --console-h: 220px; }
 html, body {
@@ -85,33 +85,49 @@ const commands = [
 ];
 
 const HELP_TEXT = `
-ls : 디렉토리 목록 출력
-cat file.txt : 파일 내용 출력
-echo Hello : 문자열 출력
-head -n 10 file : 파일 앞부분 출력
-tail -n 10 file : 파일 끝부분 출력
-sort file : 정렬
-uniq file : 연속 중복 제거
-wc -l file : 단어/라인 수 계산
-md5sum file : MD5 해시 생성
-tr a-z A-Z : 문자 치환
-sed 's/old/new/' file : 텍스트 변환
-tree dir : 디렉토리 구조 출력
-pwd : 현재 경로 출력
-cd dir : 디렉토리 변경
-rm file : 파일 삭제
-mkdir dir : 디렉토리 생성
-gawk '{print $1}' file : 텍스트 처리
-grep 'pattern' file : 문자열 검색
-jq '.key' file.json : JSON 처리
-date : 현재 날짜와 시간 표시
-get file : VFS에 있는 파일을 로컬로 다운로드
-clear : 콘솔 출력 초기화
+📂 파일 & 디렉토리 관리
+──────────────────────────────
+- ls                  : 디렉토리 목록 출력
+- tree dir            : 디렉토리 구조 출력
+- pwd                 : 현재 경로 출력
+- cd dir              : 디렉토리 변경
+- mkdir dir           : 디렉토리 생성
+- rm file             : 파일 삭제
+- get file            : VFS에 있는 파일을 로컬로 다운로드
 
-특기사항:
+📑 파일 내용 보기 & 출력
+──────────────────────────────
+- cat file.txt        : 파일 내용 출력
+- head -n 10 file     : 파일 앞부분 출력
+- tail -n 10 file     : 파일 끝부분 출력
+- echo Hello          : 문자열 출력
+- clear               : 콘솔 출력 초기화
+
+🔍 검색 & 텍스트 처리
+──────────────────────────────
+- grep 'pattern' file : 문자열 검색
+- sort file           : 정렬
+- uniq file           : 연속 중복 제거
+- wc -l file          : 단어/라인 수 계산
+- tr a-z A-Z          : 문자 치환
+- sed 's/old/new/' file : 텍스트 변환
+- gawk '{print $1}' file : 텍스트 처리
+
+📊 데이터 & 포맷 처리
+──────────────────────────────
+- jq '.key' file.json : JSON 처리
+- md5sum file         : MD5 해시 생성
+
+🕒 시스템 정보
+──────────────────────────────
+- date                : 현재 날짜와 시간 표시
+
+📝 특기사항
+──────────────────────────────
 - 에디터는 항상 input.txt와 연결됩니다.
 - sed ... input.txt 실행 시 결과가 stdout이면 에디터에 반영됩니다.
-- sed -i 또는 'w file'을 포함하면 VFS 파일만 수정되고, 에디터는 VFS에서 다시 읽어옵니다.
+- sed -i 또는 'w file'을 포함하면 VFS 파일만 수정되고,
+  에디터는 VFS에서 다시 읽어옵니다.
 `;
 
 function log(msg) {
@@ -379,7 +395,7 @@ require(["vs/editor/editor.main"], function() {
   });
 
   jsConsole = monaco.editor.create(document.getElementById("console-input"), {
-    value: "",
+    value: "sed '$r help.txt' input.txt",
     language: "shell",
     theme: "vs-dark",
     fontSize: 13,
