@@ -60,7 +60,7 @@ window.define = defineBackup;
 <div id="console">
   <div id="console-header">
     <span id="toggle-btn">▼ Console</span>
-    <span class="hint">🖥️미니쉘 전체 기능 • ⬆️⬇️명령 히스토리 • 🔄Tab 명령 자동완성 • 처리 대상이 input.txt 면 에디터 반영</span>
+    <span class="hint">🖥️쉘 기능: ⚡Enter 실행 • 🔽Shift+Enter 줄바꿈 • ⬆️⬇️명령 히스토리 • 🔄Tab 명령 자동완성 • ↩️Ctrl+Z 되돌리기 • ↪️Ctrl+Shift+Z 재실행 • 📂Ctrl+O 열기(드래그)</span>
   </div>
   <div id="console-resizer"></div>
   <div id="console-output"></div>
@@ -121,13 +121,6 @@ const HELP_TEXT = `
 🕒 시스템 정보
 ──────────────────────────────
 - date                : 현재 날짜와 시간 표시
-
-📝 특기사항
-──────────────────────────────
-- 에디터는 항상 input.txt와 연결됩니다.
-- sed ... input.txt 실행 시 결과가 stdout이면 에디터에 반영됩니다.
-- sed -i 또는 'w file'을 포함하면 VFS 파일만 수정되고,
-  에디터는 VFS에서 다시 읽어옵니다.
 `;
 
 function log(msg) {
