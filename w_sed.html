@@ -201,7 +201,9 @@ async function runSed(cmd){
     if(result && result.stdout){
       const model = editor.getModel();
       const fullRange = model.getFullModelRange();
+      editor.pushUndoStop();
       editor.executeEdits("sed-replace", [{ range: fullRange, text: result.stdout }]);
+      editor.pushUndoStop();
     }
     if(result && result.stderr) log("stderr: "+result.stderr);
     log(`실행됨: ${cmd}`);
