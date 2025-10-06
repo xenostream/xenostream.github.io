@@ -326,7 +326,9 @@ function runCode(code) {
       const start = startStr === "$" ? model.getLineCount() : parseInt(startStr, 10);
       const end   = endStr   === "$" ? model.getLineCount() : (endStr ? parseInt(endStr, 10) : start);
       const range = new monaco.Range(start, 1, end, model.getLineMaxColumn(end));
+      editor.pushUndoStop();
       editor.executeEdits("console-delete", [{ range, text: "" }]);
+      editor.pushUndoStop();
       log(`줄 ${startStr}${endStr ? "~" + endStr : ""} 삭제 완료`);
       return;
     }
@@ -351,7 +353,9 @@ function runCode(code) {
         }
       }
       if (edits.length > 0) {
+        editor.pushUndoStop();
         editor.executeEdits("console-replace", edits);
+        editor.pushUndoStop();
         log(`줄 ${startStr}${endStr ? "~" + endStr : ""} 치환 완료: ${regex} → "${replacement}"`);
       }
       return;
@@ -365,9 +369,11 @@ function runCode(code) {
       const fullText = model.getValue();
       const newText = fullText.replace(regex, replacement);
       if (newText !== fullText) {
+        editor.pushUndoStop();
         editor.executeEdits("console-replace", [
           { range: model.getFullModelRange(), text: newText, forceMoveMarkers: true }
         ]);
+        editor.pushUndoStop();
         log(`전역 치환 완료: ${regex} → "${replacement}"`);
       }
       return;
