@@ -5,7 +5,7 @@
   <title>Mini Editor</title>
 
   <style>
-    :root { --console-h: 200px; }
+    :root { --console-h: 300px; }
 
     html, body {
       margin: 0;
@@ -65,12 +65,12 @@
     }
 
     #console-input {
-      height: 80px;
+      height: 50px;
       border-top: 1px solid #333;
     }
   </style>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.56.0/min/vs/loader.min.js"></script>
 </head>
 
 <body>
@@ -104,7 +104,7 @@
 
 require.config({
   paths: {
-    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
+    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.56.0/min/vs"
   }
 });
 
@@ -114,27 +114,17 @@ let jsConsole;
 let currentFileName = "untitled.txt";
 
 
-/* ============================================================
- * Monaco 초기화
- * ============================================================ */
-
 require(["vs/editor/editor.main"], function () {
 
   editor = monaco.editor.create(
     document.getElementById("editor"),
     {
       value: `console.log("Hello World");`,
-
       language: "javascript",
-
       theme: "vs-dark",
-
       fontFamily: "Cascadia Mono, monospace",
-
       fontSize: 14,
-
       wordWrap: "on",
-
       folding: true,
 
       minimap: {
@@ -143,9 +133,7 @@ require(["vs/editor/editor.main"], function () {
       },
 
       lineNumbers: "on",
-
       cursorBlinking: "smooth",
-
       automaticLayout: true
     }
   );
@@ -162,9 +150,7 @@ require(["vs/editor/editor.main"], function () {
         '// 예) 1,$d • /foo/g,"bar" • s/foo/bar/g • g/the/p',
 
       language: "javascript",
-
       theme: "vs-dark",
-
       fontSize: 13,
 
       minimap: {
@@ -172,9 +158,7 @@ require(["vs/editor/editor.main"], function () {
       },
 
       lineNumbers: "off",
-
       wordWrap: "on",
-
       automaticLayout: true
     }
   );
@@ -182,22 +166,6 @@ require(["vs/editor/editor.main"], function () {
 
   /* ==========================================================
    * Enter 처리
-   *
-   * 일반 Enter
-   *   → 명령 실행
-   *
-   * Shift+Enter
-   *   → 줄바꿈
-   *
-   * "\" + Enter
-   *   → 줄바꿈
-   *
-   * 예:
-   *
-   * s/Hello/He \
-   * llo/
-   *
-   * 마지막 Enter에서 실행
    * ========================================================== */
 
   jsConsole.onKeyDown(e => {
@@ -216,14 +184,6 @@ require(["vs/editor/editor.main"], function () {
     const value =
       jsConsole.getValue();
 
-
-    /*
-     * 현재 커서 앞의 텍스트를 확인한다.
-     *
-     * 마지막 문자가 "\"이면
-     * 명령 continuation이므로
-     * Enter를 실행하지 않고 줄바꿈한다.
-     */
     const position =
       jsConsole.getPosition();
 
@@ -239,13 +199,6 @@ require(["vs/editor/editor.main"], function () {
         offset
       );
 
-
-    /*
-     * \ + Enter
-     *
-     * 마지막 문자가 "\"인 경우
-     * 실제 newline을 삽입한다.
-     */
     if (
       /\\$/.test(beforeCursor)
     ) {
@@ -272,12 +225,6 @@ require(["vs/editor/editor.main"], function () {
       return;
     }
 
-
-    /*
-     * 그 외 Enter
-     * → 명령 실행
-     */
-
     e.preventDefault();
 
     const code =
@@ -302,10 +249,6 @@ require(["vs/editor/editor.main"], function () {
 
   });
 
-
-  /*
-   * 에디터가 생긴 뒤 초기 로그
-   */
   log(
     "Monaco ed ready — " +
     editor.getModel().getLineCount() +
@@ -326,10 +269,6 @@ function log(msg) {
       "console-output"
     );
 
-  /*
-   * HTML을 그대로 넣지 않고
-   * 콘솔 출력용으로 안전하게 처리
-   */
   const line =
     document.createElement("div");
 
@@ -487,7 +426,6 @@ fileInput.addEventListener(
       );
     };
 
-
     reader.readAsText(file);
   }
 );
@@ -532,28 +470,6 @@ function saveFile() {
     `파일 저장 완료: ${a.download}`
   );
 }
-
-
-/* ============================================================
- * ============================================================
- *
- * Monaco Adapter
- *
- * 기존 CodeMirror의
- *
- *   findView()
- *   readLines()
- *   writeLines()
- *   currentLine()
- *   moveCursor()
- *
- * 를 Monaco API로 대체
- *
- * 아래부터 ed 처리 엔진은
- * CodeMirror 버전의 로직을 그대로 사용한다.
- *
- * ============================================================
- * ============================================================ */
 
 
 /* ============================================================
@@ -602,8 +518,6 @@ function readLines() {
 
 /* ============================================================
  * 줄 전체 쓰기
- *
- * cursor는 이동할 줄 번호
  * ============================================================ */
 
 function writeLines(
@@ -621,23 +535,19 @@ function writeLines(
     lines = [""];
   }
 
-
   const normalized =
     lines.map(
       x => String(x ?? "")
     );
 
-
   const text =
     normalized.join("\n");
-
 
   const newLineCount =
     Math.max(
       1,
       normalized.length
     );
-
 
   const targetLine =
     Math.max(
@@ -648,10 +558,6 @@ function writeLines(
       )
     );
 
-
-  /*
-   * 커서를 targetLine의 시작 위치로 계산
-   */
   let lineOffset = 0;
 
   for (
@@ -664,7 +570,6 @@ function writeLines(
       normalized[i].length + 1;
   }
 
-
   lineOffset =
     Math.max(
       0,
@@ -674,7 +579,6 @@ function writeLines(
       )
     );
 
-
   const model =
     v.getModel();
 
@@ -682,15 +586,7 @@ function writeLines(
   const fullRange =
     model.getFullModelRange();
 
-
-  /*
-   * executeEdits 사용.
-   *
-   * setValue만 사용하지 않고 Monaco undo stack에
-   * 하나의 편집으로 남도록 한다.
-   */
   v.pushUndoStop();
-
 
   v.executeEdits(
     "ed-command",
@@ -708,10 +604,6 @@ function writeLines(
 
   v.pushUndoStop();
 
-
-  /*
-   * 커서 위치 계산
-   */
   const pos =
     model.getPositionAt(
       Math.min(
@@ -719,7 +611,6 @@ function writeLines(
         model.getValueLength()
       )
     );
-
 
   v.setPosition(pos);
 
@@ -757,7 +648,6 @@ function moveCursor(n) {
   const model =
     v.getModel();
 
-
   n =
     Math.max(
       1,
@@ -767,18 +657,15 @@ function moveCursor(n) {
       )
     );
 
-
   const position =
     new monaco.Position(
       n,
       1
     );
 
-
   v.setPosition(
     position
   );
-
 
   v.revealPositionInCenterIfOutsideViewport(
     position
@@ -791,9 +678,7 @@ function moveCursor(n) {
  * ============================================================ */
 
 let buffer = null;
-
 let current = 1;
-
 let nextId = 1;
 
 
@@ -818,7 +703,6 @@ function syncBuffer() {
     lines.map(
       makeLine
     );
-
 
   current =
     Math.max(
@@ -850,7 +734,6 @@ function getLine(n) {
 
   ensureBuffer();
 
-
   if (
     !Number.isInteger(n) ||
     n < 1 ||
@@ -859,7 +742,6 @@ function getLine(n) {
     throw Error(
       `잘못된 줄 주소: ${n}`
     );
-
 
   return buffer[n - 1];
 }
@@ -880,7 +762,6 @@ function lineNumberById(id) {
   const i =
     lineIndexById(id);
 
-
   return i < 0
     ? null
     : i + 1;
@@ -891,14 +772,12 @@ function setCurrent(n) {
 
   ensureBuffer();
 
-
   if (!buffer.length) {
 
     current = 0;
 
     return;
   }
-
 
   current =
     Math.max(
@@ -3247,11 +3126,6 @@ function execute(
       "undo"
     );
 
-
-    /*
-     * Monaco의 실제 문서 상태를
-     * 다시 읽도록 buffer 무효화
-     */
     buffer = null;
 
 
@@ -4019,10 +3893,8 @@ undo
 window.runCode =
   runCode;
 
-
 window.findGithubEditor =
   findView;
-
 
 window.ed = (
   strings,
@@ -4033,7 +3905,6 @@ window.ed = (
     typeof strings === "string"
   )
     return runCode(strings);
-
 
   return runCode(
     String.raw(
