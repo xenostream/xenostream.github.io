@@ -1,261 +1,279 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>Mini Editor</title>
+<meta charset="UTF-8" />
+<title>Mini FS Editor - Monaco ed</title>
 
-  <style>
-    :root { --console-h: 300px; }
+<style>
+:root {
+  --console-h: 150px;
+}
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: "Cascadia Mono", monospace;
-      background: #1e1e1e;
-    }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: "Cascadia Code", monospace;
+  background: #1e1e1e;
+  color: #ddd;
+}
 
-    #editor {
-      height: calc(100vh - var(--console-h));
-      width: 100vw;
-      transition: height 0.2s ease;
-    }
+#container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
 
-    #console {
-      height: var(--console-h);
-      width: 100vw;
-      background: #111;
-      color: #0f0;
-      display: flex;
-      flex-direction: column;
-      border-top: 1px solid #333;
-      overflow: hidden;
-      transition: height 0.2s ease;
-    }
+/* ============================================================
+ * Sidebar
+ * ============================================================ */
 
-    #console-header {
-      background: #222;
-      padding: 4px 8px;
-      font-size: 12px;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
+#sidebar {
+  width: 250px;
+  min-width: 0;
+  background: #252526;
+  border-right: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+  overflow: hidden;
+}
 
-    #toggle-btn {
-      font-weight: 600;
-    }
+#sidebar.collapsed {
+  width: 0;
+}
 
-    .hint {
-      color: #999;
-      margin-left: auto;
-      font-size: 11px;
-    }
+#sidebar-toggle {
+  width: 12px;
+  background: #333;
+  border: none;
+  color: #eee;
+  cursor: pointer;
+  padding: 0;
+}
 
-    #console-output {
-      flex: 1;
-      padding: 6px;
-      overflow-y: auto;
-      font-size: 13px;
-      white-space: pre-wrap;
-    }
+/* ============================================================
+ * Main
+ * ============================================================ */
 
-    #console-input {
-      height: 50px;
-      border-top: 1px solid #333;
-    }
-  </style>
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.56.0/min/vs/loader.min.js"></script>
+#editor {
+  height: calc(100vh - var(--console-h));
+  width: 100%;
+  transition: height 0.2s ease;
+}
+
+/* ============================================================
+ * Console
+ * ============================================================ */
+
+#console-toggle {
+  background: #333;
+  border: none;
+  color: #eee;
+  font-size: 12px;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+#console {
+  height: var(--console-h);
+  background: #111;
+  border-top: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  transition: height 0.2s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+#console-resizer {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  cursor: ns-resize;
+  z-index: 100;
+  background: transparent;
+}
+
+#console-resizer:hover {
+  background: #555;
+}
+
+#console-resizer.dragging {
+  background: #007acc;
+}
+
+#console-output {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 13px;
+  padding: 6px;
+  color: #0f0;
+  white-space: pre-wrap;
+}
+
+#console-output::-webkit-scrollbar {
+  width: 10px;
+}
+
+#console-output::-webkit-scrollbar-track {
+  background: #111;
+}
+
+#console-output::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 5px;
+}
+
+#console-output::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+#console-input {
+  height: 60px;
+}
+
+/* ============================================================
+ * Toolbar
+ * ============================================================ */
+
+#toolbar {
+  display: flex;
+  justify-content: space-around;
+  padding: 6px;
+  border-bottom: 1px solid #333;
+}
+
+#toolbar button {
+  background: none;
+  border: none;
+  color: #eee;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* ============================================================
+ * File list
+ * ============================================================ */
+
+#file-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px;
+  font-size: 13px;
+}
+
+.file-item {
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  user-select: none;
+}
+
+.file-item:hover {
+  background: #333;
+}
+
+.file-item.active {
+  background: #444;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 </head>
 
 <body>
 
-  <div id="editor"></div>
+<div id="container">
 
-  <div id="console">
+  <div id="sidebar">
 
-    <div id="console-header">
-      <span id="toggle-btn">▼ Console</span>
-
-      <span class="hint">
-        클릭해서 접기/펼치기 • 📂Ctrl+O 열기 • 💾Ctrl+S 저장 •
-        ↩️Ctrl+Z 되돌리기 • ↪️Ctrl+Shift+Z 재실행
-      </span>
+    <div id="toolbar">
+      <button id="btnNew" title="New">✨</button>
+      <button id="btnDelete" title="Delete">🗑️</button>
+      <button id="btnSave" title="Save (가상FS)">💾</button>
+      <button id="btnOpen" title="Open">📂</button>
+      <button id="btnDownload" title="Download">⬇️</button>
     </div>
 
-    <div id="console-output"></div>
-
-    <div id="console-input"></div>
+    <div id="file-list" aria-label="Files"></div>
 
   </div>
 
-  <input
-    type="file"
-    id="fileInput"
-    style="display:none"
-  />
+  <button id="sidebar-toggle">◀</button>
+
+  <div id="main">
+
+    <div id="editor"></div>
+
+    <button id="console-toggle">
+      ▼ Console
+    </button>
+
+    <div id="console">
+
+      <div id="console-resizer"></div>
+
+      <div id="console-output"></div>
+
+      <div id="console-input"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<input
+  type="file"
+  id="fileInput"
+  style="display:none"
+/>
 
 <script>
 
 require.config({
   paths: {
-    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.56.0/min/vs"
+    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
   }
 });
 
-let editor;
-let jsConsole;
 
-let currentFileName = "untitled.txt";
+/* ============================================================
+ * Monaco / Virtual FS
+ * ============================================================ */
 
+let editor = null;
+let jsConsole = null;
 
-require(["vs/editor/editor.main"], function () {
+let currentFile = null;
 
-  editor = monaco.editor.create(
-    document.getElementById("editor"),
-    {
-      value: `console.log("Hello World");`,
-      language: "javascript",
-      theme: "vs-dark",
-      fontFamily: "Cascadia Mono, monospace",
-      fontSize: 14,
-      wordWrap: "on",
-      folding: true,
-
-      minimap: {
-        enabled: true,
-        side: "right"
-      },
-
-      lineNumbers: "on",
-      cursorBlinking: "smooth",
-      automaticLayout: true
-    }
-  );
+const files = {};
 
 
-  /* ==========================================================
-   * 콘솔 입력용 Monaco
-   * ========================================================== */
+/* ============================================================
+ * ed file name
+ *
+ * 추가:
+ * r / w / f / e 명령에서 사용하는 ed식 현재 파일명
+ * ============================================================ */
 
-  jsConsole = monaco.editor.create(
-    document.getElementById("console-input"),
-    {
-      value:
-        '// 예) 1,$d • /foo/g,"bar" • s/foo/bar/g • g/the/p',
-
-      language: "javascript",
-      theme: "vs-dark",
-      fontSize: 13,
-
-      minimap: {
-        enabled: false
-      },
-
-      lineNumbers: "off",
-      wordWrap: "on",
-      automaticLayout: true
-    }
-  );
-
-
-  /* ==========================================================
-   * Enter 처리
-   * ========================================================== */
-
-  jsConsole.onKeyDown(e => {
-
-    if (
-      e.keyCode !== monaco.KeyCode.Enter
-    )
-      return;
-
-
-    /* Shift+Enter는 Monaco 기본 줄바꿈 */
-    if (e.shiftKey)
-      return;
-
-
-    const value =
-      jsConsole.getValue();
-
-    const position =
-      jsConsole.getPosition();
-
-    const model =
-      jsConsole.getModel();
-
-    const offset =
-      model.getOffsetAt(position);
-
-    const beforeCursor =
-      value.slice(
-        0,
-        offset
-      );
-
-    if (
-      /\\$/.test(beforeCursor)
-    ) {
-
-      e.preventDefault();
-
-      jsConsole.executeEdits(
-        "console-continuation",
-        [
-          {
-            range:
-              new monaco.Range(
-                position.lineNumber,
-                position.column,
-                position.lineNumber,
-                position.column
-              ),
-
-            text: "\n"
-          }
-        ]
-      );
-
-      return;
-    }
-
-    e.preventDefault();
-
-    const code =
-      jsConsole.getValue();
-
-    jsConsole.setValue("");
-
-    try {
-      runCode(code);
-    }
-    catch (err) {
-      log(
-        "Error: " +
-        (
-          err &&
-          err.message
-            ? err.message
-            : String(err)
-        )
-      );
-    }
-
-  });
-
-  log(
-    "Monaco ed ready — " +
-    editor.getModel().getLineCount() +
-    " lines"
-  );
-
-});
+let edFileName = null;
 
 
 /* ============================================================
@@ -265,29 +283,17 @@ require(["vs/editor/editor.main"], function () {
 function log(msg) {
 
   const out =
-    document.getElementById(
-      "console-output"
-    );
+    document.getElementById("console-output");
 
-  const line =
-    document.createElement("div");
-
-  line.textContent =
-    String(msg ?? "");
-
-  out.appendChild(line);
+  out.textContent +=
+    String(msg) + "\n";
 
   out.scrollTop =
     out.scrollHeight;
 }
 
 
-/* ============================================================
- * console.log 가로채기
- * ============================================================ */
-
-const origLog =
-  console.log;
+const origLog = console.log;
 
 console.log = (...args) => {
 
@@ -295,238 +301,818 @@ console.log = (...args) => {
 
   log(
     args
-      .map(
-        x =>
-          typeof x === "string"
-            ? x
-            : String(x)
-      )
+      .map(x => String(x))
       .join(" ")
   );
 };
 
 
 /* ============================================================
- * 파일 열기 / 저장
+ * Monaco initialization
  * ============================================================ */
 
-const fileInput =
-  document.getElementById(
-    "fileInput"
-  );
+require(
+  ["vs/editor/editor.main"],
+  function () {
 
-
-window.addEventListener(
-  "keydown",
-  e => {
-
-    if (
-      e.ctrlKey &&
-      e.key.toLowerCase() === "o"
-    ) {
-
-      e.preventDefault();
-
-      fileInput.click();
-
-      return;
-    }
-
-
-    if (
-      e.ctrlKey &&
-      e.key.toLowerCase() === "s"
-    ) {
-
-      e.preventDefault();
-
-      saveFile();
-
-      return;
-    }
-
-  }
-);
-
-
-/* ============================================================
- * 파일 열기
- * ============================================================ */
-
-fileInput.addEventListener(
-  "change",
-  e => {
-
-    const file =
-      e.target.files[0];
-
-    if (!file)
-      return;
-
-    const reader =
-      new FileReader();
-
-    reader.onload = () => {
-
-      editor.setValue(
-        reader.result
-      );
-
-      currentFileName =
-        file.name;
-
-
-      const ext =
-        file.name
-          .split(".")
-          .pop()
-          .toLowerCase();
-
-
-      let lang =
-        "plaintext";
-
-
-      if (ext === "js")
-        lang = "javascript";
-
-      else if (ext === "ts")
-        lang = "typescript";
-
-      else if (ext === "md")
-        lang = "markdown";
-
-      else if (ext === "cs")
-        lang = "csharp";
-
-      else if (
-        ext === "html" ||
-        ext === "htm"
-      )
-        lang = "html";
-
-      else if (ext === "css")
-        lang = "css";
-
-      else if (ext === "json")
-        lang = "json";
-
-      else if (ext === "xml")
-        lang = "xml";
-
-
-      monaco.editor.setModelLanguage(
-        editor.getModel(),
-        lang
+    editor =
+      monaco.editor.create(
+        document.getElementById("editor"),
+        {
+          value: "",
+          language: "plaintext",
+          theme: "vs-dark",
+          fontSize: 14,
+          wordWrap: "on",
+          folding: true,
+          minimap: {
+            enabled: true
+          },
+          automaticLayout: false
+        }
       );
 
 
-      log(
-        `파일 로드 완료: ${file.name} (언어: ${lang})`
+    jsConsole =
+      monaco.editor.create(
+        document.getElementById("console-input"),
+        {
+          value:
+            "// ed 명령 예) 1,$p   g/the/t.   s/foo/bar/g",
+          language: "javascript",
+          theme: "vs-dark",
+          fontSize: 13,
+          minimap: {
+            enabled: false
+          },
+          lineNumbers: "off",
+          automaticLayout: false
+        }
       );
-    };
-
-    reader.readAsText(file);
-  }
-);
 
 
-/* ============================================================
- * 파일 저장
- * ============================================================ */
+    jsConsole.onKeyDown(e => {
 
-function saveFile() {
+      if (
+        e.keyCode ===
+        monaco.KeyCode.Enter
+      ) {
 
-  const text =
-    editor.getValue();
+        if (e.shiftKey)
+          return;
 
-  const blob =
-    new Blob(
-      [text],
-      {
-        type: "text/plain"
+        const code =
+          jsConsole
+            .getValue()
+            .trim();
+
+        jsConsole.setValue("");
+
+        if (code)
+          runCode(code);
+
+        e.preventDefault();
+
+      }
+
+    });
+
+
+    const ro =
+      new ResizeObserver(() => {
+
+        if (editor)
+          editor.layout();
+
+        if (jsConsole)
+          jsConsole.layout();
+
+      });
+
+
+    ro.observe(
+      document.getElementById("main")
+    );
+
+    ro.observe(
+      document.getElementById("editor")
+    );
+
+    ro.observe(
+      document.getElementById("console")
+    );
+
+
+    window.addEventListener(
+      "resize",
+      () => {
+
+        if (editor)
+          editor.layout();
+
+        if (jsConsole)
+          jsConsole.layout();
+
       }
     );
 
-  const url =
-    URL.createObjectURL(
-      blob
-    );
 
-  const a =
-    document.createElement("a");
+    refreshList();
 
-  a.href = url;
-
-  a.download =
-    currentFileName ||
-    "untitled.txt";
-
-  a.click();
-
-  URL.revokeObjectURL(url);
-
-  log(
-    `파일 저장 완료: ${a.download}`
-  );
-}
+  }
+);
 
 
 /* ============================================================
- * Monaco editor 확인
+ * Virtual FS
  * ============================================================ */
 
-function findView() {
+function refreshList() {
+
+  const list =
+    document.getElementById("file-list");
+
+  list.innerHTML = "";
+
+  const names =
+    Object.keys(files);
+
+  if (!names.length) {
+
+    list.innerHTML =
+      "<div style='color:#888;padding:6px'>" +
+      "파일이 없습니다. ✨ 또는 📂 버튼을 사용하세요." +
+      "</div>";
+
+    return;
+  }
+
+
+  names.forEach(fname => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "file-item" +
+      (
+        fname === currentFile
+          ? " active"
+          : ""
+      );
+
+    div.textContent =
+      fname;
+
+    div.onclick =
+      () => openFile(fname);
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+function detectLanguage(fname) {
+
+  const ext =
+    fname
+      .split(".")
+      .pop()
+      .toLowerCase();
+
+  if (ext === "js")
+    return "javascript";
+
+  if (ext === "ts")
+    return "typescript";
+
+  if (ext === "md")
+    return "markdown";
+
+  if (ext === "cs")
+    return "csharp";
+
+  if (
+    ext === "html" ||
+    ext === "htm"
+  )
+    return "html";
+
+  if (ext === "css")
+    return "css";
+
+  if (ext === "json")
+    return "json";
+
+  if (ext === "xml")
+    return "xml";
+
+  return "plaintext";
+}
+
+
+function setEditorLanguage(fname) {
 
   if (!editor)
-    throw Error(
-      "Monaco 편집기가 아직 준비되지 않았습니다."
-    );
+    return;
 
-  return editor;
+  monaco.editor.setModelLanguage(
+    editor.getModel(),
+    detectLanguage(fname)
+  );
+
 }
 
 
 /* ============================================================
- * 현재 문서 줄 읽기
+ * New
+ * ============================================================ */
+
+document
+  .getElementById("btnNew")
+  .addEventListener(
+    "click",
+    () => {
+
+      const fname =
+        prompt(
+          "새 파일 이름:",
+          "untitled.txt"
+        );
+
+      if (
+        !fname ||
+        files[fname]
+      ) {
+
+        alert("파일 존재");
+
+        return;
+      }
+
+      files[fname] = "";
+
+      currentFile =
+        fname;
+
+      edFileName =
+        fname;
+
+      editor.setValue("");
+
+      setEditorLanguage(fname);
+
+      refreshList();
+
+      log(
+        `생성됨: ${fname}`
+      );
+
+    }
+  );
+
+
+/* ============================================================
+ * Open virtual file
+ * ============================================================ */
+
+function openFile(fname) {
+
+  currentFile =
+    fname;
+
+  edFileName =
+    fname;
+
+  const content =
+    files[fname] ?? "";
+
+  editor.setValue(
+    content
+  );
+
+  setEditorLanguage(fname);
+
+  refreshList();
+
+  log(
+    `열림: ${fname}`
+  );
+
+}
+
+
+/* ============================================================
+ * Delete
+ * ============================================================ */
+
+document
+  .getElementById("btnDelete")
+  .addEventListener(
+    "click",
+    () => {
+
+      if (!currentFile) {
+
+        alert(
+          "열린 파일 없음"
+        );
+
+        return;
+      }
+
+      delete files[currentFile];
+
+      currentFile =
+        null;
+
+      edFileName =
+        null;
+
+      editor.setValue("");
+
+      monaco.editor.setModelLanguage(
+        editor.getModel(),
+        "plaintext"
+      );
+
+      refreshList();
+
+      log(
+        "삭제됨 (가상 FS)"
+      );
+
+    }
+  );
+
+
+/* ============================================================
+ * Save
+ * ============================================================ */
+
+document
+  .getElementById("btnSave")
+  .addEventListener(
+    "click",
+    () => {
+
+      if (!currentFile) {
+
+        alert(
+          "열린 파일 없음"
+        );
+
+        return;
+      }
+
+      files[currentFile] =
+        editor.getValue();
+
+      edFileName =
+        currentFile;
+
+      log(
+        "저장됨: " +
+        currentFile
+      );
+
+    }
+  );
+
+
+/* ============================================================
+ * Local Open
+ * ============================================================ */
+
+document
+  .getElementById("btnOpen")
+  .addEventListener(
+    "click",
+    () => {
+
+      const input =
+        document.getElementById(
+          "fileInput"
+        );
+
+      input.value = "";
+
+      input.click();
+
+    }
+  );
+
+
+document
+  .getElementById("fileInput")
+  .addEventListener(
+    "change",
+    e => {
+
+      const file =
+        e.target.files[0];
+
+      if (!file)
+        return;
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () => {
+
+          files[file.name] =
+            reader.result;
+
+          currentFile =
+            file.name;
+
+          edFileName =
+            file.name;
+
+          editor.setValue(
+            reader.result
+          );
+
+          setEditorLanguage(
+            file.name
+          );
+
+          refreshList();
+
+          log(
+            `로컬 파일 로드: ${file.name}`
+          );
+
+        };
+
+      reader.readAsText(
+        file,
+        "UTF-8"
+      );
+
+    }
+  );
+
+
+/* ============================================================
+ * Download
+ * ============================================================ */
+
+document
+  .getElementById("btnDownload")
+  .addEventListener(
+    "click",
+    () => {
+
+      if (!currentFile) {
+
+        alert(
+          "열린 파일 없음"
+        );
+
+        return;
+      }
+
+      const text =
+        editor.getValue();
+
+      const blob =
+        new Blob(
+          [text],
+          {
+            type:
+              "text/plain;charset=utf-8"
+          }
+        );
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+      const a =
+        document.createElement(
+          "a"
+        );
+
+      a.href =
+        url;
+
+      a.download =
+        currentFile ||
+        "untitled.txt";
+
+      a.click();
+
+      URL.revokeObjectURL(
+        url
+      );
+
+      log(
+        `다운로드 완료: ${a.download}`
+      );
+
+    }
+  );
+
+
+/* ============================================================
+ * Sidebar toggle
+ * ============================================================ */
+
+const sidebar =
+  document.getElementById(
+    "sidebar"
+  );
+
+const sidebarToggle =
+  document.getElementById(
+    "sidebar-toggle"
+  );
+
+
+sidebarToggle.addEventListener(
+  "click",
+  () => {
+
+    sidebar.classList.toggle(
+      "collapsed"
+    );
+
+    sidebarToggle.textContent =
+      sidebar.classList.contains(
+        "collapsed"
+      )
+        ? "▶"
+        : "◀";
+
+
+    requestAnimationFrame(
+      () => {
+
+        if (editor)
+          editor.layout();
+
+        if (jsConsole)
+          jsConsole.layout();
+
+        requestAnimationFrame(
+          () => {
+
+            if (editor)
+              editor.layout();
+
+            if (jsConsole)
+              jsConsole.layout();
+
+          }
+        );
+
+      }
+    );
+
+  }
+);
+
+
+/* ============================================================
+ * Console toggle
+ * ============================================================ */
+
+const rootStyle =
+  document.documentElement.style;
+
+const toggleBtn =
+  document.getElementById(
+    "console-toggle"
+  );
+
+let consoleCollapsed =
+  false;
+
+
+function setConsoleHeight(px) {
+
+  rootStyle.setProperty(
+    "--console-h",
+    px
+  );
+
+  requestAnimationFrame(
+    () => {
+
+      if (editor)
+        editor.layout();
+
+      if (jsConsole)
+        jsConsole.layout();
+
+      requestAnimationFrame(
+        () => {
+
+          if (editor)
+            editor.layout();
+
+          if (jsConsole)
+            jsConsole.layout();
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+toggleBtn.addEventListener(
+  "click",
+  () => {
+
+    consoleCollapsed =
+      !consoleCollapsed;
+
+    if (consoleCollapsed) {
+
+      setConsoleHeight(
+        "0px"
+      );
+
+      toggleBtn.textContent =
+        "▶ Console";
+
+    }
+
+    else {
+
+      setConsoleHeight(
+        "150px"
+      );
+
+      toggleBtn.textContent =
+        "▼ Console";
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+ * Console mouse resize
+ * ============================================================ */
+
+const consoleElement =
+  document.getElementById(
+    "console"
+  );
+
+const consoleResizer =
+  document.getElementById(
+    "console-resizer"
+  );
+
+let consoleResizing =
+  false;
+
+let consoleResizeStartY =
+  0;
+
+let consoleResizeStartHeight =
+  0;
+
+
+consoleResizer.addEventListener(
+  "mousedown",
+  e => {
+
+    if (consoleCollapsed)
+      return;
+
+    consoleResizing =
+      true;
+
+    consoleResizeStartY =
+      e.clientY;
+
+    consoleResizeStartHeight =
+      consoleElement.getBoundingClientRect().height;
+
+    consoleResizer.classList.add(
+      "dragging"
+    );
+
+    document.body.style.cursor =
+      "ns-resize";
+
+    document.body.style.userSelect =
+      "none";
+
+    e.preventDefault();
+
+  }
+);
+
+
+document.addEventListener(
+  "mousemove",
+  e => {
+
+    if (!consoleResizing)
+      return;
+
+    const delta =
+      consoleResizeStartY -
+      e.clientY;
+
+    let newHeight =
+      consoleResizeStartHeight +
+      delta;
+
+    const minHeight =
+      60;
+
+    const main =
+      document.getElementById(
+        "main"
+      );
+
+    const toggleHeight =
+      toggleBtn.getBoundingClientRect().height;
+
+    const minEditorHeight =
+      80;
+
+    const maxHeight =
+      Math.max(
+        minHeight,
+        main.clientHeight -
+        toggleHeight -
+        minEditorHeight
+      );
+
+    newHeight =
+      Math.max(
+        minHeight,
+        Math.min(
+          newHeight,
+          maxHeight
+        )
+      );
+
+    setConsoleHeight(
+      `${Math.round(newHeight)}px`
+    );
+
+  }
+);
+
+
+document.addEventListener(
+  "mouseup",
+  () => {
+
+    if (!consoleResizing)
+      return;
+
+    consoleResizing =
+      false;
+
+    consoleResizer.classList.remove(
+      "dragging"
+    );
+
+    document.body.style.cursor =
+      "";
+
+    document.body.style.userSelect =
+      "";
+
+  }
+);
+
+
+/* ============================================================
+ * Monaco Adapter
  * ============================================================ */
 
 function readLines() {
 
-  const v =
-    findView();
-
   const model =
-    v.getModel();
+    editor.getModel();
 
-  const result = [];
+  return model.getLinesContent();
 
-  for (
-    let n = 1;
-    n <= model.getLineCount();
-    n++
-  ) {
-
-    result.push(
-      model.getLineContent(n)
-    );
-  }
-
-  return result;
 }
 
-
-/* ============================================================
- * 줄 전체 쓰기
- * ============================================================ */
 
 function writeLines(
   lines,
   cursor = 1
 ) {
-
-  const v =
-    findView();
 
   if (
     !Array.isArray(lines) ||
@@ -543,6 +1129,9 @@ function writeLines(
   const text =
     normalized.join("\n");
 
+  const model =
+    editor.getModel();
+
   const newLineCount =
     Math.max(
       1,
@@ -558,7 +1147,7 @@ function writeLines(
       )
     );
 
-  let lineOffset = 0;
+  let anchor = 0;
 
   for (
     let i = 0;
@@ -566,87 +1155,85 @@ function writeLines(
     i++
   ) {
 
-    lineOffset +=
+    anchor +=
       normalized[i].length + 1;
+
   }
 
-  lineOffset =
+  anchor =
     Math.max(
       0,
       Math.min(
-        lineOffset,
+        anchor,
         text.length
       )
     );
 
-  const model =
-    v.getModel();
+  editor.pushUndoStop();
 
-
-  const fullRange =
-    model.getFullModelRange();
-
-  v.pushUndoStop();
-
-  v.executeEdits(
-    "ed-command",
+  editor.executeEdits(
+    "ed",
     [
       {
-        range: fullRange,
+        range:
+          model.getFullModelRange(),
 
         text,
 
-        forceMoveMarkers: true
+        forceMoveMarkers:
+          true
       }
     ]
   );
 
+  const newModel =
+    editor.getModel();
 
-  v.pushUndoStop();
-
-  const pos =
-    model.getPositionAt(
+  const line =
+    Math.max(
+      1,
       Math.min(
-        lineOffset,
-        model.getValueLength()
+        targetLine,
+        newModel.getLineCount()
       )
     );
 
-  v.setPosition(pos);
+  const column =
+    Math.min(
+      1,
+      newModel.getLineMaxColumn(line)
+    );
 
-  v.revealPositionInCenterIfOutsideViewport(
-    pos
+  editor.setPosition({
+    lineNumber: line,
+    column
+  });
+
+  editor.revealLineInCenter(
+    line
   );
+
+  editor.pushUndoStop();
+
 }
 
-
-/* ============================================================
- * 현재 줄
- * ============================================================ */
 
 function currentLine() {
 
-  const v =
-    findView();
+  if (!editor)
+    return 1;
 
-  const pos =
-    v.getPosition();
+  return editor
+    .getPosition()
+    .lineNumber;
 
-  return pos.lineNumber;
 }
 
 
-/* ============================================================
- * 커서 이동
- * ============================================================ */
-
 function moveCursor(n) {
 
-  const v =
-    findView();
-
   const model =
-    v.getModel();
+    editor.getModel();
 
   n =
     Math.max(
@@ -657,19 +1244,15 @@ function moveCursor(n) {
       )
     );
 
-  const position =
-    new monaco.Position(
-      n,
-      1
-    );
+  editor.setPosition({
+    lineNumber: n,
+    column: 1
+  });
 
-  v.setPosition(
-    position
+  editor.revealLineInCenter(
+    n
   );
 
-  v.revealPositionInCenterIfOutsideViewport(
-    position
-  );
 }
 
 
@@ -686,10 +1269,9 @@ function makeLine(text) {
 
   return {
     id: nextId++,
-
-    text:
-      String(text ?? "")
+    text: String(text ?? "")
   };
+
 }
 
 
@@ -698,11 +1280,8 @@ function syncBuffer() {
   const lines =
     readLines();
 
-
   buffer =
-    lines.map(
-      makeLine
-    );
+    lines.map(makeLine);
 
   current =
     Math.max(
@@ -712,6 +1291,7 @@ function syncBuffer() {
         buffer.length
       )
     );
+
 }
 
 
@@ -719,6 +1299,7 @@ function ensureBuffer() {
 
   if (!buffer)
     syncBuffer();
+
 }
 
 
@@ -727,6 +1308,7 @@ function lineCount() {
   ensureBuffer();
 
   return buffer.length;
+
 }
 
 
@@ -738,12 +1320,14 @@ function getLine(n) {
     !Number.isInteger(n) ||
     n < 1 ||
     n > buffer.length
-  )
+  ) {
     throw Error(
       `잘못된 줄 주소: ${n}`
     );
+  }
 
   return buffer[n - 1];
+
 }
 
 
@@ -754,6 +1338,7 @@ function lineIndexById(id) {
   return buffer.findIndex(
     x => x.id === id
   );
+
 }
 
 
@@ -765,6 +1350,7 @@ function lineNumberById(id) {
   return i < 0
     ? null
     : i + 1;
+
 }
 
 
@@ -787,6 +1373,7 @@ function setCurrent(n) {
         buffer.length
       )
     );
+
 }
 
 
@@ -794,12 +1381,10 @@ function commit() {
 
   ensureBuffer();
 
-
   writeLines(
     buffer.map(
       x => x.text
     ),
-
     Math.max(
       1,
       Math.min(
@@ -808,6 +1393,7 @@ function commit() {
       )
     )
   );
+
 }
 
 
@@ -817,9 +1403,7 @@ function commit() {
 
 function quoted(s) {
 
-  s =
-    s.trim();
-
+  s = s.trim();
 
   if (
     s.length < 2 ||
@@ -838,40 +1422,36 @@ function quoted(s) {
     throw Error(
       '문자열은 "..." 형식이어야 합니다.'
     );
+
   }
 
-
-  return s.slice(1, -1)
-
+  return s
+    .slice(1, -1)
     .replace(
       /\\n/g,
       "\n"
     )
-
     .replace(
       /\\r/g,
       "\r"
     )
-
     .replace(
       /\\t/g,
       "\t"
     )
-
     .replace(
       /\\"/g,
       '"'
     )
-
     .replace(
       /\\'/g,
       "'"
     )
-
     .replace(
       /\\\\/g,
       "\\"
     );
+
 }
 
 
@@ -887,7 +1467,6 @@ function readDelimited(
 
   let value = "";
 
-
   while (
     p < s.length
   ) {
@@ -895,23 +1474,23 @@ function readDelimited(
     const c =
       s[p++];
 
-
     if (c === "\\") {
 
       if (
         p >= s.length
-      )
+      ) {
+
         throw Error(
           "주소 정규식이 닫히지 않았습니다."
         );
 
+      }
 
       value +=
         "\\" + s[p++];
 
       continue;
     }
-
 
     if (
       c === delimiter
@@ -921,16 +1500,17 @@ function readDelimited(
         value,
         end: p
       };
+
     }
 
-
     value += c;
-  }
 
+  }
 
   throw Error(
     "주소 정규식이 닫히지 않았습니다."
   );
+
 }
 
 
@@ -942,22 +1522,20 @@ function searchAddress(
 
   ensureBuffer();
 
-
   if (!re)
     re = lastRegex;
 
+  if (!re) {
 
-  if (!re)
     throw Error(
       "이전 정규식이 없습니다."
     );
 
+  }
 
   lastRegex = re;
 
-
   let rx;
-
 
   try {
 
@@ -965,16 +1543,16 @@ function searchAddress(
       new RegExp(re);
 
   }
+
   catch (e) {
 
     throw Error(
       `잘못된 정규식: ${e.message}`
     );
+
   }
 
-
   let n = base;
-
 
   for (
     let i = 0;
@@ -984,19 +1562,15 @@ function searchAddress(
 
     n += direction;
 
-
     if (
       n > buffer.length
     )
       n = 1;
 
-
     if (n < 1)
       n = buffer.length;
 
-
     rx.lastIndex = 0;
-
 
     if (
       rx.test(
@@ -1004,12 +1578,13 @@ function searchAddress(
       )
     )
       return n;
-  }
 
+  }
 
   throw Error(
     `정규식에 일치하는 줄이 없습니다: /${re}/`
   );
+
 }
 
 
@@ -1021,13 +1596,11 @@ function parseAddressAt(
 
   ensureBuffer();
 
-
   while (
     pos < s.length &&
     /\s/.test(s[pos])
   )
     pos++;
-
 
   if (
     pos >= s.length
@@ -1038,40 +1611,35 @@ function parseAddressAt(
       end: pos,
       present: false
     };
+
   }
 
-
   let n;
-
   let present = true;
 
   const c =
     s[pos];
 
-
   if (c === ".") {
 
     n = base;
-
     pos++;
-  }
 
+  }
 
   else if (c === "$") {
 
     n = buffer.length;
-
     pos++;
-  }
 
+  }
 
   else if (c === "0") {
 
     n = 0;
-
     pos++;
-  }
 
+  }
 
   else if (
     /[0-9]/.test(c)
@@ -1082,25 +1650,21 @@ function parseAddressAt(
         .slice(pos)
         .match(/^\d+/);
 
-
     n =
-      Number(
-        m[0]
-      );
-
+      Number(m[0]);
 
     pos +=
       m[0].length;
-  }
 
+  }
 
   else if (
     c === "/" ||
     c === "?"
   ) {
 
-    const delimiter = c;
-
+    const delimiter =
+      c;
 
     const r =
       readDelimited(
@@ -1108,7 +1672,6 @@ function parseAddressAt(
         pos + 1,
         delimiter
       );
-
 
     n =
       searchAddress(
@@ -1119,11 +1682,10 @@ function parseAddressAt(
           : -1
       );
 
-
     pos =
       r.end;
-  }
 
+  }
 
   else if (
     c === "+" ||
@@ -1131,8 +1693,8 @@ function parseAddressAt(
   ) {
 
     n = base;
-  }
 
+  }
 
   else {
 
@@ -1141,6 +1703,7 @@ function parseAddressAt(
       end: pos,
       present: false
     };
+
   }
 
 
@@ -1154,49 +1717,47 @@ function parseAddressAt(
     )
       pos++;
 
-
     if (
       s[pos] !== "+" &&
       s[pos] !== "-"
     )
       break;
 
-
     const sign =
       s[pos++] === "+"
         ? 1
         : -1;
-
 
     const m =
       s
         .slice(pos)
         .match(/^\d+/);
 
-
     const amount =
       m
         ? Number(m[0])
         : 1;
 
-
     if (m)
       pos +=
         m[0].length;
 
-
     n +=
       sign * amount;
+
   }
 
 
   if (
     n < 0 ||
     n > buffer.length
-  )
+  ) {
+
     throw Error(
       `잘못된 줄 주소: ${n}`
     );
+
+  }
 
 
   return {
@@ -1204,6 +1765,7 @@ function parseAddressAt(
     end: pos,
     present
   };
+
 }
 
 
@@ -1215,10 +1777,8 @@ function parseRangeAt(
 
   ensureBuffer();
 
-
   const startPos =
     pos;
-
 
   while (
     pos < s.length &&
@@ -1235,16 +1795,13 @@ function parseRangeAt(
     const separator =
       s[pos++];
 
-
     const first =
       separator === ","
         ? 1
         : current;
 
-
     const second =
       buffer.length;
-
 
     return {
       s: first,
@@ -1252,6 +1809,7 @@ function parseRangeAt(
       end: pos,
       present: true
     };
+
   }
 
 
@@ -1264,13 +1822,13 @@ function parseRangeAt(
         defaultAddr
       );
 
-
     return {
       s: n,
       e: n,
       end: pos,
       present: false
     };
+
   }
 
 
@@ -1291,13 +1849,13 @@ function parseRangeAt(
         defaultAddr
       );
 
-
     return {
       s: n,
       e: n,
       end: startPos,
       present: false
     };
+
   }
 
 
@@ -1323,6 +1881,7 @@ function parseRangeAt(
       end: pos,
       present: true
     };
+
   }
 
 
@@ -1342,10 +1901,13 @@ function parseRangeAt(
 
   if (
     !second.present
-  )
+  ) {
+
     throw Error(
       "두 번째 주소가 없습니다."
     );
+
+  }
 
 
   pos =
@@ -1363,10 +1925,13 @@ function parseRangeAt(
   if (
     first.value >
     second.value
-  )
+  ) {
+
     throw Error(
       "잘못된 줄 범위입니다."
     );
+
+  }
 
 
   return {
@@ -1375,6 +1940,7 @@ function parseRangeAt(
     end: pos,
     present: true
   };
+
 }
 
 
@@ -1385,10 +1951,8 @@ function parseAddress(
 
   ensureBuffer();
 
-
   const text =
     String(s ?? "");
-
 
   const r =
     parseAddressAt(
@@ -1400,23 +1964,30 @@ function parseAddress(
 
   if (
     !r.present
-  )
+  ) {
+
     throw Error(
       `잘못된 주소: ${s}`
     );
+
+  }
 
 
   if (
     text
       .slice(r.end)
       .trim()
-  )
+  ) {
+
     throw Error(
       `잘못된 주소: ${s}`
     );
 
+  }
+
 
   return r.value;
+
 }
 
 
@@ -1426,7 +1997,6 @@ function getRange(
 ) {
 
   ensureBuffer();
-
 
   const text =
     String(s ?? "");
@@ -1440,6 +2010,7 @@ function getRange(
       s: 1,
       e: buffer.length
     };
+
   }
 
 
@@ -1451,6 +2022,7 @@ function getRange(
       s: current,
       e: buffer.length
     };
+
   }
 
 
@@ -1466,16 +2038,20 @@ function getRange(
     text
       .slice(r.end)
       .trim()
-  )
+  ) {
+
     throw Error(
       `잘못된 주소: ${s}`
     );
+
+  }
 
 
   return {
     s: r.s,
     e: r.e
   };
+
 }
 
 
@@ -1510,22 +2086,18 @@ function printCommand(
 
       text =
         text
-
           .replace(
             /\\/g,
             "\\\\"
           )
-
           .replace(
             /\t/g,
             "\\t"
           )
-
           .replace(
             /\r/g,
             "\\r"
           )
-
           .replace(
             /[\x00-\x1f\x7f-\x9f]/g,
             c => {
@@ -1534,7 +2106,6 @@ function printCommand(
                 c === "\n"
               )
                 return "\\n";
-
 
               return (
                 "\\x" +
@@ -1546,6 +2117,7 @@ function printCommand(
                     "0"
                   )
               );
+
             }
           );
 
@@ -1553,28 +2125,32 @@ function printCommand(
       console.log(
         `${text}$`
       );
-    }
 
+    }
 
     else if (numbered) {
 
       console.log(
         `${n}\t${text}`
       );
-    }
 
+    }
 
     else {
 
-      console.log(text);
+      console.log(
+        text
+      );
+
     }
+
   }
 
 
   setCurrent(e);
 
-
   return e;
+
 }
 
 
@@ -1605,7 +2181,6 @@ function deleteCommand(addr) {
       makeLine("")
     );
 
-
     setCurrent(1);
 
     return 1;
@@ -1621,24 +2196,23 @@ function deleteCommand(addr) {
 
 
   return current;
+
 }
 
 
 function splitText(text) {
 
   return String(text)
-
     .replace(
       /\r\n/g,
       "\n"
     )
-
     .replace(
       /\r/g,
       "\n"
     )
-
     .split("\n");
+
 }
 
 
@@ -1673,6 +2247,7 @@ function insertCommand(
 
 
   return current;
+
 }
 
 
@@ -1706,6 +2281,7 @@ function appendCommand(
 
 
   return current;
+
 }
 
 
@@ -1751,10 +2327,12 @@ function changeCommand(
         buffer.length
       )
     );
+
   }
 
 
   return current;
+
 }
 
 
@@ -1766,7 +2344,6 @@ function joinCommand(addr) {
 
   ensureBuffer();
 
-
   let s;
   let e;
 
@@ -1777,8 +2354,8 @@ function joinCommand(addr) {
   ) {
 
     s = current;
-
     e = current + 1;
+
   }
 
   else {
@@ -1789,24 +2366,27 @@ function joinCommand(addr) {
         "."
       );
 
-
     s = range.s;
-
     e = range.e;
 
-
-    if (s === e)
+    if (
+      s === e
+    )
       e = s + 1;
+
   }
 
 
   if (
     s < 1 ||
     s > buffer.length
-  )
+  ) {
+
     throw Error(
       `잘못된 줄 주소: ${s}`
     );
+
+  }
 
 
   if (
@@ -1815,7 +2395,9 @@ function joinCommand(addr) {
     e = buffer.length;
 
 
-  if (s === e) {
+  if (
+    s === e
+  ) {
 
     setCurrent(s);
 
@@ -1848,8 +2430,8 @@ function joinCommand(addr) {
 
   setCurrent(s);
 
-
   return s;
+
 }
 
 
@@ -1876,7 +2458,9 @@ function copyCommand(
     );
 
 
-  if (target === 0) {
+  if (
+    target === 0
+  ) {
 
     const copies =
       buffer
@@ -1903,6 +2487,7 @@ function copyCommand(
 
 
     return current;
+
   }
 
 
@@ -1913,10 +2498,13 @@ function copyCommand(
       s === e &&
       target === s
     )
-  )
+  ) {
+
     throw Error(
       "복사 대상이 원본 범위 안에 있습니다."
     );
+
+  }
 
 
   const copies =
@@ -1945,6 +2533,7 @@ function copyCommand(
 
 
   return current;
+
 }
 
 
@@ -1974,10 +2563,13 @@ function moveCommand(
   if (
     target >= s &&
     target <= e
-  )
+  ) {
+
     throw Error(
       "이동 대상이 원본 범위 안에 있습니다."
     );
+
+  }
 
 
   const count =
@@ -2017,6 +2609,7 @@ function moveCommand(
 
 
   return current;
+
 }
 
 
@@ -2027,30 +2620,36 @@ function moveCommand(
 const ESC = "\uFFFF";
 
 let lastRegex = "";
-
 let lastSubstitution = null;
 
 
 function parseSubstitute(s) {
 
-  if (s[0] !== "s")
+  if (
+    s[0] !== "s"
+  ) {
+
     throw Error(
       "잘못된 substitute 명령입니다."
     );
+
+  }
 
 
   const delimiter =
     s[1];
 
 
-  if (!delimiter)
+  if (!delimiter) {
+
     throw Error(
       "s 구분자가 없습니다."
     );
 
+  }
+
 
   let p = 2;
-
   const parts = [];
 
 
@@ -2061,7 +2660,6 @@ function parseSubstitute(s) {
   ) {
 
     let value = "";
-
     let closed = false;
 
 
@@ -2073,14 +2671,19 @@ function parseSubstitute(s) {
         s[p];
 
 
-      if (c === "\\") {
+      if (
+        c === "\\"
+      ) {
 
         if (
           p + 1 >= s.length
-        )
+        ) {
+
           throw Error(
             "substitute escape가 닫히지 않았습니다."
           );
+
+        }
 
 
         const n =
@@ -2097,6 +2700,7 @@ function parseSubstitute(s) {
           p += 2;
 
           continue;
+
         }
 
 
@@ -2111,16 +2715,17 @@ function parseSubstitute(s) {
           p += 3;
 
           continue;
+
         }
 
 
         value +=
           ESC + n;
 
-
         p += 2;
 
         continue;
+
       }
 
 
@@ -2133,22 +2738,28 @@ function parseSubstitute(s) {
         closed = true;
 
         break;
+
       }
 
 
       value += c;
 
       p++;
+
     }
 
 
-    if (!closed)
+    if (!closed) {
+
       throw Error(
         "substitute 구분자가 닫히지 않았습니다."
       );
 
+    }
+
 
     parts.push(value);
+
   }
 
 
@@ -2168,13 +2779,17 @@ function parseSubstitute(s) {
 
     if (
       flags.includes(f)
-    )
+    ) {
+
       throw Error(
         `중복 substitute flag: ${f}`
       );
 
+    }
+
 
     flags += f;
+
   }
 
 
@@ -2182,10 +2797,13 @@ function parseSubstitute(s) {
     s
       .slice(p)
       .trim()
-  )
+  ) {
+
     throw Error(
       `잘못된 substitute suffix: ${s.slice(p)}`
     );
+
+  }
 
 
   return {
@@ -2194,6 +2812,7 @@ function parseSubstitute(s) {
     replacement: parts[1],
     flags
   };
+
 }
 
 
@@ -2222,6 +2841,7 @@ function decodeSubPattern(
       out += c;
 
       continue;
+
     }
 
 
@@ -2242,10 +2862,12 @@ function decodeSubPattern(
     else
       out +=
         "\\" + n;
+
   }
 
 
   return out;
+
 }
 
 
@@ -2274,6 +2896,7 @@ function decodeSubReplacement(
       out += c;
 
       continue;
+
     }
 
 
@@ -2288,6 +2911,7 @@ function decodeSubReplacement(
       out += "\n";
 
       continue;
+
     }
 
 
@@ -2298,6 +2922,7 @@ function decodeSubReplacement(
       out += delimiter;
 
       continue;
+
     }
 
 
@@ -2309,6 +2934,7 @@ function decodeSubReplacement(
         "$" + n;
 
       continue;
+
     }
 
 
@@ -2319,14 +2945,17 @@ function decodeSubReplacement(
       out += "$&";
 
       continue;
+
     }
 
 
     out += n;
+
   }
 
 
   return out;
+
 }
 
 
@@ -2340,6 +2969,7 @@ function jsReplacementToText(
     regex,
     replacement
   );
+
 }
 
 
@@ -2349,9 +2979,7 @@ function substituteCommand(
 ) {
 
   const sub =
-    parseSubstitute(
-      command
-    );
+    parseSubstitute(command);
 
 
   let pattern =
@@ -2365,10 +2993,13 @@ function substituteCommand(
     pattern = lastRegex;
 
 
-  if (!pattern)
+  if (!pattern) {
+
     throw Error(
       "이전 정규식이 없습니다."
     );
+
+  }
 
 
   lastRegex =
@@ -2420,11 +3051,13 @@ function substituteCommand(
       );
 
   }
+
   catch (e) {
 
     throw Error(
       `잘못된 정규식: ${e.message}`
     );
+
   }
 
 
@@ -2437,7 +3070,6 @@ function substituteCommand(
 
   const start =
     range.s;
-
 
   const originalEnd =
     range.e;
@@ -2484,6 +3116,7 @@ function substituteCommand(
       n++;
 
       continue;
+
     }
 
 
@@ -2515,13 +3148,17 @@ function substituteCommand(
 
     n =
       lastChanged + 1;
+
   }
 
 
-  if (!changed)
+  if (!changed) {
+
     throw Error(
       "치환 없음"
     );
+
+  }
 
 
   setCurrent(
@@ -2567,6 +3204,7 @@ function substituteCommand(
 
 
   return current;
+
 }
 
 
@@ -2583,24 +3221,29 @@ function parseGlobalHeader(code) {
   if (
     type !== "g" &&
     type !== "v"
-  )
+  ) {
+
     throw Error(
       "잘못된 global 명령입니다."
     );
+
+  }
 
 
   const delimiter =
     code[1];
 
 
-  if (!delimiter)
+  if (!delimiter) {
+
     throw Error(
       "global 구분자가 없습니다."
     );
 
+  }
+
 
   let p = 2;
-
   let pattern = "";
 
 
@@ -2612,20 +3255,26 @@ function parseGlobalHeader(code) {
       code[p++];
 
 
-    if (c === "\\") {
+    if (
+      c === "\\"
+    ) {
 
       if (
         p >= code.length
-      )
+      ) {
+
         throw Error(
           "global 정규식 escape가 닫히지 않았습니다."
         );
+
+      }
 
 
       pattern +=
         "\\" + code[p++];
 
       continue;
+
     }
 
 
@@ -2636,16 +3285,20 @@ function parseGlobalHeader(code) {
 
 
     pattern += c;
+
   }
 
 
   if (
     p > code.length ||
     code[p - 1] !== delimiter
-  )
+  ) {
+
     throw Error(
       "global 정규식이 닫히지 않았습니다."
     );
+
+  }
 
 
   return {
@@ -2654,6 +3307,7 @@ function parseGlobalHeader(code) {
     pattern,
     restStart: p
   };
+
 }
 
 
@@ -2666,10 +3320,13 @@ function scanSubstituteCommand(
     text[start + 1];
 
 
-  if (!delimiter)
+  if (!delimiter) {
+
     throw Error(
       "substitute 구분자가 없습니다."
     );
+
+  }
 
 
   let p =
@@ -2693,7 +3350,9 @@ function scanSubstituteCommand(
         text[p];
 
 
-      if (c === "\\") {
+      if (
+        c === "\\"
+      ) {
 
         if (
           text[p + 1] === "\r" &&
@@ -2704,8 +3363,8 @@ function scanSubstituteCommand(
         else
           p += 2;
 
-
         continue;
+
       }
 
 
@@ -2718,17 +3377,23 @@ function scanSubstituteCommand(
         closed = true;
 
         break;
+
       }
 
 
       p++;
+
     }
 
 
-    if (!closed)
+    if (!closed) {
+
       throw Error(
         "global 내부 substitute가 닫히지 않았습니다."
       );
+
+    }
+
   }
 
 
@@ -2742,16 +3407,17 @@ function scanSubstituteCommand(
 
 
   return p;
+
 }
 
 
-function splitGlobalCommands(text) {
+function splitGlobalCommands(
+  text
+) {
 
   const result = [];
 
-
   let start = 0;
-
   let p = 0;
 
 
@@ -2775,6 +3441,7 @@ function splitGlobalCommands(text) {
         );
 
       continue;
+
     }
 
 
@@ -2814,6 +3481,7 @@ function splitGlobalCommands(text) {
       start = p;
 
       continue;
+
     }
 
 
@@ -2839,10 +3507,12 @@ function splitGlobalCommands(text) {
       start = p;
 
       continue;
+
     }
 
 
     p++;
+
   }
 
 
@@ -2857,6 +3527,7 @@ function splitGlobalCommands(text) {
 
 
   return result;
+
 }
 
 
@@ -2870,9 +3541,7 @@ function globalCommand(
 ) {
 
   const g =
-    parseGlobalHeader(
-      code
-    );
+    parseGlobalHeader(code);
 
 
   let pattern =
@@ -2886,10 +3555,13 @@ function globalCommand(
     pattern = lastRegex;
 
 
-  if (!pattern)
+  if (!pattern) {
+
     throw Error(
       "이전 정규식이 없습니다."
     );
+
+  }
 
 
   lastRegex =
@@ -2905,11 +3577,13 @@ function globalCommand(
       new RegExp(pattern);
 
   }
+
   catch (e) {
 
     throw Error(
       `잘못된 global 정규식: ${e.message}`
     );
+
   }
 
 
@@ -2948,6 +3622,7 @@ function globalCommand(
       markedIds.push(
         buffer[n - 1].id
       );
+
   }
 
 
@@ -2969,9 +3644,7 @@ function globalCommand(
     );
 
 
-  if (
-    !commands.length
-  )
+  if (!commands.length)
     commands.push("p");
 
 
@@ -3014,10 +3687,13 @@ function globalCommand(
         /^[gv][/?]/.test(
           trimmed
         )
-      )
+      ) {
+
         throw Error(
           "global 안에서 global/vglobal은 사용할 수 없습니다."
         );
+
+      }
 
 
       lastResult =
@@ -3025,11 +3701,14 @@ function globalCommand(
           trimmed,
           String(current)
         );
+
     }
+
   }
 
 
   return lastResult;
+
 }
 
 
@@ -3049,12 +3728,15 @@ function splitAddressAndCommand(
     );
 
 
-  if (!r.present) {
+  if (
+    !r.present
+  ) {
 
     return {
       addr: null,
       rest: code.trim()
     };
+
   }
 
 
@@ -3068,19 +3750,550 @@ function splitAddressAndCommand(
         )
         .trim(),
 
-
     rest:
       code
         .slice(
           r.end
         )
         .trimStart()
+
   };
+
+}
+
+
+/* ============================================================
+ * ed file commands
+ *
+ * 추가된 부분
+ *
+ * r  : virtual FS 파일을 현재 버퍼 뒤에 읽기
+ * w  : 현재 버퍼/주소 범위를 virtual FS에 쓰기
+ * f  : 현재 ed 파일명 확인/지정
+ * e  : virtual FS 파일을 현재 버퍼로 열기
+ *
+ * 주소는 기존 parseRangeAt() / getRange()를 그대로 사용한다.
+ * ============================================================ */
+
+
+/*
+ * 현재 버퍼가 수정되었는지 검사
+ */
+function edBufferModified() {
+
+  const fname =
+    edFileName ||
+    currentFile;
+
+  if (!fname)
+    return false;
+
+  if (
+    !Object.prototype.hasOwnProperty.call(
+      files,
+      fname
+    )
+  )
+    return true;
+
+  return (
+    editor.getValue() !==
+    String(files[fname] ?? "")
+  );
+
+}
+
+
+/*
+ * ed 현재 파일명 설정
+ */
+function setEdFileName(fname) {
+
+  fname =
+    String(fname ?? "").trim();
+
+  if (!fname)
+    throw Error(
+      "파일 이름이 없습니다."
+    );
+
+  edFileName =
+    fname;
+
+  currentFile =
+    fname;
+
+  refreshList();
+
+}
+
+
+/*
+ * r filename
+ *
+ * 주소가 없으면 현재 줄 뒤.
+ *
+ * 0r file
+ * .r file
+ * 3r file
+ * $r file
+ * /abc/r file
+ */
+function readFileCommand(
+  addr,
+  filename
+) {
+
+  filename =
+    String(filename ?? "").trim();
+
+
+  if (
+    !filename
+  ) {
+
+    throw Error(
+      "r: 파일 이름이 없습니다."
+    );
+
+  }
+
+
+  if (
+    !Object.prototype.hasOwnProperty.call(
+      files,
+      filename
+    )
+  ) {
+
+    throw Error(
+      `파일이 없습니다: ${filename}`
+    );
+
+  }
+
+
+  const content =
+    String(
+      files[filename] ?? ""
+    );
+
+
+  const items =
+    content === ""
+      ? []
+      : splitText(content)
+          .map(makeLine);
+
+
+  const n =
+    parseAddress(
+      addr || "."
+    );
+
+
+  /*
+   * 0r -> 맨 앞
+   * .r -> 현재 줄 뒤
+   * $r -> 마지막 줄 뒤
+   */
+  if (items.length) {
+
+    buffer.splice(
+      n,
+      0,
+      ...items
+    );
+
+    setCurrent(
+      n + items.length
+    );
+
+  }
+  else {
+
+    /*
+     * 빈 파일을 읽은 경우
+     * 버퍼 내용은 바꾸지 않는다.
+     */
+    setCurrent(
+      Math.min(
+        n,
+        buffer.length
+      )
+    );
+
+  }
+
+
+  /*
+   * ed의 r은 파일명 자체를 바꾸지 않는다.
+   */
+
+  console.log(
+    `${content.length}`
+  );
+
+
+  return current;
+
+}
+
+
+/*
+ * w
+ * w filename
+ * 1,$w filename
+ * 3,5w filename
+ */
+function writeFileCommand(
+  addr,
+  filename
+) {
+
+  filename =
+    String(filename ?? "").trim();
+
+
+  /*
+   * 파일명이 없으면 현재 ed 파일명 사용
+   */
+  if (!filename) {
+
+    filename =
+      edFileName ||
+      currentFile;
+
+  }
+
+
+  if (!filename) {
+
+    throw Error(
+      "w: 파일 이름이 없습니다."
+    );
+
+  }
+
+
+  let s;
+  let e;
+
+
+  /*
+   * 주소가 지정되면 그 범위만 기록
+   */
+  if (
+    addr &&
+    String(addr).trim()
+  ) {
+
+    const range =
+      getRange(
+        addr,
+        "1,$"
+      );
+
+    s = range.s;
+    e = range.e;
+
+  }
+
+  else {
+
+    s = 1;
+    e = buffer.length;
+
+  }
+
+
+  const text =
+    buffer
+      .slice(
+        s - 1,
+        e
+      )
+      .map(
+        x => x.text
+      )
+      .join("\n");
+
+
+  files[filename] =
+    text;
+
+
+  /*
+   * w filename은 ed의 현재 파일명을 filename으로 갱신
+   */
+  edFileName =
+    filename;
+
+  currentFile =
+    filename;
+
+
+  refreshList();
+
+
+  console.log(
+    `${text.length}`
+  );
+
+  console.log(
+    `"${filename}"에 저장됨`
+  );
+
+
+  return current;
+
+}
+
+
+/*
+ * f
+ * f filename
+ */
+function fileNameCommand(
+  filename
+) {
+
+  filename =
+    String(filename ?? "").trim();
+
+
+  /*
+   * f만 입력하면 현재 파일명 출력
+   */
+  if (!filename) {
+
+    console.log(
+      edFileName ||
+      currentFile ||
+      ""
+    );
+
+    return current;
+
+  }
+
+
+  /*
+   * 따옴표 파일명 지원
+   */
+  if (
+    (
+      filename.startsWith('"') &&
+      filename.endsWith('"')
+    ) ||
+    (
+      filename.startsWith("'") &&
+      filename.endsWith("'")
+    )
+  ) {
+
+    filename =
+      quoted(filename);
+
+  }
+
+
+  setEdFileName(
+    filename
+  );
+
+
+  console.log(
+    filename
+  );
+
+
+  return current;
+
+}
+
+
+/*
+ * e filename
+ * e! filename
+ * e
+ * e!
+ */
+function editFileCommand(
+  command
+) {
+
+  let text =
+    String(command ?? "").trim();
+
+
+  let force =
+    false;
+
+
+  if (
+    text === "!"
+  ) {
+
+    force = true;
+
+    text = "";
+
+  }
+
+  else if (
+    text.startsWith("!")
+  ) {
+
+    force = true;
+
+    text =
+      text
+        .slice(1)
+        .trim();
+
+  }
+
+
+  let filename =
+    text;
+
+
+  if (!filename) {
+
+    filename =
+      edFileName ||
+      currentFile;
+
+  }
+
+
+  if (!filename) {
+
+    throw Error(
+      "e: 파일 이름이 없습니다."
+    );
+
+  }
+
+
+  /*
+   * 수정된 버퍼를 일반 e로 버리는 것을 방지
+   */
+  if (
+    !force &&
+    edBufferModified()
+  ) {
+
+    throw Error(
+      `수정된 버퍼입니다. 강제 열기: e! ${filename}`
+    );
+
+  }
+
+
+  /*
+   * virtual FS에 존재하면 내용 로드.
+   *
+   * 존재하지 않으면 빈 파일로 새로 생성.
+   */
+  const exists =
+    Object.prototype.hasOwnProperty.call(
+      files,
+      filename
+    );
+
+
+  let content;
+
+
+  if (exists) {
+
+    content =
+      String(
+        files[filename] ?? ""
+      );
+
+  }
+
+  else {
+
+    files[filename] =
+      "";
+
+    content =
+      "";
+
+  }
+
+
+  const newLines =
+    splitText(
+      content
+    );
+
+
+  buffer =
+    newLines.map(
+      makeLine
+    );
+
+
+  if (
+    !buffer.length
+  ) {
+
+    buffer = [
+      makeLine("")
+    ];
+
+  }
+
+
+  current =
+    1;
+
+
+  edFileName =
+    filename;
+
+  currentFile =
+    filename;
+
+
+  /*
+   * Monaco에도 실제 버퍼를 반영
+   */
+  writeLines(
+    buffer.map(
+      x => x.text
+    ),
+    1
+  );
+
+
+  setEditorLanguage(
+    filename
+  );
+
+
+  refreshList();
+
+
+  console.log(
+    `"${filename}" 편집 중`
+  );
+
+
+  return current;
+
 }
 
 
 /* ============================================================
  * execute
+ *
+ * 기존 dispatcher + r/w/f/e 추가
  * ============================================================ */
 
 function execute(
@@ -3093,12 +4306,10 @@ function execute(
 
   code =
     String(code ?? "")
-
       .replace(
         /\r\n/g,
         "\n"
       )
-
       .trim();
 
 
@@ -3113,23 +4324,24 @@ function execute(
     return help();
 
 
-  /* ========================================================
-   * Monaco undo
-   * ======================================================== */
+  /* ----------------------------------------------------------
+   * undo
+   * ---------------------------------------------------------- */
 
   if (
     code === "u"
   ) {
 
-    findView().trigger(
+    editor.trigger(
       "ed",
-      "undo"
+      "undo",
+      null
     );
 
     buffer = null;
 
-
     return currentLine();
+
   }
 
 
@@ -3144,12 +4356,14 @@ function execute(
       );
 
   }
+
   catch {
 
     parsed = {
       addr: null,
       rest: code
     };
+
   }
 
 
@@ -3181,6 +4395,7 @@ function execute(
       forcedAddr || "1,$",
       command
     );
+
   }
 
 
@@ -3193,6 +4408,7 @@ function execute(
       forcedAddr || ".",
       command
     );
+
   }
 
 
@@ -3203,6 +4419,7 @@ function execute(
       false,
       false
     );
+
   }
 
 
@@ -3220,7 +4437,9 @@ function execute(
         effectiveAddr || "1,$",
         command
       );
+
     }
+
   }
 
 
@@ -3232,6 +4451,94 @@ function execute(
       effectiveAddr || ".",
       command
     );
+
+  }
+
+
+  /* ==========================================================
+   * r / w / f / e
+   *
+   * 주소가 splitAddressAndCommand()를 먼저 거쳤기 때문에
+   * 다음과 같은 명령이 모두 가능하다.
+   *
+   * 3r abc.txt
+   * 3,5w abc.txt
+   * /foo/,$w abc.txt
+   * f
+   * f abc.txt
+   * e abc.txt
+   * e! abc.txt
+   * ========================================================== */
+
+  /*
+   * f
+   */
+  if (
+    command === "f" ||
+    command.startsWith("f ")
+  ) {
+
+    return fileNameCommand(
+      command
+        .slice(1)
+        .trim()
+    );
+
+  }
+
+
+  /*
+   * e / e!
+   */
+  if (
+    command === "e" ||
+    command === "e!" ||
+    command.startsWith("e ") ||
+    command.startsWith("e! ")
+  ) {
+
+    return editFileCommand(
+      command
+        .slice(1)
+        .trim()
+    );
+
+  }
+
+
+  /*
+   * r
+   */
+  if (
+    command === "r" ||
+    command.startsWith("r ")
+  ) {
+
+    return readFileCommand(
+      effectiveAddr || ".",
+      command
+        .slice(1)
+        .trim()
+    );
+
+  }
+
+
+  /*
+   * w
+   */
+  if (
+    command === "w" ||
+    command.startsWith("w ")
+  ) {
+
+    return writeFileCommand(
+      effectiveAddr,
+      command
+        .slice(1)
+        .trim()
+    );
+
   }
 
 
@@ -3260,6 +4567,7 @@ function execute(
         false,
         false
       );
+
     }
 
 
@@ -3282,6 +4590,7 @@ function execute(
         true,
         false
       );
+
     }
 
 
@@ -3304,6 +4613,7 @@ function execute(
         false,
         true
       );
+
     }
 
 
@@ -3322,6 +4632,7 @@ function execute(
       return deleteCommand(
         effectiveAddr || "."
       );
+
     }
 
 
@@ -3340,6 +4651,7 @@ function execute(
       return joinCommand(
         effectiveAddr || null
       );
+
     }
 
 
@@ -3361,6 +4673,7 @@ function execute(
         effectiveAddr || ".",
         quoted(rest)
       );
+
     }
 
 
@@ -3382,6 +4695,7 @@ function execute(
         effectiveAddr || ".",
         quoted(rest)
       );
+
     }
 
 
@@ -3403,6 +4717,7 @@ function execute(
         effectiveAddr || ".",
         quoted(rest)
       );
+
     }
 
 
@@ -3424,6 +4739,7 @@ function execute(
         effectiveAddr || ".",
         rest
       );
+
     }
 
 
@@ -3445,6 +4761,7 @@ function execute(
         effectiveAddr || ".",
         rest
       );
+
     }
 
 
@@ -3464,8 +4781,8 @@ function execute(
 
       console.log(r.e);
 
-
       return current;
+
     }
 
 
@@ -3474,7 +4791,9 @@ function execute(
       throw Error(
         `알 수 없는 명령입니다: ${code}`
       );
+
   }
+
 }
 
 
@@ -3491,6 +4810,7 @@ function scanTopLevelSubstitute(
     text,
     start
   );
+
 }
 
 
@@ -3522,6 +4842,7 @@ function scanTopLevelGlobal(
       p += 2;
 
       continue;
+
     }
 
 
@@ -3532,14 +4853,17 @@ function scanTopLevelGlobal(
       p++;
 
       break;
+
     }
 
 
     p++;
+
   }
 
 
   return text.length;
+
 }
 
 
@@ -3549,9 +4873,7 @@ function splitTopLevelCommands(
 
   const result = [];
 
-
   let start = 0;
-
   let p = 0;
 
 
@@ -3588,6 +4910,7 @@ function splitTopLevelCommands(
         );
 
       continue;
+
     }
 
 
@@ -3603,6 +4926,7 @@ function splitTopLevelCommands(
         );
 
       continue;
+
     }
 
 
@@ -3619,7 +4943,8 @@ function splitTopLevelCommands(
       )
     ) {
 
-      const delimiter = c;
+      const delimiter =
+        c;
 
 
       p++;
@@ -3636,6 +4961,7 @@ function splitTopLevelCommands(
           p += 2;
 
           continue;
+
         }
 
 
@@ -3646,14 +4972,17 @@ function splitTopLevelCommands(
           p++;
 
           break;
+
         }
 
 
         p++;
+
       }
 
 
       continue;
+
     }
 
 
@@ -3679,10 +5008,12 @@ function splitTopLevelCommands(
       start = p;
 
       continue;
+
     }
 
 
     p++;
+
   }
 
 
@@ -3697,6 +5028,7 @@ function splitTopLevelCommands(
 
 
   return result;
+
 }
 
 
@@ -3729,19 +5061,34 @@ function runCode(code) {
     current;
 
 
-  for (
-    const command of commands
-  ) {
+  try {
 
-    result =
-      execute(command);
+    for (
+      const command of commands
+    ) {
+
+      result =
+        execute(command);
+
+    }
+
+
+    commit();
+
+
+    return result;
+
   }
 
+  catch (err) {
 
-  commit();
+    log(
+      "Error: " +
+      err.message
+    );
 
+  }
 
-  return result;
 }
 
 
@@ -3752,7 +5099,7 @@ function runCode(code) {
 function help() {
 
   console.log(`
-GitHub CodeMirror ed
+GitHub CodeMirror ed → Monaco
 
 주소
   .             현재 줄
@@ -3874,6 +5221,31 @@ inverse global
   v/abc/n
   v/abc/d
 
+파일
+  f
+  f abc.txt
+
+읽기
+  r abc.txt
+  0r abc.txt
+  .r abc.txt
+  3r abc.txt
+  $r abc.txt
+  /abc/r abc.txt
+
+쓰기
+  w
+  w abc.txt
+  1,$w abc.txt
+  3,5w abc.txt
+  .,$w abc.txt
+  /abc/,$w abc.txt
+
+편집
+  e
+  e abc.txt
+  e! abc.txt
+
 줄 수
   =
 
@@ -3883,18 +5255,13 @@ undo
 도움말
   help
 `);
+
 }
 
 
 /* ============================================================
- * 전역 함수
+ * ed 공개 API
  * ============================================================ */
-
-window.runCode =
-  runCode;
-
-window.findGithubEditor =
-  findView;
 
 window.ed = (
   strings,
@@ -3906,105 +5273,133 @@ window.ed = (
   )
     return runCode(strings);
 
+
   return runCode(
     String.raw(
       strings,
       ...values
     )
   );
+
 };
 
 
 /* ============================================================
- * 새로고침 방지
+ * 외부 접근용
+ * ============================================================ */
+
+window.runCode =
+  runCode;
+
+
+/* ============================================================
+ * Ctrl+Z / Ctrl+Shift+Z
  * ============================================================ */
 
 window.addEventListener(
-  "beforeunload",
-  function(e) {
+  "keydown",
+  e => {
 
-    e.preventDefault();
+    if (!editor)
+      return;
 
-    e.returnValue = "";
+
+    if (
+      e.ctrlKey &&
+      !e.shiftKey &&
+      e.key.toLowerCase() === "z"
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      e.ctrlKey &&
+      e.shiftKey &&
+      e.key.toLowerCase() === "z"
+    ) {
+
+      e.preventDefault();
+
+      editor.trigger(
+        "keyboard",
+        "redo",
+        null
+      );
+
+    }
+
+
+    if (
+      e.ctrlKey &&
+      !e.shiftKey &&
+      e.key.toLowerCase() === "y"
+    ) {
+
+      e.preventDefault();
+
+      editor.trigger(
+        "keyboard",
+        "redo",
+        null
+      );
+
+    }
+
   }
 );
 
 
 /* ============================================================
- * Console 토글
+ * F5 / Ctrl+R 방지
  * ============================================================ */
 
-const rootStyle =
-  document.documentElement.style;
+window.addEventListener(
+  "beforeunload",
+  function (e) {
+
+    e.preventDefault();
+
+    e.returnValue = "";
+
+  }
+);
 
 
-const toggleBtn =
-  document.getElementById(
-    "toggle-btn"
+/* ============================================================
+ * ready
+ * ============================================================ */
+
+function waitForEditorReady() {
+
+  if (!editor) {
+
+    requestAnimationFrame(
+      waitForEditorReady
+    );
+
+    return;
+
+  }
+
+
+  console.log(
+    `%cMonaco ed ready — ${editor.getModel().getLineCount()} lines`,
+    "color:#4caf50;font-weight:bold"
   );
 
 
-const header =
-  document.getElementById(
-    "console-header"
+  console.log(
+    "ed\`help\` 또는 ed('help')"
   );
 
 
-function setConsoleHeight(px) {
-
-  rootStyle.setProperty(
-    "--console-h",
-    px
-  );
-
-
-  requestAnimationFrame(
-    () => {
-
-      if (editor)
-        editor.layout();
-
-      if (jsConsole)
-        jsConsole.layout();
-    }
-  );
 }
 
 
-header.addEventListener(
-  "click",
-  () => {
-
-    const collapsed =
-      toggleBtn.textContent
-        .startsWith("▼")
-        ? false
-        : true;
-
-
-    if (!collapsed) {
-
-      setConsoleHeight(
-        "25px"
-      );
-
-
-      toggleBtn.textContent =
-        "▶ Console";
-    }
-
-    else {
-
-      setConsoleHeight(
-        "200px"
-      );
-
-
-      toggleBtn.textContent =
-        "▼ Console";
-    }
-  }
-);
+waitForEditorReady();
 
 </script>
 
