@@ -143,7 +143,6 @@ html, body {
   background: #555;
 }
 
-
 #console-input {
   height: 60px;
 }
@@ -194,7 +193,7 @@ html, body {
 }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.56.0/min/vs/loader.min.js"></script>
 </head>
 
 <body>
@@ -249,7 +248,7 @@ html, body {
 
 require.config({
   paths: {
-    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
+    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.56.0/min/vs"
   }
 });
 
@@ -264,14 +263,6 @@ let jsConsole = null;
 let currentFile = null;
 
 const files = {};
-
-
-/* ============================================================
- * ed file name
- *
- * 추가:
- * r / w / f / e 명령에서 사용하는 ed식 현재 파일명
- * ============================================================ */
 
 let edFileName = null;
 
@@ -350,30 +341,42 @@ require(
         }
       );
 
-
     jsConsole.onKeyDown(e => {
 
       if (
-        e.keyCode ===
+        e.keyCode !==
         monaco.KeyCode.Enter
+      )
+        return;
+
+      if (e.shiftKey)
+        return;
+
+
+      const code =
+        jsConsole
+          .getValue();
+
+      if (
+        /\\$/.test(code)
       ) {
 
-        if (e.shiftKey)
-          return;
-
-        const code =
-          jsConsole
-            .getValue()
-            .trim();
-
-        jsConsole.setValue("");
-
-        if (code)
-          runCode(code);
-
-        e.preventDefault();
+        return;
 
       }
+
+      const trimmed =
+        code.trim();
+
+
+      jsConsole.setValue("");
+
+
+      if (trimmed)
+        runCode(trimmed);
+
+
+      e.preventDefault();
 
     });
 
@@ -3761,24 +3764,6 @@ function splitAddressAndCommand(
 
 }
 
-
-/* ============================================================
- * ed file commands
- *
- * 추가된 부분
- *
- * r  : virtual FS 파일을 현재 버퍼 뒤에 읽기
- * w  : 현재 버퍼/주소 범위를 virtual FS에 쓰기
- * f  : 현재 ed 파일명 확인/지정
- * e  : virtual FS 파일을 현재 버퍼로 열기
- *
- * 주소는 기존 parseRangeAt() / getRange()를 그대로 사용한다.
- * ============================================================ */
-
-
-/*
- * 현재 버퍼가 수정되었는지 검사
- */
 function edBufferModified() {
 
   const fname =
@@ -3828,17 +3813,6 @@ function setEdFileName(fname) {
 }
 
 
-/*
- * r filename
- *
- * 주소가 없으면 현재 줄 뒤.
- *
- * 0r file
- * .r file
- * 3r file
- * $r file
- * /abc/r file
- */
 function readFileCommand(
   addr,
   filename
@@ -3891,12 +3865,6 @@ function readFileCommand(
       addr || "."
     );
 
-
-  /*
-   * 0r -> 맨 앞
-   * .r -> 현재 줄 뒤
-   * $r -> 마지막 줄 뒤
-   */
   if (items.length) {
 
     buffer.splice(
@@ -3911,11 +3879,6 @@ function readFileCommand(
 
   }
   else {
-
-    /*
-     * 빈 파일을 읽은 경우
-     * 버퍼 내용은 바꾸지 않는다.
-     */
     setCurrent(
       Math.min(
         n,
@@ -3924,11 +3887,6 @@ function readFileCommand(
     );
 
   }
-
-
-  /*
-   * ed의 r은 파일명 자체를 바꾸지 않는다.
-   */
 
   console.log(
     `${content.length}`
@@ -3939,13 +3897,6 @@ function readFileCommand(
 
 }
 
-
-/*
- * w
- * w filename
- * 1,$w filename
- * 3,5w filename
- */
 function writeFileCommand(
   addr,
   filename
@@ -3954,10 +3905,6 @@ function writeFileCommand(
   filename =
     String(filename ?? "").trim();
 
-
-  /*
-   * 파일명이 없으면 현재 ed 파일명 사용
-   */
   if (!filename) {
 
     filename =
@@ -3979,10 +3926,6 @@ function writeFileCommand(
   let s;
   let e;
 
-
-  /*
-   * 주소가 지정되면 그 범위만 기록
-   */
   if (
     addr &&
     String(addr).trim()
@@ -4022,10 +3965,6 @@ function writeFileCommand(
   files[filename] =
     text;
 
-
-  /*
-   * w filename은 ed의 현재 파일명을 filename으로 갱신
-   */
   edFileName =
     filename;
 
@@ -4049,11 +3988,6 @@ function writeFileCommand(
 
 }
 
-
-/*
- * f
- * f filename
- */
 function fileNameCommand(
   filename
 ) {
@@ -4061,10 +3995,6 @@ function fileNameCommand(
   filename =
     String(filename ?? "").trim();
 
-
-  /*
-   * f만 입력하면 현재 파일명 출력
-   */
   if (!filename) {
 
     console.log(
@@ -4077,10 +4007,6 @@ function fileNameCommand(
 
   }
 
-
-  /*
-   * 따옴표 파일명 지원
-   */
   if (
     (
       filename.startsWith('"') &&
@@ -4097,28 +4023,17 @@ function fileNameCommand(
 
   }
 
-
   setEdFileName(
     filename
   );
-
 
   console.log(
     filename
   );
 
-
   return current;
-
 }
 
-
-/*
- * e filename
- * e! filename
- * e
- * e!
- */
 function editFileCommand(
   command
 ) {
@@ -4176,10 +4091,6 @@ function editFileCommand(
 
   }
 
-
-  /*
-   * 수정된 버퍼를 일반 e로 버리는 것을 방지
-   */
   if (
     !force &&
     edBufferModified()
@@ -4191,12 +4102,6 @@ function editFileCommand(
 
   }
 
-
-  /*
-   * virtual FS에 존재하면 내용 로드.
-   *
-   * 존재하지 않으면 빈 파일로 새로 생성.
-   */
   const exists =
     Object.prototype.hasOwnProperty.call(
       files,
@@ -4260,10 +4165,6 @@ function editFileCommand(
   currentFile =
     filename;
 
-
-  /*
-   * Monaco에도 실제 버퍼를 반영
-   */
   writeLines(
     buffer.map(
       x => x.text
@@ -4454,25 +4355,6 @@ function execute(
 
   }
 
-
-  /* ==========================================================
-   * r / w / f / e
-   *
-   * 주소가 splitAddressAndCommand()를 먼저 거쳤기 때문에
-   * 다음과 같은 명령이 모두 가능하다.
-   *
-   * 3r abc.txt
-   * 3,5w abc.txt
-   * /foo/,$w abc.txt
-   * f
-   * f abc.txt
-   * e abc.txt
-   * e! abc.txt
-   * ========================================================== */
-
-  /*
-   * f
-   */
   if (
     command === "f" ||
     command.startsWith("f ")
@@ -4486,10 +4368,6 @@ function execute(
 
   }
 
-
-  /*
-   * e / e!
-   */
   if (
     command === "e" ||
     command === "e!" ||
@@ -4505,10 +4383,6 @@ function execute(
 
   }
 
-
-  /*
-   * r
-   */
   if (
     command === "r" ||
     command.startsWith("r ")
@@ -5099,7 +4973,7 @@ function runCode(code) {
 function help() {
 
   console.log(`
-GitHub CodeMirror ed → Monaco
+Monaco ed Editor
 
 주소
   .             현재 줄
@@ -5384,17 +5258,9 @@ function waitForEditorReady() {
 
   }
 
-
   console.log(
-    `%cMonaco ed ready — ${editor.getModel().getLineCount()} lines`,
-    "color:#4caf50;font-weight:bold"
+    "Monaco ed ready — help"
   );
-
-
-  console.log(
-    "ed\`help\` 또는 ed('help')"
-  );
-
 
 }
 
