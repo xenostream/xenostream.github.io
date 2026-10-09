@@ -4,12 +4,19 @@
 <meta charset="UTF-8" />
 <title>SED Web Editor + VFS Shell (Integrated)</title>
 <style>
+@font-face {
+  font-family: "Sarasa Mono K Nerd Font";
+  src: url("./sarasa-fixed-k-regular-nerd-font.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 :root { --console-h: 220px; }
 html, body {
   margin: 0; padding: 0;
   height: 100%; width: 100%;
   overflow: hidden;
-  font-family: "Cascadia Mono", monospace;
+  font-family: "Sarasa Mono K Nerd Font", monospace;
   background: #1e1e1e;
 }
 #editor { height: calc(100vh - var(--console-h)); width: 100vw; transition: height 0.2s ease; }
@@ -43,7 +50,7 @@ html, body {
 #console-output::-webkit-scrollbar-thumb:hover { background-color: #333; }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.56.0/min/vs/loader.min.js"></script>
 
 <!-- Aioli -->
 <script>
@@ -68,7 +75,7 @@ window.define = defineBackup;
 </div>
 
 <script>
-require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" } });
+require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.56.0/min/vs" } });
 
 let editor, jsConsole;
 let currentFileName = "input.txt";
@@ -390,7 +397,7 @@ require(["vs/editor/editor.main"], function() {
     value: "",
     language: "plaintext",
     theme: "vs-dark",
-    fontFamily: "Cascadia Mono, monospace",
+    fontFamily: "Sarasa Mono K Nerd Font, monospace",
     fontSize: 14,
     wordWrap: "on",
     folding: true,
