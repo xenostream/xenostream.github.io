@@ -4,12 +4,19 @@
 <meta charset="UTF-8" />
 <title>Mini Editor with sed</title>
 <style>
+@font-face {
+font-family: "Sarasa Mono K Nerd Font";
+src: url("./sarasa-fixed-k-regular-nerd-font.woff2") format("woff2");
+font-weight: 400;
+font-style: normal;
+font-display: swap;
+}
 :root { --console-h: 200px; }
 html, body {
   margin: 0; padding: 0;
   height: 100%; width: 100%;
   overflow: hidden;
-  font-family: "Cascadia Mono", monospace;
+  font-family: "Sarasa Mono K Nerd Fonto", monospace;
   background: #1e1e1e;
 }
 #editor { height: calc(100vh - var(--console-h)); width: 100vw; transition: height 0.2s ease; }
@@ -84,7 +91,7 @@ require(["vs/editor/editor.main"], function() {
     value: `foo bar\nfoo baz\n하나 둘 셋\nhello world`,
     language: "plaintext",
     theme: "vs-dark",
-    fontFamily: "Cascadia Mono, monospace",
+    fontFamily: "Sarasa Mono K Nerd Fonto, monospace",
     fontSize: 14,
     wordWrap: "on",
     folding: true,
